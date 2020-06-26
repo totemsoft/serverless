@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Serverless Spring API - au.com.totemsoft.serverless.elixir::elixir-service
+Globals:
+  Api:
+    EndpointConfiguration: REGIONAL
+
+Resources:
+  ElixirServiceFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: au.com.totemsoft.serverless.elixir.StreamLambdaHandler::handleRequest
+      Runtime: java8
+      CodeUri: .
+      MemorySize: 512
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 15
+      Events:
+        ProxyResource:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: any
+
+Outputs:
+  ElixirServiceApi:
+    Description: URL for application
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/survey'
+    Export:
+      Name: ElixirServiceApi
