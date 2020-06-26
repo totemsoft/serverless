@@ -48,9 +48,8 @@ Using a new shell, you can send a test survey request to your API:
 
 ```bash
 $ curl -s http://127.0.0.1:3000/survey | python -m json.tool
-
 {
-    "pong": "Hello, World!"
+    "survey": "Survey"
 }
 ``` 
 
@@ -68,16 +67,15 @@ Once the deployment is completed, the SAM CLI will print out the stack's outputs
 -------------------------------------------------------------------------------------------------------------
 OutputKey-Description                        OutputValue
 -------------------------------------------------------------------------------------------------------------
-ElixirServiceApi - URL for application            https://xxxxxxxxxx.execute-api.us-west-2.amazonaws.com/Prod/pets
+ElixirServiceApi - URL for application       https://xxxxxxxxxx.execute-api.ap-southeast-2.amazonaws.com/Prod/pets
 -------------------------------------------------------------------------------------------------------------
 ```
 
 Copy the `OutputValue` into a browser or use curl to test your first request:
 
 ```bash
-$ curl -s https://xxxxxxx.execute-api.us-west-2.amazonaws.com/Prod/survey | python -m json.tool
-
+$ curl -s https://xxxxxxx.execute-api.ap-southeast-2.amazonaws.com/Prod/survey | python -m json.tool
 {
-    "pong": "Hello, World!"
+    "survey": "Survey"
 }
 ```
