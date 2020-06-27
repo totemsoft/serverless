@@ -38,7 +38,7 @@ public class StreamLambdaHandlerTest {
 
     @Test
     public void survey() {
-        InputStream requestStream = new AwsProxyRequestBuilder("/survey", HttpMethod.GET)
+        InputStream requestStream = new AwsProxyRequestBuilder("/survey/1963", HttpMethod.GET)
             .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
             .buildStream();
         ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
@@ -60,7 +60,7 @@ public class StreamLambdaHandlerTest {
 
     @Test
     public void survey_404() {
-        InputStream requestStream = new AwsProxyRequestBuilder("/SURVEY", HttpMethod.GET)
+        InputStream requestStream = new AwsProxyRequestBuilder("/SARVEY", HttpMethod.GET)
             .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
             .buildStream();
         ByteArrayOutputStream responseStream = new ByteArrayOutputStream();

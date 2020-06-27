@@ -16,13 +16,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RequestMapping("/survey")
 public class SurveyController {
 
-    @GetMapping(path = {"", "/"}, produces = MediaType.APPLICATION_JSON)
-    public Map<String, String> survey() {
-        Map<String, String> result = new HashMap<>();
-        result.put("survey", "Survey");
-        return result;
-    }
-
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON)
     public Map<String, String> survey(@PathVariable("id") int id) {
         Map<String, String> result = new HashMap<>();
