@@ -5,7 +5,7 @@
     "description": "API sets created by the Totem Software Pty Ltd to meet the needs of the Survey",
     "version": "1.0.0",
     "contact": {
-      "name": "Consumer Data Standards",
+      "name": "Valeri Chibaev",
       "url": "http://totemsoft.com.au/",
       "email": "totemsoft.com.au@gmail.com"
     },
@@ -109,10 +109,15 @@
       "type": "object",
       "required": [
         "type",
+        "text",
         "answers"
       ],
       "properties": {
         "type": { "$ref": "#/definitions/QuestionType" },
+        "text": {
+          "type": "string",
+          "description": "Question text"
+        },
         "answers": {
           "description": "An array of question answers",
           "type": "array",
@@ -135,8 +140,17 @@
       ]
     },
     "Answer": {
-      "type": "string",
-      "description": "Question Answer"
+      "type": "object",
+      "description": "Question Answer",
+      "required": [
+        "text"
+      ],
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Answer text"
+        }
+      }
     }
   }
 }
