@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    http://joelittlejohn.github.io/jsonschema2pojo/site/1.0.2/generate-mojo.html 
+    %M2_HOME%\bin\mvn clean generate-sources
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>au.com.totemsoft.serverless</groupId>
+        <artifactId>serverless</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>schema</artifactId>
+    <packaging>jar</packaging>
+ 
+    <name>JSON Schema</name>
+    <description>JSON Schema</description>
+    <url>https://github.com/totemsoft/serverless</url>
+
+    <properties>
+        <cxf.version>3.3.5</cxf.version>
+        <swagger.version>1.6.0</swagger.version>
+        <jackson.version>2.10.2</jackson.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-jaxrs</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-client</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http-hc</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-service-description</artifactId> 
+            <version>${cxf.version}</version> 
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>4.3.0</version>
+                <configuration>
+                    <generatorName>jaxrs-cxf</generatorName>
+                    <!--generatorName>spring</generatorName-->
+                    <output>${basedir}</output>
+                    <!--output>${basedir}/target/generated</output-->
+                    <configOptions>
+                        <!--library>spring-mvc</library-->
+                        <sourceFolder>src/main/java</sourceFolder>
+                        <generateApiTests>false</generateApiTests>
+                        <generateApiDocumentation>false</generateApiDocumentation>
+                        <generateModelsTests>false</generateModelsTests>
+                        <generateModelsDocumentation>false</generateModelsDocumentation>
+                        <java8>true</java8>
+                        <serializableModel>false</serializableModel>
+                        <async>false</async>
+                        <dateLibrary>java8-localdatetime</dateLibrary>
+                        <delegatePattern>true</delegatePattern>
+                        <useBeanValidation>true</useBeanValidation>
+                        <useOptional>true</useOptional>
+                        <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                    </configOptions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>elixir.survey</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <skip>false</skip>
+                            <inputSpec>${basedir}/src/main/resources/elixir-survey.json</inputSpec>
+                            <basePackage>au.com.totemsoft.elixir.survey.v1</basePackage>
+                            <modelPackage>au.com.totemsoft.elixir.survey.v1.model</modelPackage>
+                            <apiPackage>au.com.totemsoft.elixir.survey.v1.api</apiPackage>
+                            <invokerPackage>au.com.totemsoft.elixir.survey.v1.handler</invokerPackage>
+                        </configuration>
+                    </execution>
+                    <!--execution>
+                        <id>cds</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <skip>true</skip>
+                            <inputSpec>${basedir}/src/main/resources/cds/cds_full.json</inputSpec>
+                            <basePackage>au.com.totemsoft.openbanking.cds.v1</basePackage>
+                            <modelPackage>au.com.totemsoft.openbanking.cds.v1.model</modelPackage>
+                            <apiPackage>au.com.totemsoft.openbanking.cds.v1.api</apiPackage>
+                            <invokerPackage>au.com.totemsoft.openbanking.cds.v1.handler</invokerPackage>
+                        </configuration>
+                    </execution-->
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

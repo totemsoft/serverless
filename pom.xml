@@ -11,6 +11,26 @@
 
     <name>Serverless</name>
     <description>Serverless</description>
+    <url>https://github.com/totemsoft/serverless</url>
 
+    <modules>
+        <module>schema</module>
+        <module>elixir-service</module>
+    </modules>
+
+    <properties>
+        <junit.version>4.12</junit.version>
+
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
-

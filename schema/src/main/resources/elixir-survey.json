@@ -1,249 +1,142 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "http://elixirlegal.com/elixir-survey.json",
-    "type": "object",
-    "title": "The root schema",
-    "description": "The root schema comprises the entire JSON document.",
-    "default": {},
-    "examples": [
-        {
-            "userId": 12345,
-            "userName": "shibaevv",
-            "survey": {
-                "surveyId": 777,
-                "surveyQuestions": [
-                    {
-                        "surveyQuestion": "Question 1",
-                        "surveyQuestionAnswers": [
-                            {
-                                "surveyQuestionAnswer": {
-                                    "type": "text",
-                                    "value": "Answer 1"
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-    ],
-    "required": [
-        "userId",
-        "userName",
-        "survey"
-    ],
-    "additionalProperties": true,
-    "properties": {
-        "userId": {
-            "$id": "#/properties/userId",
-            "type": "integer",
-            "title": "The userId schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": 0,
-            "examples": [
-                12345
-            ]
-        },
-        "userName": {
-            "$id": "#/properties/userName",
-            "type": "string",
-            "title": "The userName schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": "",
-            "examples": [
-                "shibaevv"
-            ]
-        },
-        "survey": {
-            "$id": "#/properties/survey",
-            "type": "object",
-            "title": "The survey schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": {},
-            "examples": [
-                {
-                    "surveyId": 777,
-                    "surveyQuestions": [
-                        {
-                            "surveyQuestion": "Question 1",
-                            "surveyQuestionAnswers": [
-                                {
-                                    "surveyQuestionAnswer": {
-                                        "type": "text",
-                                        "value": "Answer 1"
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ],
-            "required": [
-                "surveyId",
-                "surveyQuestions"
-            ],
-            "additionalProperties": true,
-            "properties": {
-                "surveyId": {
-                    "$id": "#/properties/survey/properties/surveyId",
-                    "type": "integer",
-                    "title": "The surveyId schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": 0,
-                    "examples": [
-                        777
-                    ]
-                },
-                "surveyQuestions": {
-                    "$id": "#/properties/survey/properties/surveyQuestions",
-                    "type": "array",
-                    "title": "The surveyQuestions schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": [],
-                    "examples": [
-                        [
-                            {
-                                "surveyQuestion": "Question 1",
-                                "surveyQuestionAnswers": [
-                                    {
-                                        "surveyQuestionAnswer": {
-                                            "type": "text",
-                                            "value": "Answer 1"
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
-                    ],
-                    "additionalItems": true,
-                    "items": {
-                        "anyOf": [
-                            {
-                                "$id": "#/properties/survey/properties/surveyQuestions/items/anyOf/0",
-                                "type": "object",
-                                "title": "The first anyOf schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": {},
-                                "examples": [
-                                    {
-                                        "surveyQuestion": "Question 1",
-                                        "surveyQuestionAnswers": [
-                                            {
-                                                "surveyQuestionAnswer": {
-                                                    "type": "text",
-                                                    "value": "Answer 1"
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ],
-                                "required": [
-                                    "surveyQuestion",
-                                    "surveyQuestionAnswers"
-                                ],
-                                "additionalProperties": true,
-                                "properties": {
-                                    "surveyQuestion": {
-                                        "$id": "#/properties/survey/properties/surveyQuestions/items/anyOf/0/properties/surveyQuestion",
-                                        "type": "string",
-                                        "title": "The surveyQuestion schema",
-                                        "description": "An explanation about the purpose of this instance.",
-                                        "default": "",
-                                        "examples": [
-                                            "Question 1"
-                                        ]
-                                    },
-                                    "surveyQuestionAnswers": {
-                                        "$id": "#/properties/survey/properties/surveyQuestions/items/anyOf/0/properties/surveyQuestionAnswers",
-                                        "type": "array",
-                                        "title": "The surveyQuestionAnswers schema",
-                                        "description": "An explanation about the purpose of this instance.",
-                                        "default": [],
-                                        "examples": [
-                                            [
-                                                {
-                                                    "surveyQuestionAnswer": {
-                                                        "type": "text",
-                                                        "value": "Answer 1"
-                                                    }
-                                                }
-                                            ]
-                                        ],
-                                        "additionalItems": true,
-                                        "items": {
-                                            "anyOf": [
-                                                {
-                                                    "$id": "#/properties/survey/properties/surveyQuestions/items/anyOf/0/properties/surveyQuestionAnswers/items/anyOf/0",
-                                                    "type": "object",
-                                                    "title": "The first anyOf schema",
-                                                    "description": "An explanation about the purpose of this instance.",
-                                                    "default": {},
-                                                    "examples": [
-                                                        {
-                                                            "surveyQuestionAnswer": {
-                                                                "type": "text",
-                                                                "value": "Answer 1"
-                                                            }
-                                                        }
-                                                    ],
-                                                    "required": [
-                                                        "surveyQuestionAnswer"
-                                                    ],
-                                                    "additionalProperties": true,
-                                                    "properties": {
-                                                        "surveyQuestionAnswer": {
-                                                            "$id": "#/properties/survey/properties/surveyQuestions/items/anyOf/0/properties/surveyQuestionAnswers/items/anyOf/0/properties/surveyQuestionAnswer",
-                                                            "type": "object",
-                                                            "title": "The surveyQuestionAnswer schema",
-                                                            "description": "An explanation about the purpose of this instance.",
-                                                            "default": {},
-                                                            "examples": [
-                                                                {
-                                                                    "type": "text",
-                                                                    "value": "Answer 1"
-                                                                }
-                                                            ],
-                                                            "required": [
-                                                                "type",
-                                                                "value"
-                                                            ],
-                                                            "additionalProperties": true,
-                                                            "properties": {
-                                                                "type": {
-                                                                    "$id": "#/properties/survey/properties/surveyQuestions/items/anyOf/0/properties/surveyQuestionAnswers/items/anyOf/0/properties/surveyQuestionAnswer/properties/type",
-                                                                    "type": "string",
-                                                                    "title": "The type schema",
-                                                                    "description": "An explanation about the purpose of this instance.",
-                                                                    "default": "",
-                                                                    "examples": [
-                                                                        "text"
-                                                                    ]
-                                                                },
-                                                                "value": {
-                                                                    "$id": "#/properties/survey/properties/surveyQuestions/items/anyOf/0/properties/surveyQuestionAnswers/items/anyOf/0/properties/surveyQuestionAnswer/properties/value",
-                                                                    "type": "string",
-                                                                    "title": "The value schema",
-                                                                    "description": "An explanation about the purpose of this instance.",
-                                                                    "default": "",
-                                                                    "examples": [
-                                                                        "Answer 1"
-                                                                    ]
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ],
-                                            "$id": "#/properties/survey/properties/surveyQuestions/items/anyOf/0/properties/surveyQuestionAnswers/items"
-                                        }
-                                    }
-                                }
-                            }
-                        ],
-                        "$id": "#/properties/survey/properties/surveyQuestions/items"
-                    }
-                }
-            }
-        }
+  "swagger": "2.0",
+  "info": {
+    "title": "Elixir Survey",
+    "description": "API sets created by the Totem Software Pty Ltd to meet the needs of the Survey",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Consumer Data Standards",
+      "url": "http://totemsoft.com.au/",
+      "email": "totemsoft.com.au@gmail.com"
+    },
+    "license": {
+      "name": "Apache License Version 2.0",
+      "url": "http://www.apache.org/licenses/"
     }
+  },
+  "host": "survey.holder.com.au",
+  "basePath": "/survey-au/v1",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/survey/questions": {
+      "get": {
+        "summary": "Get Survey Questions",
+        "description": "Obtain a list of survey questions",
+        "operationId": "surveyQuestions",
+        "x-scopes": [
+          "survey:questions.basic:read"
+        ],
+        "tags": [
+          "Survey"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ParamSurveyId"
+          },
+          {
+            "$ref": "#/parameters/RequestHeader_x-v"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "x-v": {
+                "type": "string",
+                "description": "The [version](#response-headers) of the API end point that the data holder has responded with."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ResponseSurveyQuestionList"
+            }
+          }
+        },
+        "x-version": "1"
+      }
+    }
+  },
+  "parameters": {
+    "RequestHeader_x-v": {
+      "name": "x-v",
+      "description": "Version of the API end point requested by the client. Must be set to a positive integer. The data holder should respond with the highest supported version between [x-min-v](#request-headers) and [x-v](#request-headers). If the value of [x-min-v](#request-headers) is equal to or higher than the value of [x-v](#request-headers) then the [x-min-v](#request-headers) header should be treated as absent. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers)",
+      "in": "header",
+      "type": "string",
+      "required": true
+    },
+    "ParamSurveyId": {
+      "name": "surveyId",
+      "in": "query",
+      "description": "Survey ID",
+      "required": true,
+      "type": "integer"
+    }
+  },
+  "definitions": {
+    "ResponseSurveyQuestionList": {
+      "type": "object",
+      "required": [
+        "data",
+        "links",
+        "meta"
+      ],
+      "properties": {
+        "data": {
+          "type": "object",
+          "required": [
+            "questions"
+          ],
+          "properties": {
+            "questions": {
+              "description": "The list of questions returned. If the filter results in an empty set then this array may have no records",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Question": {
+      "type": "object",
+      "required": [
+        "type",
+        "answers"
+      ],
+      "properties": {
+        "type": { "$ref": "#/definitions/QuestionType" },
+        "answers": {
+          "description": "An array of question answers",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Answer"
+          }
+        }
+      }
+    },
+    "QuestionType": {
+      "type": "string",
+      "description": "Question Types",
+      "enum": [
+        "TEXT",
+        "RADIOGROUP",
+        "DROPDOWN",
+        "CHECKBOXES",
+        "BOOLEAN",
+        "COMMENT"
+      ]
+    },
+    "Answer": {
+      "type": "string",
+      "description": "Question Answer"
+    }
+  }
 }
