@@ -16,28 +16,33 @@
     <description>JSON Schema for Survey</description>
     <url>https://github.com/totemsoft/serverless/schema/survey</url>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.openapitools</groupId>
-                <artifactId>openapi-generator-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>survey</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${openapitools.skip}</skip>
-                            <inputSpec>${basedir}/src/main/resources/elixir-survey.yaml</inputSpec>
-                            <basePackage>au.com.totemsoft.elixir.survey.v1</basePackage>
-                            <modelPackage>au.com.totemsoft.elixir.survey.v1.model</modelPackage>
-                            <apiPackage>au.com.totemsoft.elixir.survey.v1.api</apiPackage>
-                            <invokerPackage>au.com.totemsoft.elixir.survey.v1.handler</invokerPackage>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <profiles>
+        <profile>
+            <id>survey</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openapitools</groupId>
+                        <artifactId>openapi-generator-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>survey</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${openapitools.skip}</skip>
+                                    <inputSpec>${basedir}/src/main/resources/elixir-survey.yaml</inputSpec>
+                                    <basePackage>au.com.totemsoft.elixir.survey.v1</basePackage>
+                                    <modelPackage>au.com.totemsoft.elixir.survey.v1.model</modelPackage>
+                                    <apiPackage>au.com.totemsoft.elixir.survey.v1.api</apiPackage>
+                                    <invokerPackage>au.com.totemsoft.elixir.survey.v1.handler</invokerPackage>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

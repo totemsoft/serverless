@@ -69,12 +69,11 @@
                 <plugin>
                     <groupId>org.openapitools</groupId>
                     <artifactId>openapi-generator-maven-plugin</artifactId>
-                    <version>4.3.0</version>
+                    <version>4.3.1</version>
                     <configuration>
                         <generatorName>spring</generatorName>
                         <!--generatorName>jaxrs-cxf</generatorName-->
-                        <!--output>${basedir}</output-->
-                        <output>${basedir}/target/generated</output>
+                        <output>${basedir}</output>
                         <withXml>false</withXml>
                         <configOptions>
                             <library>spring-mvc</library>
@@ -96,5 +95,19 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*ApiUtil.java</exclude>
+                        <exclude>**/*ApiController.java</exclude>
+                        <exclude>**/*ApiDelegate.java</exclude>
+                        <exclude>org/openapitools/**/*.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>

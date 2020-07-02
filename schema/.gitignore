@@ -1,0 +1,6 @@
+/**/.openapi-generator/
+/**/application.properties
+/**/ApiUtil.java
+/**/*ApiController.java
+/**/*ApiDelegate.java
+/**/org/openapitools/configuration
