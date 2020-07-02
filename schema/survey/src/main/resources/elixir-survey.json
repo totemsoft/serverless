@@ -27,7 +27,7 @@
   ],
   "paths": {
     "/survey/questions": {
-      "get": {
+      "post": {
         "summary": "Get Survey Questions",
         "description": "Obtain a list of survey questions",
         "operationId": "surveyQuestions",
@@ -39,10 +39,10 @@
         ],
         "parameters": [
           {
-            "$ref": "#/parameters/ParamSurveyId"
+            "$ref": "#/parameters/RequestHeader_x-v"
           },
           {
-            "$ref": "#/parameters/RequestHeader_x-v"
+            "$ref": "#/parameters/RequestSurvey"
           }
         ],
         "responses": {
@@ -55,7 +55,7 @@
               }
             },
             "schema": {
-              "$ref": "#/definitions/ResponseSurveyQuestionList"
+              "$ref": "#/definitions/ResponseSurvey"
             }
           }
         },
@@ -71,21 +71,33 @@
       "type": "string",
       "required": true
     },
-    "ParamSurveyId": {
-      "name": "surveyId",
-      "in": "query",
-      "description": "Survey ID",
+    "RequestSurvey": {
+      "name": "surveyRequest",
+      "in": "body",
+      "description": "Survey Request",
       "required": true,
-      "type": "integer"
+      "schema": {
+        "$ref": "#/definitions/RequestSurvey"
+      }
     }
   },
   "definitions": {
-    "ResponseSurveyQuestionList": {
+    "RequestSurvey": {
       "type": "object",
       "required": [
-        "data",
-        "links",
-        "meta"
+        "surveyId"
+      ],
+      "properties": {
+        "surveyId": {
+          "type": "string",
+          "description": "Survey Id"
+        }
+      }
+    },
+    "ResponseSurvey": {
+      "type": "object",
+      "required": [
+        "data"
       ],
       "properties": {
         "data": {

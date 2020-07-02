@@ -14,67 +14,17 @@
 
     <name>Serverless Elixir API</name>
     <description>Serverless Elixir API</description>
-    <url>https://github.com/totemsoft/serverless</url>
-
-    <properties>
-        <spring.version>5.2.5.RELEASE</spring.version>
-        <log4j.version>2.13.3</log4j.version>
-    </properties>
+    <url>https://github.com/totemsoft/serverless/elixir-service</url>
 
     <dependencies>
         <dependency>
             <groupId>com.amazonaws.serverless</groupId>
             <artifactId>aws-serverless-java-container-spring</artifactId>
-            <version>1.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <!--
-             the Spring Context Indexer run an annotation processor at compile time and generates
-             a META-INF/spring.components file that Spring can use to speed up component scanning at boot time.
-             For small applications, this doesn't make a big difference. However, for large applications with
-             complex dependencies this may improve your cold start time significantly.
-        -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-indexer</artifactId>
-            <version>${spring.version}</version>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-log4j2</artifactId>
-            <version>1.1.0</version>
         </dependency>
     </dependencies>
 

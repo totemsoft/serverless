@@ -21,6 +21,8 @@
     </modules>
 
     <properties>
+        <openapitools.skip>true</openapitools.skip>
+
         <cxf.version>3.3.5</cxf.version>
         <swagger.version>1.6.0</swagger.version>
         <jackson.version>2.10.2</jackson.version>
@@ -73,6 +75,7 @@
                         <!--generatorName>jaxrs-cxf</generatorName-->
                         <!--output>${basedir}</output-->
                         <output>${basedir}/target/generated</output>
+                        <withXml>false</withXml>
                         <configOptions>
                             <library>spring-mvc</library>
                             <sourceFolder>src/main/java</sourceFolder>

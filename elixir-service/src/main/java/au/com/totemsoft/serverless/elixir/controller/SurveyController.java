@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RestController
 @EnableWebMvc
-@RequestMapping("/survey")
+@RequestMapping("${openapi.elixirSurvey.base-path:/survey}")
 public class SurveyController {
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON)

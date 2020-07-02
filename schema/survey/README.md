@@ -7,5 +7,4 @@ You can view the server in swagger-ui by pointing to
 http://localhost:8080/survey-au/v1/
 
 ## Links
-* [JSON Schema](https://json-schema.org/implementations.html)
 * [SurveyJS](https://surveyjs.io/Examples/Library/?id=questiontype-text&platform=jQuery&theme=default)

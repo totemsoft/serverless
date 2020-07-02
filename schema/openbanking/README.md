@@ -1,6 +1,4 @@
-# JSON Schema
+# JSON Schema for Poen Banking
 
 ## Links
-* [JSON Schema](https://json-schema.org/implementations.html)
-* [JSON Schema Generator](https://jsonschema.net/home)
-* [SurveyJS](https://surveyjs.io/Examples/Library/?id=questiontype-text&platform=jQuery&theme=default)
+* [Consumer Data Right (CDR)](https://consumerdatastandardsaustralia.github.io/standards/#introduction)
