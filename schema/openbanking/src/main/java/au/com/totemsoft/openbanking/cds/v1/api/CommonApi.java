@@ -25,9 +25,7 @@ import io.swagger.annotations.ApiResponses;
 @Api(value = "common", description = "the common API")
 public interface CommonApi {
 
-    default CommonApiDelegate getDelegate() {
-        return new CommonApiDelegate() {};
-    }
+    CommonApi getDelegate();
 
     /**
      * GET /common/customer : Get Customer

@@ -42,9 +42,7 @@ import io.swagger.annotations.ApiResponses;
 @Api(value = "banking", description = "the banking API")
 public interface BankingApi {
 
-    default BankingApiDelegate getDelegate() {
-        return new BankingApiDelegate() {};
-    }
+    BankingApi getDelegate();
 
     /**
      * GET /banking/accounts/{accountId} : Get Account Detail

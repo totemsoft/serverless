@@ -17,7 +17,7 @@
 
     <modules>
         <module>survey</module>
-        <!--module>openbanking</module-->
+        <module>openbanking</module>
     </modules>
 
     <properties>

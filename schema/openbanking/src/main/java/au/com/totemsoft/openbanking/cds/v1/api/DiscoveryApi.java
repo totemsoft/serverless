@@ -25,9 +25,7 @@ import io.swagger.annotations.ApiResponses;
 @Api(value = "discovery", description = "the discovery API")
 public interface DiscoveryApi {
 
-    default DiscoveryApiDelegate getDelegate() {
-        return new DiscoveryApiDelegate() {};
-    }
+    DiscoveryApi getDelegate();
 
     /**
      * GET /discovery/outages : Get Outages
