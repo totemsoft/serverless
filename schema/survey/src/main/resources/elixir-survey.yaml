@@ -52,7 +52,7 @@ parameters:
     name: surveyRequest
     in: body
     description: Survey Request
-    required: true,
+    required: true
     schema:
       $ref: '#/definitions/RequestSurvey'
 definitions:
