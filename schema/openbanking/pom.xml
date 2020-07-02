@@ -31,7 +31,6 @@
                                     <goal>generate</goal>
                                 </goals>
                                 <configuration>
-                                    <skip>false</skip>
                                     <inputSpec>${basedir}/src/main/resources/cds/cds_full.json</inputSpec>
                                     <basePackage>au.com.totemsoft.openbanking.cds.v1</basePackage>
                                     <modelPackage>au.com.totemsoft.openbanking.cds.v1.model</modelPackage>
