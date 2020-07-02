@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 # **surveyQuestions**
 ```swift
-    open class func surveyQuestions(xV: String, surveyRequest: RequestSurvey? = nil, completion: @escaping (_ data: ResponseSurvey?, _ error: Error?) -> Void)
+    open class func surveyQuestions(xV: String, surveyRequest: RequestSurvey, completion: @escaping (_ data: ResponseSurvey?, _ error: Error?) -> Void)
 ```
 
 Get Survey Questions
@@ -22,7 +22,7 @@ Obtain a list of survey questions
 import OpenAPIClient
 
 let xV = "xV_example" // String | Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers).
-let surveyRequest = RequestSurvey(surveyId: "surveyId_example") // RequestSurvey | Survey Request (optional)
+let surveyRequest = RequestSurvey(surveyId: "surveyId_example") // RequestSurvey | Survey Request
 
 // Get Survey Questions
 SurveyAPI.surveyQuestions(xV: xV, surveyRequest: surveyRequest) { (response, error) in
@@ -42,7 +42,7 @@ SurveyAPI.surveyQuestions(xV: xV, surveyRequest: surveyRequest) { (response, err
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xV** | **String** | Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers). | 
- **surveyRequest** | [**RequestSurvey**](RequestSurvey.md) | Survey Request | [optional] 
+ **surveyRequest** | [**RequestSurvey**](RequestSurvey.md) | Survey Request | 
 
 ### Return type
 

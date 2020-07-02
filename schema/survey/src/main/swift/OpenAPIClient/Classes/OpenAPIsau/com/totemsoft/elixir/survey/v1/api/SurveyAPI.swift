@@ -14,11 +14,11 @@ open class SurveyAPI {
      Get Survey Questions
      
      - parameter xV: (header) Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers). 
-     - parameter surveyRequest: (body) Survey Request (optional)
+     - parameter surveyRequest: (body) Survey Request 
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func surveyQuestions(xV: String, surveyRequest: RequestSurvey? = nil, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: ResponseSurvey?,_ error: Error?) -> Void)) {
+    open class func surveyQuestions(xV: String, surveyRequest: RequestSurvey, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: ResponseSurvey?,_ error: Error?) -> Void)) {
         surveyQuestionsWithRequestBuilder(xV: xV, surveyRequest: surveyRequest).execute(apiResponseQueue) { result -> Void in
             switch result {
             case let .success(response):
@@ -35,10 +35,10 @@ open class SurveyAPI {
      - Obtain a list of survey questions
      - responseHeaders: [x-v(String)]
      - parameter xV: (header) Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers). 
-     - parameter surveyRequest: (body) Survey Request (optional)
+     - parameter surveyRequest: (body) Survey Request 
      - returns: RequestBuilder<ResponseSurvey> 
      */
-    open class func surveyQuestionsWithRequestBuilder(xV: String, surveyRequest: RequestSurvey? = nil) -> RequestBuilder<ResponseSurvey> {
+    open class func surveyQuestionsWithRequestBuilder(xV: String, surveyRequest: RequestSurvey) -> RequestBuilder<ResponseSurvey> {
         let path = "/survey/questions"
         let URLString = OpenAPIClientAPI.basePath + path
         let parameters = JSONEncodingHelper.encodingParameters(forEncodableObject: surveyRequest)
