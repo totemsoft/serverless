@@ -32,8 +32,8 @@ public interface SurveyApi {
      * POST /survey/questions : Get Survey Questions
      * Obtain a list of survey questions
      *
-     * @param xV Version of the API end point requested by the client. Must be set to a positive integer. The data holder should respond with the highest supported version between [x-min-v](#request-headers) and [x-v](#request-headers). If the value of [x-min-v](#request-headers) is equal to or higher than the value of [x-v](#request-headers) then the [x-min-v](#request-headers) header should be treated as absent. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers) (required)
-     * @param surveyRequest Survey Request (required)
+     * @param xV Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers). (required)
+     * @param surveyRequest Survey Request (optional)
      * @return Success (status code 200)
      */
     @ApiOperation(value = "Get Survey Questions", nickname = "surveyQuestions", notes = "Obtain a list of survey questions", response = ResponseSurvey.class, tags={ "Survey", })
@@ -43,7 +43,7 @@ public interface SurveyApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    default ResponseEntity<ResponseSurvey> surveyQuestions(@ApiParam(value = "Version of the API end point requested by the client. Must be set to a positive integer. The data holder should respond with the highest supported version between [x-min-v](#request-headers) and [x-v](#request-headers). If the value of [x-min-v](#request-headers) is equal to or higher than the value of [x-v](#request-headers) then the [x-min-v](#request-headers) header should be treated as absent. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers)" ,required=true) @RequestHeader(value="x-v", required=true) String xV,@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody RequestSurvey surveyRequest) {
+    default ResponseEntity<ResponseSurvey> surveyQuestions(@ApiParam(value = "Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="x-v", required=true) String xV,@ApiParam(value = "Survey Request"  )  @Valid @RequestBody(required = false) RequestSurvey surveyRequest) {
         return getDelegate().surveyQuestions(xV, surveyRequest);
     }
 

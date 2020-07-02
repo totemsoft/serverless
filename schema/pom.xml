@@ -21,7 +21,7 @@
     </modules>
 
     <properties>
-        <openapitools.skip>true</openapitools.skip>
+        <openapitools.skip>false</openapitools.skip>
 
         <cxf.version>3.3.5</cxf.version>
         <swagger.version>1.6.0</swagger.version>

@@ -29,7 +29,7 @@
                         </goals>
                         <configuration>
                             <skip>${openapitools.skip}</skip>
-                            <inputSpec>${basedir}/src/main/resources/elixir-survey.json</inputSpec>
+                            <inputSpec>${basedir}/src/main/resources/elixir-survey.yaml</inputSpec>
                             <basePackage>au.com.totemsoft.elixir.survey.v1</basePackage>
                             <modelPackage>au.com.totemsoft.elixir.survey.v1.model</modelPackage>
                             <apiPackage>au.com.totemsoft.elixir.survey.v1.api</apiPackage>

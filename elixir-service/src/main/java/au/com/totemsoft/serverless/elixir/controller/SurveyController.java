@@ -11,10 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import au.com.totemsoft.elixir.survey.v1.api.SurveyApi;
+
 @RestController
 @EnableWebMvc
 @RequestMapping("${openapi.elixirSurvey.base-path:/survey}")
-public class SurveyController {
+public class SurveyController implements SurveyApi {
+
+    @Override
+    public SurveyApi getDelegate() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON)
     public Map<String, String> survey(@PathVariable("id") int id) {

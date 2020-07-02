@@ -26,6 +26,12 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-log4j2</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>au.com.totemsoft.serverless.schema</groupId>
+            <artifactId>survey</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <profiles>

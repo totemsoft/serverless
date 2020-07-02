@@ -31,10 +31,10 @@ public class ResponseSurveyData   {
   }
 
   /**
-   * The list of questions returned. If the filter results in an empty set then this array may have no records
+   * The list of questions returned. If the filter results in an empty set then this array may have no records.
    * @return questions
   */
-  @ApiModelProperty(required = true, value = "The list of questions returned. If the filter results in an empty set then this array may have no records")
+  @ApiModelProperty(required = true, value = "The list of questions returned. If the filter results in an empty set then this array may have no records.")
   @NotNull
 
   @Valid
