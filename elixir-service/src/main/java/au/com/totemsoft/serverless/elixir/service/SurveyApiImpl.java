@@ -1,5 +1,6 @@
 package au.com.totemsoft.serverless.elixir.service;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,12 @@ public class SurveyApiImpl implements SurveyApi {
 
     @Override
     public ResponseEntity<ResponseSurvey> surveyQuestions(String xV, RequestSurvey surveyRequest) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        ResponseSurvey survey = new ResponseSurvey();
+        HttpHeaders responseHeaders = new HttpHeaders();
+        //responseHeaders.setLocation(location);
+        //responseHeaders.set("MyResponseHeader", "MyValue");
+        return new ResponseEntity<>(survey, responseHeaders, HttpStatus.OK);
+        //return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

@@ -1,5 +1,7 @@
 package au.com.totemsoft.elixir.survey.v1.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -14,29 +16,35 @@ import io.swagger.annotations.ApiModelProperty;
  */
 
 public class ResponseSurvey   {
-  @JsonProperty("data")
-  private ResponseSurveyData data;
+  @JsonProperty("questions")
+  @Valid
+  private List<Question> questions = new ArrayList<>();
 
-  public ResponseSurvey data(ResponseSurveyData data) {
-    this.data = data;
+  public ResponseSurvey questions(List<Question> questions) {
+    this.questions = questions;
+    return this;
+  }
+
+  public ResponseSurvey addQuestionsItem(Question questionsItem) {
+    this.questions.add(questionsItem);
     return this;
   }
 
   /**
-   * Get data
-   * @return data
+   * The list of questions returned. If the filter results in an empty set then this array may have no records.
+   * @return questions
   */
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(required = true, value = "The list of questions returned. If the filter results in an empty set then this array may have no records.")
   @NotNull
 
   @Valid
 
-  public ResponseSurveyData getData() {
-    return data;
+  public List<Question> getQuestions() {
+    return questions;
   }
 
-  public void setData(ResponseSurveyData data) {
-    this.data = data;
+  public void setQuestions(List<Question> questions) {
+    this.questions = questions;
   }
 
 
@@ -49,12 +57,12 @@ public class ResponseSurvey   {
       return false;
     }
     ResponseSurvey responseSurvey = (ResponseSurvey) o;
-    return Objects.equals(this.data, responseSurvey.data);
+    return Objects.equals(this.questions, responseSurvey.questions);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(data);
+    return Objects.hash(questions);
   }
 
   @Override
@@ -62,7 +70,7 @@ public class ResponseSurvey   {
     StringBuilder sb = new StringBuilder();
     sb.append("class ResponseSurvey {\n");
     
-    sb.append("    data: ").append(toIndentedString(data)).append("\n");
+    sb.append("    questions: ").append(toIndentedString(questions)).append("\n");
     sb.append("}");
     return sb.toString();
   }

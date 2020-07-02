@@ -67,18 +67,13 @@ definitions:
   ResponseSurvey:
     type: object
     required:
-      - data
+      - questions
     properties:
-      data:
-        type: object
-        required:
-          - questions
-        properties:
-          questions:
-            description: The list of questions returned. If the filter results in an empty set then this array may have no records.
-            type: array
-            items:
-              $ref: '#/definitions/Question'
+      questions:
+        description: The list of questions returned. If the filter results in an empty set then this array may have no records.
+        type: array
+        items:
+          $ref: '#/definitions/Question'
   Question:
     type: object
     required:
