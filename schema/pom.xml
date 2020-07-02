@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-    http://joelittlejohn.github.io/jsonschema2pojo/site/1.0.2/generate-mojo.html 
-    %M2_HOME%\bin\mvn clean generate-sources
--->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -73,12 +69,12 @@
                     <artifactId>openapi-generator-maven-plugin</artifactId>
                     <version>4.3.0</version>
                     <configuration>
-                        <generatorName>jaxrs-cxf</generatorName>
-                        <!--generatorName>spring</generatorName-->
-                        <output>${basedir}</output>
-                        <!--output>${basedir}/target/generated</output-->
+                        <generatorName>spring</generatorName>
+                        <!--generatorName>jaxrs-cxf</generatorName-->
+                        <!--output>${basedir}</output-->
+                        <output>${basedir}/target/generated</output>
                         <configOptions>
-                            <!--library>spring-mvc</library-->
+                            <library>spring-mvc</library>
                             <sourceFolder>src/main/java</sourceFolder>
                             <generateApiTests>false</generateApiTests>
                             <generateApiDocumentation>false</generateApiDocumentation>
