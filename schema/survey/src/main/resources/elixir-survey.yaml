@@ -43,6 +43,7 @@ paths:
       summary: Get Survey Questions
       description: Obtain a list of survey questions
       operationId: surveyQuestions
+      security: [] # No security
       x-scopes:
         - survey:question.basic:read
       tags:
@@ -51,7 +52,7 @@ paths:
         - $ref: '#/parameters/RequestHeader_x-v'
         - $ref: '#/parameters/RequestSurvey'
       responses:
-        '200':
+        200:
           description: Success
           headers:
             x-v:
@@ -65,6 +66,8 @@ paths:
       summary: Uploads a file.
       description: Uploads a file.
       operationId: surveyUpload
+      security:
+        - OAuth2: [write]
       x-scopes:
         - survey:question.basic:upload
       tags:
@@ -83,10 +86,14 @@ paths:
           required: false
           description: Description of file contents.
       responses:
-        '200':
+        200:
           description: Success
           schema:
             $ref: '#/definitions/ResponseUpload'
+        401:
+          description: Not authenticated
+        403:
+          description: Access token does not have the required scope
 # parameters
 parameters:
   RequestHeader_x-v:
