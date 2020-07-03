@@ -18,6 +18,25 @@ consumes:
   - application/json
 produces:
   - application/json
+#
+# The securityDefinitions section is used to define all security schemes (authentication types) supported by the API.
+securityDefinitions:
+  BasicAuth:
+    type: basic
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-API-Key
+  OAuth2:
+    type: oauth2
+    flow: accessCode
+    authorizationUrl: https://example.com/oauth/authorize
+    tokenUrl: https://example.com/oauth/token
+    scopes:
+      read: Grants read access
+      write: Grants write access
+      admin: Grants read and write access to administrative information
+# paths
 paths:
   /survey/questions:
     post:
@@ -25,7 +44,7 @@ paths:
       description: Obtain a list of survey questions
       operationId: surveyQuestions
       x-scopes:
-        - survey:questions.basic:read
+        - survey:question.basic:read
       tags:
         - Survey
       parameters:
@@ -41,6 +60,35 @@ paths:
           schema:
             $ref: '#/definitions/ResponseSurvey'
       x-version: 1
+  /survey/upload:
+    post:
+      summary: Uploads a file.
+      description: Uploads a file.
+      operationId: surveyUpload
+      x-scopes:
+        - survey:question.basic:upload
+      tags:
+        - Survey
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: fileUpload
+          type: file
+          required: false
+          description: The file to upload.
+          #x-mimetype: application/zip
+        - in: formData
+          name: fileNote
+          type: string
+          required: false
+          description: Description of file contents.
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ResponseUpload'
+# parameters
 parameters:
   RequestHeader_x-v:
     name: x-v
@@ -55,6 +103,7 @@ parameters:
     required: true
     schema:
       $ref: '#/definitions/RequestSurvey'
+# definitions
 definitions:
   RequestSurvey:
     type: object
@@ -114,3 +163,11 @@ definitions:
       text:
         type: string
         description: Answer text
+  ResponseUpload:
+    type: object
+    required:
+      - surveyId
+    properties:
+      surveyId:
+        description: Survey Id
+        type: string

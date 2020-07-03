@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import au.com.totemsoft.elixir.survey.v1.model.RequestSurvey;
 import au.com.totemsoft.elixir.survey.v1.model.ResponseSurvey;
+import au.com.totemsoft.elixir.survey.v1.model.ResponseUpload;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -45,6 +48,26 @@ public interface SurveyApi {
         method = RequestMethod.POST)
     default ResponseEntity<ResponseSurvey> surveyQuestions(@ApiParam(value = "Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="x-v", required=true) String xV,@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody RequestSurvey surveyRequest) {
         return getDelegate().surveyQuestions(xV, surveyRequest);
+    }
+
+
+    /**
+     * POST /survey/upload : Uploads a file.
+     * Uploads a file.
+     *
+     * @param fileUpload The file to upload. (optional)
+     * @param fileNote Description of file contents. (optional)
+     * @return Success (status code 200)
+     */
+    @ApiOperation(value = "Uploads a file.", nickname = "surveyUpload", notes = "Uploads a file.", response = ResponseUpload.class, tags={ "Survey", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "Success", response = ResponseUpload.class) })
+    @RequestMapping(value = "/survey/upload",
+        produces = { "application/json" }, 
+        consumes = { "multipart/form-data" },
+        method = RequestMethod.POST)
+    default ResponseEntity<ResponseUpload> surveyUpload(@ApiParam(value = "The file to upload.") @Valid @RequestPart(value = "fileUpload") MultipartFile fileUpload,@ApiParam(value = "Description of file contents.") @RequestPart(value="fileNote", required=false)  String fileNote) {
+        return getDelegate().surveyUpload(fileUpload, fileNote);
     }
 
 }
