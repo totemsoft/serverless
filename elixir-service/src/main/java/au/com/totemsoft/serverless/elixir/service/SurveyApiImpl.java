@@ -47,7 +47,7 @@ public class SurveyApiImpl implements SurveyApi {
 
     @Override
     public ResponseEntity<ResponseUpload> surveyUpload(MultipartFile fileUpload, String fileNote) {
-        String fileInfo = String.format("name: %s, size: %d", fileUpload.getName(), fileUpload.getSize());
+        String fileInfo = String.format("name: %s, size: %d", fileUpload.getOriginalFilename(), fileUpload.getSize());
         ResponseUpload result = new ResponseUpload().surveyId(fileNote + " - " + fileInfo);
         // TODO: save in s3
         return entity(result);
