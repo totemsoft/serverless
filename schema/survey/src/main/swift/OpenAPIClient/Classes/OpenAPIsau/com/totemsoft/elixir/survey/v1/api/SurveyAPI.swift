@@ -54,4 +54,49 @@ open class SurveyAPI {
         return requestBuilder.init(method: "POST", URLString: (url?.string ?? URLString), parameters: parameters, isBody: true, headers: headerParameters)
     }
 
+    /**
+     Uploads a file.
+     
+     - parameter fileUpload: (form) The file to upload. 
+     - parameter fileNote: (form) Description of file contents. (optional)
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
+     */
+    open class func surveyUpload(fileUpload: URL, fileNote: String? = nil, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: ResponseUpload?,_ error: Error?) -> Void)) {
+        surveyUploadWithRequestBuilder(fileUpload: fileUpload, fileNote: fileNote).execute(apiResponseQueue) { result -> Void in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
+    }
+
+    /**
+     Uploads a file.
+     - POST /survey/upload
+     - Uploads a file.
+     - parameter fileUpload: (form) The file to upload. 
+     - parameter fileNote: (form) Description of file contents. (optional)
+     - returns: RequestBuilder<ResponseUpload> 
+     */
+    open class func surveyUploadWithRequestBuilder(fileUpload: URL, fileNote: String? = nil) -> RequestBuilder<ResponseUpload> {
+        let path = "/survey/upload"
+        let URLString = OpenAPIClientAPI.basePath + path
+        let formParams: [String:Any?] = [
+            "fileUpload": fileUpload.encodeToJSON(),
+            "fileNote": fileNote?.encodeToJSON()
+        ]
+
+        let nonNullParameters = APIHelper.rejectNil(formParams)
+        let parameters = APIHelper.convertBoolToString(nonNullParameters)
+        
+        let url = URLComponents(string: URLString)
+
+        let requestBuilder: RequestBuilder<ResponseUpload>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+
+        return requestBuilder.init(method: "POST", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
+    }
+
 }

@@ -55,7 +55,7 @@ public interface SurveyApi {
      * POST /survey/upload : Uploads a file.
      * Uploads a file.
      *
-     * @param fileUpload The file to upload. (optional)
+     * @param fileUpload The file to upload. (required)
      * @param fileNote Description of file contents. (optional)
      * @return Success (status code 200)
      */

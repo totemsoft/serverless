@@ -27,6 +27,7 @@ All URIs are relative to *https://survey.holder.com.au/survey-au/v1*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *SurveyAPI* | [**surveyQuestions**](docs/SurveyAPI.md#surveyquestions) | **POST** /survey/questions | Get Survey Questions
+*SurveyAPI* | [**surveyUpload**](docs/SurveyAPI.md#surveyupload) | **POST** /survey/upload | Uploads a file.
 
 
 ## Documentation For Models
@@ -36,11 +37,31 @@ Class | Method | HTTP request | Description
  - [QuestionType](docs/QuestionType.md)
  - [RequestSurvey](docs/RequestSurvey.md)
  - [ResponseSurvey](docs/ResponseSurvey.md)
+ - [ResponseUpload](docs/ResponseUpload.md)
 
 
 ## Documentation For Authorization
 
- All endpoints do not require authorization.
+
+## ApiKeyAuth
+
+- **Type**: API key
+- **API key parameter name**: X-API-Key
+- **Location**: HTTP header
+
+## BasicAuth
+
+- **Type**: HTTP basic authentication
+
+## OAuth2
+
+- **Type**: OAuth
+- **Flow**: accessCode
+- **Authorization URL**: https://example.com/oauth/authorize
+- **Scopes**: 
+ - **read**: Grants read access
+ - **write**: Grants write access
+ - **admin**: Grants read and write access to administrative information
 
 
 ## Author

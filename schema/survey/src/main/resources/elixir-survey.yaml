@@ -75,9 +75,8 @@ paths:
         - in: formData
           name: fileUpload
           type: file
-          required: false
+          required: true
           description: The file to upload.
-          #x-mimetype: application/zip
         - in: formData
           name: fileNote
           type: string

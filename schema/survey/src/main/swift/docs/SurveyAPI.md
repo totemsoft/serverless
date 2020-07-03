@@ -5,6 +5,7 @@ All URIs are relative to *https://survey.holder.com.au/survey-au/v1*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**surveyQuestions**](SurveyAPI.md#surveyquestions) | **POST** /survey/questions | Get Survey Questions
+[**surveyUpload**](SurveyAPI.md#surveyupload) | **POST** /survey/upload | Uploads a file.
 
 
 # **surveyQuestions**
@@ -55,6 +56,58 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **surveyUpload**
+```swift
+    open class func surveyUpload(fileUpload: URL, fileNote: String? = nil, completion: @escaping (_ data: ResponseUpload?, _ error: Error?) -> Void)
+```
+
+Uploads a file.
+
+Uploads a file.
+
+### Example 
+```swift
+// The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
+import OpenAPIClient
+
+let fileUpload = URL(string: "https://example.com")! // URL | The file to upload.
+let fileNote = "fileNote_example" // String | Description of file contents. (optional)
+
+// Uploads a file.
+SurveyAPI.surveyUpload(fileUpload: fileUpload, fileNote: fileNote) { (response, error) in
+    guard error == nil else {
+        print(error)
+        return
+    }
+
+    if (response) {
+        dump(response)
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **fileUpload** | **URL** | The file to upload. | 
+ **fileNote** | **String** | Description of file contents. | [optional] 
+
+### Return type
+
+[**ResponseUpload**](ResponseUpload.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

@@ -16,7 +16,7 @@
     <modules>
         <module>schema</module>
         <!-- build with SAM CLI -->
-        <!--module>elixir-service</module-->
+        <module>elixir-service</module>
     </modules>
 
     <properties>
