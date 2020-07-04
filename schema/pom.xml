@@ -23,7 +23,7 @@
     <properties>
         <cxf.version>3.3.5</cxf.version>
         <swagger.version>1.6.0</swagger.version>
-        <jackson.version>2.10.2</jackson.version>
+        <jackson.version>2.11.0</jackson.version>
     </properties>
 
     <dependencies>

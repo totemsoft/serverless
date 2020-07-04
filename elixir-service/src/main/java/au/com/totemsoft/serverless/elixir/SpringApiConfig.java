@@ -13,14 +13,30 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import au.com.totemsoft.serverless.elixir.config.AuthServerOAuth2Config;
+import au.com.totemsoft.serverless.elixir.config.Encoders;
+import au.com.totemsoft.serverless.elixir.config.HibernateConfiguration;
+import au.com.totemsoft.serverless.elixir.config.ResourceServerConfiguration;
+import au.com.totemsoft.serverless.elixir.config.ServerSecurityConfig;
 import au.com.totemsoft.serverless.elixir.controller.SurveyController;
 import au.com.totemsoft.serverless.elixir.service.SurveyApiImpl;
+import au.com.totemsoft.serverless.elixir.service.UserDetailsServiceImpl;
 
 @Configuration
 // We use direct @Import instead of @ComponentScan to speed up cold starts
 // @ComponentScan("au.com.totemsoft.serverless.elixir")
-@Import({ SurveyController.class, SurveyApiImpl.class })
+@Import({
+    SurveyController.class,
+    SurveyApiImpl.class,
+    UserDetailsServiceImpl.class,
+    HibernateConfiguration.class,
+    AuthServerOAuth2Config.class,
+    Encoders.class,
+    ResourceServerConfiguration.class,
+    ServerSecurityConfig.class
+})
 public class SpringApiConfig {
+
     /*
      * Create required HandlerMapping, to avoid several default HandlerMapping instances being created
      */

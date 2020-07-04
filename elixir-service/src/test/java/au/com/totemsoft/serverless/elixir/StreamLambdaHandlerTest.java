@@ -26,6 +26,9 @@ import com.amazonaws.services.lambda.runtime.Context;
 
 public class StreamLambdaHandlerTest {
 
+    // APPLICATION_JSON_UTF8
+    private static final String APPLICATION_JSON = MediaType.APPLICATION_JSON + ";charset=UTF-8";
+
     private static StreamLambdaHandler handler;
     private static Context lambdaContext;
 
@@ -38,7 +41,7 @@ public class StreamLambdaHandlerTest {
     @Test
     public void survey() {
         InputStream requestStream = new AwsProxyRequestBuilder("/survey/1963", HttpMethod.GET)
-            .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+            .header(HttpHeaders.ACCEPT, APPLICATION_JSON)
             .buildStream();
         ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
 
@@ -60,7 +63,7 @@ public class StreamLambdaHandlerTest {
     @Test
     public void survey_404() {
         InputStream requestStream = new AwsProxyRequestBuilder("/SARVEY", HttpMethod.GET)
-            .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+            .header(HttpHeaders.ACCEPT, APPLICATION_JSON)
             .buildStream();
         ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
 

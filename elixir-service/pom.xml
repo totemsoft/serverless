@@ -8,6 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-parent</artifactId>
+        <!--artifactId>spring-boot-starter-parent</artifactId-->
         <version>2.3.1.RELEASE</version>
         <relativePath>pom.xml</relativePath>
     </parent>
@@ -25,12 +26,11 @@
         <survey.version>1.0.0-SNAPSHOT</survey.version>
 
         <spring-cloud.version>2.2.2.RELEASE</spring-cloud.version>
+        <log4j.version>2.13.3</log4j.version>
 
         <h2.version>1.4.200</h2.version>
         <postgresql.version>42.2.14</postgresql.version>
         <flywaydb.version>6.5.0</flywaydb.version>
-
-        <junit.version>4.13</junit.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -60,6 +60,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-context-indexer</artifactId>
         </dependency>
 
@@ -73,6 +77,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
+        <!--dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate5</artifactId>
+        </dependency-->
 
         <dependency>
             <groupId>com.h2database</groupId>
@@ -98,11 +107,26 @@
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!--dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency-->
 
         <dependency>
             <groupId>au.com.totemsoft.serverless.schema</groupId>
