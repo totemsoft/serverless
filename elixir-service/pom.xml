@@ -16,6 +16,12 @@
     <description>Serverless Elixir API</description>
     <url>https://github.com/totemsoft/serverless/elixir-service</url>
 
+    <properties>
+        <h2.version>1.4.200</h2.version>
+        <postgresql.version>42.2.14</postgresql.version>
+        <flywaydb.version>6.5.0</flywaydb.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.amazonaws.serverless</groupId>
@@ -25,6 +31,27 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-log4j2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-resource-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flywaydb.version}</version>
         </dependency>
 
         <dependency>

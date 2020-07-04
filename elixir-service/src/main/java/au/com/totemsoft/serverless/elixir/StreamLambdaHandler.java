@@ -11,6 +11,8 @@ import com.amazonaws.serverless.proxy.spring.SpringLambdaContainerHandler;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 
+import au.com.totemsoft.serverless.elixir.config.SpringApiConfig;
+
 public class StreamLambdaHandler implements RequestStreamHandler {
 
     private static final SpringLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler;
