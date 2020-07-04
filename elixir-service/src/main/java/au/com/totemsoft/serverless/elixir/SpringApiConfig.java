@@ -1,4 +1,4 @@
-package au.com.totemsoft.serverless.elixir.config;
+package au.com.totemsoft.serverless.elixir;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

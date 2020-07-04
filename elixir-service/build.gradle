@@ -6,10 +6,14 @@ repositories {
 }
 
 dependencies {
+  compileOnly 'org.projectlombok:lombok:1.18.12'
+  annotationProcessor 'org.projectlombok:lombok:1.18.12'
   compile (
-    'org.springframework:spring-webmvc:5.2.5.RELEASE',
-    'org.springframework:spring-context:5.2.5.RELEASE',
-    'org.springframework:spring-context-indexer:5.2.5.RELEASE',
+    'org.springframework.cloud:spring-cloud-starter-oauth2:2.2.2.RELEASE',
+    'org.springframework.boot:spring-boot-starter-data-jpa:2.3.1.RELEASE',
+    'org.springframework:spring-webmvc:5.2.7.RELEASE',
+    'org.springframework:spring-context:5.2.7.RELEASE',
+    'org.springframework:spring-context-indexer:5.2.7.RELEASE',
     'com.amazonaws.serverless:aws-serverless-java-container-spring:[1.5,)',
     'org.apache.logging.log4j:log4j-core:2.13.3',
     'org.apache.logging.log4j:log4j-api:2.13.3',
@@ -19,7 +23,9 @@ dependencies {
     'au.com.totemsoft.serverless.schema:survey:1.0.0-SNAPSHOT',
   )
 
-  testCompile("junit:junit:4.12")
+  testCompileOnly 'org.projectlombok:lombok:1.18.12'
+  testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+  testCompile("junit:junit:4.13")
 }
 
 task buildZip(type: Zip) {
