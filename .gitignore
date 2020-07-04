@@ -2,6 +2,8 @@
 /**/.project
 /**/.flattened-pom.xml
 /**/*.log*
+/**/.gradle/
+/**/build/
 /**/target/
 /**/.settings/
 /**/.aws-sam/

@@ -14,7 +14,16 @@ The project folder also includes a `template.yml` file. You can use this [SAM](h
 You can use the SAM CLI to quickly build the project
 
 ```bash
-$ mvn archetype:generate -DartifactId=elixir-service -DarchetypeGroupId=com.amazonaws.serverless.archetypes -DarchetypeArtifactId=aws-serverless-jersey-archetype -DarchetypeVersion=1.5 -DgroupId=au.com.totemsoft.serverless.elixir -Dversion=1.0.0-SNAPSHOT -Dinteractive=false
+$ mvn archetype:generate -DgroupId=au.com.totemsoft.serverless.elixir -DartifactId=elixir-service -Dversion=1.0.0-SNAPSHOT \
+  -DarchetypeGroupId=com.amazonaws.serverless.archetypes \
+  -DarchetypeArtifactId=aws-serverless-jersey-archetype \
+  -DarchetypeVersion=1.5 -Dinteractive=false
+
+$ mvn archetype:generate -DgroupId=au.com.totemsoft.serverless.elixir -DartifactId=elixir-service -Dversion=1.0.0-SNAPSHOT \
+  -DarchetypeGroupId=com.amazonaws.serverless.archetypes \
+  -DarchetypeArtifactId=aws-serverless-springboot-archetype \
+  -DarchetypeVersion=1.5 -Dinteractive=false
+
 $ cd elixir-service
 $ sam build
 
