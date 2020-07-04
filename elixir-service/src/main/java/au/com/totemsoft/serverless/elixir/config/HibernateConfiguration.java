@@ -30,8 +30,7 @@ import au.com.totemsoft.serverless.elixir.repository.UserRepository;
 @EnableTransactionManagement
 public class HibernateConfiguration {
 
-    @Value("classpath:application-h2.properties")
-    //@Value("classpath:application-postgres.properties")
+    @Value("classpath:${spring.profiles.active:h2}.properties")
     private Resource propertiesResource;
 
     private Properties properties() throws IOException {
@@ -42,8 +41,7 @@ public class HibernateConfiguration {
         }
     }
 
-    @Value("classpath:application-h2-jpa.properties")
-    //@Value("classpath:application-postgres-jpa.properties")
+    @Value("classpath:${spring.profiles.active:h2}-jpa.properties")
     private Resource jpaResource;
 
     private Properties jpaProperties() throws IOException {
