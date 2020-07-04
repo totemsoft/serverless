@@ -88,3 +88,7 @@ $ curl -s https://xxxxxxxxxx.execute-api.ap-southeast-2.amazonaws.com/Prod/surve
     "survey": "Survey"
 }
 ```
+
+## AWS Cognito
+https://docs.aws.amazon.com/cognito/latest/developerguide/token-endpoint.html
+Access token url: https://elixir.auth.ap-southeast-2.amazoncognito.com/oauth2/token

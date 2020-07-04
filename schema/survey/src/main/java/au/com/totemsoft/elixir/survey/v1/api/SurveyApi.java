@@ -24,8 +24,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.Authorization;
-import io.swagger.annotations.AuthorizationScope;
 
 @Validated
 @Api(value = "survey", description = "the survey API")
@@ -63,11 +61,7 @@ public interface SurveyApi {
      *         or Not authenticated (status code 401)
      *         or Access token does not have the required scope (status code 403)
      */
-    @ApiOperation(value = "Uploads a file.", nickname = "surveyUpload", notes = "Uploads a file.", response = ResponseUpload.class, authorizations = {
-        @Authorization(value = "OAuth2", scopes = {
-            @AuthorizationScope(scope = "write", description = "Grants write access")
-            })
-    }, tags={ "Survey", })
+    @ApiOperation(value = "Uploads a file.", nickname = "surveyUpload", notes = "Uploads a file.", response = ResponseUpload.class, tags={ "Survey", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = ResponseUpload.class),
         @ApiResponse(code = 401, message = "Not authenticated"),
