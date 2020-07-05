@@ -6,6 +6,6 @@ stack_name = "elixir-service"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1f2p466o0w557"
 s3_prefix = "elixir-service"
 region = "ap-southeast-2"
-confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
+parameter_overrides = "ServerlessRestApi=\"8cyv1loyhf\""
 

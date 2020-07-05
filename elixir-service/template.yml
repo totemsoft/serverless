@@ -1,11 +1,61 @@
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-template-anatomy.html
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: AWS Serverless Spring API - au.com.totemsoft.serverless.elixir::elixir-service
+
 Globals:
   Api:
+    #Auth: []
     EndpointConfiguration: REGIONAL
 
+Description: AWS Serverless Spring API - au.com.totemsoft.serverless.elixir::elixir-service
+
+Parameters:
+  ServerlessRestApi:
+    Type: String
+    Default: '8cyv1loyhf'
+
 Resources:
+  # Define Amazon Cognito User Pool
+  ElixirApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors: "'*'"
+      OpenApiVersion: '2.0'
+      Auth:
+        DefaultAuthorizer: ElixirCognitoAuthorizer
+        Authorizers:
+          ElixirCognitoAuthorizer:
+            UserPoolArn: arn:aws:cognito-idp:ap-southeast-2:708851056257:userpool/${AWS::Region}_Yhf0y3epT
+            #UserPoolArn:
+            #  Fn::GetAtt: [ElixirCognitoUserPool, Arn]
+            AuthorizationScopes:
+              - elixir/read
+              - elixir/write
+            Identity:
+              Header: 'Authorization'
+#   ElixirCognitoUserPool:
+#     Type: AWS::Cognito::UserPool
+#     Properties:
+#       UserPoolName: 'elixir'
+#       UserPoolName: !Ref CognitoUserPoolName
+#       Policies:
+#         PasswordPolicy:
+#           MinimumLength: 8
+#       UsernameAttributes:
+#         - email
+#       Schema:
+#         - AttributeDataType: String
+#           Name: email
+#           Required: false
+#   ElixirCognitoUserPoolClient:
+#     Type: AWS::Cognito::UserPoolClient
+#     Properties:
+#       UserPoolId: !Ref MyCognitoUserPool
+#       ClientName: !Ref CognitoUserPoolClientName
+#       GenerateSecret: false
+
+  # Define Function(s)
   ElixirServiceFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -16,16 +66,29 @@ Resources:
       Policies: AWSLambdaBasicExecutionRole
       Timeout: 15
       Events:
+        health:
+          Type: Api
+          Properties:
+            Auth:
+              Authorizer: 'NONE'
+            Path: /health
+            Method: get
+            RestApiId:
+              Ref: ElixirApi
         surveyQuestions:
           Type: Api
           Properties:
             Path: /survey/questions
             Method: post
+            RestApiId:
+              Ref: ElixirApi
         surveyUpload:
           Type: Api
           Properties:
             Path: /survey/upload
             Method: post
+            RestApiId:
+              Ref: ElixirApi
 
 Outputs:
   ElixirServiceApi:
