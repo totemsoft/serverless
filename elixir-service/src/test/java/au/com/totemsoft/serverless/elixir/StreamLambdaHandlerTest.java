@@ -40,7 +40,7 @@ public class StreamLambdaHandlerTest {
 
     @Test
     public void survey() {
-        InputStream requestStream = new AwsProxyRequestBuilder("/survey/1963", HttpMethod.GET)
+        InputStream requestStream = new AwsProxyRequestBuilder("/health", HttpMethod.GET)
             .header(HttpHeaders.ACCEPT, APPLICATION_JSON)
             .buildStream();
         ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
@@ -50,19 +50,15 @@ public class StreamLambdaHandlerTest {
         AwsProxyResponse response = readResponse(responseStream);
         assertNotNull(response);
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
-
         assertFalse(response.isBase64Encoded());
-
-        assertTrue(response.getBody().contains("survey"));
-        assertTrue(response.getBody().contains("Survey"));
-
+        assertTrue(response.getBody().contains("\"status\":\"UP\""));
         assertTrue(response.getMultiValueHeaders().containsKey(HttpHeaders.CONTENT_TYPE));
         assertTrue(response.getMultiValueHeaders().getFirst(HttpHeaders.CONTENT_TYPE).startsWith(MediaType.APPLICATION_JSON));
     }
 
     @Test
     public void survey_404() {
-        InputStream requestStream = new AwsProxyRequestBuilder("/SARVEY", HttpMethod.GET)
+        InputStream requestStream = new AwsProxyRequestBuilder("/ZDOROVJE", HttpMethod.GET)
             .header(HttpHeaders.ACCEPT, APPLICATION_JSON)
             .buildStream();
         ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
