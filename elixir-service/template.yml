@@ -16,11 +16,16 @@ Resources:
       Policies: AWSLambdaBasicExecutionRole
       Timeout: 15
       Events:
-        ProxyResource:
+        surveyQuestions:
           Type: Api
           Properties:
-            Path: /{proxy+}
-            Method: any
+            Path: /survey/questions
+            Method: post
+        surveyUpload:
+          Type: Api
+          Properties:
+            Path: /survey/upload
+            Method: post
 
 Outputs:
   ElixirServiceApi:
