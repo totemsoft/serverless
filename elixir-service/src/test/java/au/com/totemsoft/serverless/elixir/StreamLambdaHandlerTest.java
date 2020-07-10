@@ -15,6 +15,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.cxf.helpers.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -72,10 +73,11 @@ public class StreamLambdaHandlerTest {
 
     @Test
     public void survey_upload() throws IOException {
+        InputStream contentStream = getClass().getClassLoader().getResourceAsStream("document.json");
         InputStream requestStream = new AwsProxyRequestBuilder("/survey/upload", HttpMethod.POST)
-            //.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA + "; boundary=survey_upload")
             .header(HttpHeaders.AUTHORIZATION, "Bearer " + System.getProperty("access_token", "{{access_token}}"))
-            .binaryBody(getClass().getClassLoader().getResourceAsStream("document.json"))
+            .formFilePart("fileUpload", "document.json", IOUtils.readBytesFromStream(contentStream))
             .buildStream();
         ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
 
@@ -83,7 +85,7 @@ public class StreamLambdaHandlerTest {
 
         AwsProxyResponse response = readResponse(responseStream);
         assertNotNull(response);
-        assertEquals(502, response.getStatusCode());
+        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatusCode());
     }
 
     private void handle(InputStream is, ByteArrayOutputStream os) {
