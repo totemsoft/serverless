@@ -25,6 +25,10 @@
     <properties>
         <survey.version>1.0.0-SNAPSHOT</survey.version>
 
+        <aws-serverless>1.5</aws-serverless>
+        <aws-lambda>1.1.0</aws-lambda>
+        <amazonaws.version>1.11.819</amazonaws.version>
+
         <spring-cloud.version>2.2.2.RELEASE</spring-cloud.version>
         <log4j.version>2.13.3</log4j.version>
 
@@ -39,15 +43,27 @@
 
     <dependencies>
         <dependency>
+            <groupId>au.com.totemsoft.serverless.schema</groupId>
+            <artifactId>survey</artifactId>
+            <version>${survey.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.amazonaws.serverless</groupId>
             <artifactId>aws-serverless-java-container-spring</artifactId>
-            <version>1.5</version>
+            <version>${aws-serverless}</version>
         </dependency>
 
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-log4j2</artifactId>
-            <version>1.1.0</version>
+            <version>${aws-lambda}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>${amazonaws.version}</version>
         </dependency>
 
         <dependency>
@@ -127,12 +143,6 @@
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>${log4j.version}</version>
         </dependency-->
-
-        <dependency>
-            <groupId>au.com.totemsoft.serverless.schema</groupId>
-            <artifactId>survey</artifactId>
-            <version>${survey.version}</version>
-        </dependency>
     </dependencies>
 
     <profiles>

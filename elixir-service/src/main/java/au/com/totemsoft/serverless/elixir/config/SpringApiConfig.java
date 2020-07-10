@@ -14,12 +14,14 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import au.com.totemsoft.serverless.elixir.controller.SurveyController;
+import au.com.totemsoft.serverless.elixir.service.AwsS3HelperImpl;
 import au.com.totemsoft.serverless.elixir.service.SurveyApiImpl;
 
 @Configuration
 @Import({
     SurveyController.class,
     SurveyApiImpl.class,
+    AwsS3HelperImpl.class,
 })
 public class SpringApiConfig {
 

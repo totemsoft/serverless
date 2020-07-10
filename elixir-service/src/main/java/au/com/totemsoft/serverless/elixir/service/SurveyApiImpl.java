@@ -1,5 +1,12 @@
 package au.com.totemsoft.serverless.elixir.service;
 
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,40 +24,70 @@ import au.com.totemsoft.elixir.survey.v1.model.ResponseUpload;
 @Service("surveyApi")
 public class SurveyApiImpl implements SurveyApi {
 
+    private boolean debug = true;
+
+    @Autowired private UploadHelper uploadHelper;
+
     @Override
     public SurveyApi getDelegate() {
         return this;
     }
 
-    private <T> ResponseEntity<T> entity(T body) {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        //responseHeaders.setLocation(location);
-        //responseHeaders.set("MyResponseHeader", "MyValue");
-        //
-        return new ResponseEntity<>(body, responseHeaders, HttpStatus.OK);
-        //return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
     @Override
     public ResponseEntity<ResponseSurvey> surveyQuestions(String xV, RequestSurvey surveyRequest) {
-        ResponseSurvey result = new ResponseSurvey()
-            .surveyId(surveyRequest.getSurveyId())
-            .addQuestionsItem(new Question()
-                .type(QuestionType.TEXT)
-                .text("What is abra-cadabra?")
-                .addAnswersItem(new Answer().text("It is cool."))
-                .addAnswersItem(new Answer().text("It is not cool."))
-        );
-        //
-        return entity(result);
+        try {
+            ResponseSurvey result = new ResponseSurvey()
+                .surveyId(surveyRequest.getSurveyId())
+                .addQuestionsItem(new Question()
+                    .type(QuestionType.TEXT)
+                    .text("What is abra-cadabra?")
+                    .addAnswersItem(new Answer().text("It is cool."))
+                    .addAnswersItem(new Answer().text("It is not cool."))
+            );
+            //
+            return entity(result, null);
+        } catch (Exception e) {
+            ResponseSurvey error = new ResponseSurvey().surveyId(error(e));
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
     public ResponseEntity<ResponseUpload> surveyUpload(MultipartFile fileUpload, String fileNote) {
-        String fileInfo = String.format("name: %s, size: %d", fileUpload.getOriginalFilename(), fileUpload.getSize());
-        ResponseUpload result = new ResponseUpload().surveyId(fileNote + " - " + fileInfo);
-        // TODO: save in s3
-        return entity(result);
+        try {
+            String fileInfo = String.format("name: %s, size: %d", fileUpload.getOriginalFilename(), fileUpload.getSize());
+            // save s3
+            Resource r = fileUpload.getResource();
+            Map<String, Object> metadata = new TreeMap<>();
+            metadata.put(UploadHelper.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
+            metadata.put(UploadHelper.CONTENT_TYPE, fileUpload.getContentType());
+            metadata.put("fileNote", fileNote);
+            String uploadResult = uploadHelper.upload(r, metadata);
+            // result
+            ResponseUpload result = new ResponseUpload()
+                .surveyId(uploadResult + ": " + fileNote + " - " + fileInfo);
+            return entity(result, null);
+        } catch (Exception e) {
+            ResponseUpload error = new ResponseUpload().surveyId(error(e));
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private <T> ResponseEntity<T> entity(T body, HttpStatus status) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        //responseHeaders.setLocation(location);
+        //responseHeaders.set("MyResponseHeader", "MyValue");
+        //
+        return new ResponseEntity<>(body, responseHeaders, status == null ? HttpStatus.OK : status);
+        //return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    private String error(Exception e) {
+        if (debug) {
+            e.printStackTrace();
+            return ExceptionUtils.getStackTrace(e);
+        }
+        return ExceptionUtils.getRootCauseMessage(e);
     }
 
 }

@@ -39,7 +39,7 @@ public class StreamLambdaHandlerTest {
     }
 
     @Test
-    public void survey() {
+    public void health() {
         InputStream requestStream = new AwsProxyRequestBuilder("/health", HttpMethod.GET)
             .header(HttpHeaders.ACCEPT, APPLICATION_JSON)
             .buildStream();
@@ -57,7 +57,7 @@ public class StreamLambdaHandlerTest {
     }
 
     @Test
-    public void survey_404() {
+    public void health_404() {
         InputStream requestStream = new AwsProxyRequestBuilder("/ZDOROVJE", HttpMethod.GET)
             .header(HttpHeaders.ACCEPT, APPLICATION_JSON)
             .buildStream();
@@ -68,6 +68,22 @@ public class StreamLambdaHandlerTest {
         AwsProxyResponse response = readResponse(responseStream);
         assertNotNull(response);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatusCode());
+    }
+
+    @Test
+    public void survey_upload() throws IOException {
+        InputStream requestStream = new AwsProxyRequestBuilder("/survey/upload", HttpMethod.POST)
+            //.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + System.getProperty("access_token", "{{access_token}}"))
+            .binaryBody(getClass().getClassLoader().getResourceAsStream("document.json"))
+            .buildStream();
+        ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
+
+        handle(requestStream, responseStream);
+
+        AwsProxyResponse response = readResponse(responseStream);
+        assertNotNull(response);
+        assertEquals(502, response.getStatusCode());
     }
 
     private void handle(InputStream is, ByteArrayOutputStream os) {
