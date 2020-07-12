@@ -23,7 +23,7 @@ public class AwsS3HelperImpl implements UploadHelper {
     @Value("#{environment.AWS_BUCKET ?: 'MY_BUCKET'}")
     private String bucket;
 
-    /** S3 does not require region selection */
+    //** S3 does not require region selection */
     //@Value("#{environment.AWS_REGION ?: 'ap-southeast-2'}")
     //private String region;
 
