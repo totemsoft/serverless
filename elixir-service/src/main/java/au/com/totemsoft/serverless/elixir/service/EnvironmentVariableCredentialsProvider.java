@@ -22,6 +22,13 @@ import com.amazonaws.util.StringUtils;
  */
 public class EnvironmentVariableCredentialsProvider implements AWSCredentialsProvider {
 
+    /////////////////////// Environment Variables ///////////////////////
+    /** Environment variable name for the AWS access key ID */
+    private static final String ACCESS_KEY_ID = "ACCESS_KEY_ID";
+
+    /** Environment variable name for the AWS secret key */
+    private static final String SECRET_ACCESS_KEY = "SECRET_ACCESS_KEY";
+
     @Override
     public AWSCredentials getCredentials() {
         String accessKey = System.getenv(ACCESS_KEY_ENV_VAR);
@@ -29,7 +36,7 @@ public class EnvironmentVariableCredentialsProvider implements AWSCredentialsPro
             accessKey = System.getenv(ALTERNATE_ACCESS_KEY_ENV_VAR);
         }
         if (accessKey == null) {
-            accessKey = System.getenv("ACCESS_KEY_ID");
+            accessKey = System.getenv(ACCESS_KEY_ID);
         }
 
         String secretKey = System.getenv(SECRET_KEY_ENV_VAR);
@@ -37,16 +44,16 @@ public class EnvironmentVariableCredentialsProvider implements AWSCredentialsPro
             secretKey = System.getenv(ALTERNATE_SECRET_KEY_ENV_VAR);
         }
         if (secretKey == null) {
-            secretKey = System.getenv("SECRET_ACCESS_KEY");
+            secretKey = System.getenv(SECRET_ACCESS_KEY);
         }
 
         accessKey = StringUtils.trim(accessKey);
         secretKey = StringUtils.trim(secretKey);
         if (StringUtils.isNullOrEmpty(accessKey) || StringUtils.isNullOrEmpty(secretKey)) {
             throw new SdkClientException(
-                    "Unable to load AWS credentials from environment variables " +
-                    "(" + ACCESS_KEY_ENV_VAR + " (or " + ALTERNATE_ACCESS_KEY_ENV_VAR + " or ACCESS_KEY_ID) and " +
-                    SECRET_KEY_ENV_VAR + " (or " + ALTERNATE_SECRET_KEY_ENV_VAR + " or SECRET_ACCESS_KEY))");
+                "Unable to load AWS credentials from environment variables " +
+                "(" + ACCESS_KEY_ENV_VAR + " (or " + ALTERNATE_ACCESS_KEY_ENV_VAR + " or " + ACCESS_KEY_ID + ") and " +
+                SECRET_KEY_ENV_VAR + " (or " + ALTERNATE_SECRET_KEY_ENV_VAR + " or " + SECRET_ACCESS_KEY + "))");
         }
 
         String sessionToken = System.getenv(AWS_SESSION_TOKEN_ENV_VAR);
@@ -55,9 +62,9 @@ public class EnvironmentVariableCredentialsProvider implements AWSCredentialsPro
         }
         sessionToken = StringUtils.trim(sessionToken);
         return sessionToken == null ?
-                new BasicAWSCredentials(accessKey, secretKey)
-                :
-                new BasicSessionCredentials(accessKey, secretKey, sessionToken);
+            new BasicAWSCredentials(accessKey, secretKey)
+            :
+            new BasicSessionCredentials(accessKey, secretKey, sessionToken);
     }
 
     @Override

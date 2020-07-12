@@ -24,16 +24,17 @@ public class AwsS3HelperImpl implements UploadHelper {
     private String bucket;
 
     /** S3 does not require region selection */
-    @Value("#{environment.AWS_REGION ?: 'ap-southeast-2'}")
-    private String region;
+    //@Value("#{environment.AWS_REGION ?: 'ap-southeast-2'}")
+    //private String region;
 
     private AmazonS3ClientBuilder builder;
 
     private AmazonS3 client() {
         if (builder == null) {
             builder = AmazonS3ClientBuilder.standard()
-                .withCredentials(new EnvironmentVariableCredentialsProvider())
-                .withRegion(region);
+                //.withCredentials(new EnvironmentVariableCredentialsProvider())
+                //.withRegion(region)
+                ;
         }
         return builder.build();
     }
