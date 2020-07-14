@@ -14,13 +14,16 @@ public interface UploadHelper {
 
     String CONTENT_TYPE = "contentType";
 
+    String FILE_NOTE = "fileNote";
+
     /**
      * 
      * @param resource
+     * @param folderId
      * @param metadata
      * @return
      * @throws IOException
      */
-    String upload(Resource resource, Map<String, Object> metadata) throws IOException;
+    String upload(Resource resource, String folderId, Map<String, Object> metadata) throws IOException;
 
 }

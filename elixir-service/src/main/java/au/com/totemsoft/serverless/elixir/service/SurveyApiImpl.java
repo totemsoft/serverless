@@ -6,6 +6,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,10 @@ public class SurveyApiImpl implements SurveyApi {
 
     private boolean debug = true;
 
-    @Autowired private UploadHelper uploadHelper;
+    @Autowired
+    @Qualifier("workDocsUploadHelper")
+    //@Qualifier("s3UploadHelper")
+    private UploadHelper uploadHelper;
 
     @Override
     public SurveyApi getDelegate() {
@@ -54,6 +58,7 @@ public class SurveyApiImpl implements SurveyApi {
 
     @Override
     public ResponseEntity<ResponseUpload> surveyUpload(MultipartFile fileUpload, String fileNote) {
+        String fileReference = ""; // TODO: pass as parameter
         try {
             String fileInfo = String.format("name: %s, size: %d", fileUpload.getOriginalFilename(), fileUpload.getSize());
             // save s3
@@ -61,11 +66,11 @@ public class SurveyApiImpl implements SurveyApi {
             Map<String, Object> metadata = new TreeMap<>();
             metadata.put(UploadHelper.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
             metadata.put(UploadHelper.CONTENT_TYPE, fileUpload.getContentType());
-            metadata.put("fileNote", fileNote);
-            String uploadResult = uploadHelper.upload(r, metadata);
+            metadata.put(UploadHelper.FILE_NOTE, fileNote);
+            String uploadResult = uploadHelper.upload(r, fileReference, metadata);
             // result
             ResponseUpload result = new ResponseUpload()
-                .surveyId(uploadResult + ": " + fileNote + " - " + fileInfo);
+                .surveyId(uploadResult + ": [" + fileReference + "]" + fileNote + " - " + fileInfo);
             return entity(result, null);
         } catch (Exception e) {
             ResponseUpload error = new ResponseUpload().surveyId(error(e));

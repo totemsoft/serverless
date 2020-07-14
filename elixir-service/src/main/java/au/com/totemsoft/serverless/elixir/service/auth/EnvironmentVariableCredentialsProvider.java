@@ -1,4 +1,4 @@
-package au.com.totemsoft.serverless.elixir.service;
+package au.com.totemsoft.serverless.elixir.service.auth;
 
 import static com.amazonaws.SDKGlobalConfiguration.ACCESS_KEY_ENV_VAR;
 import static com.amazonaws.SDKGlobalConfiguration.ALTERNATE_ACCESS_KEY_ENV_VAR;

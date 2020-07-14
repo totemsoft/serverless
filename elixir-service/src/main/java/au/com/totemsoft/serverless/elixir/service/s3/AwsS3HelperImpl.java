@@ -1,4 +1,4 @@
-package au.com.totemsoft.serverless.elixir.service;
+package au.com.totemsoft.serverless.elixir.service.s3;
 
 import java.io.IOException;
 import java.util.Date;
@@ -16,7 +16,9 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 
-@Service
+import au.com.totemsoft.serverless.elixir.service.UploadHelper;
+
+@Service("s3UploadHelper")
 public class AwsS3HelperImpl implements UploadHelper {
 
     /** The name of an existing bucket, or access point ARN, to which the new object will be uploaded. */
@@ -40,7 +42,11 @@ public class AwsS3HelperImpl implements UploadHelper {
     }
 
     @Override
-    public String upload(Resource resource, Map<String, Object> metadata) throws IOException {
+    public String upload(Resource resource, String pathname, Map<String, Object> metadata) throws IOException {
+        final AmazonS3 client = client();
+        // TODO: use pathname
+        
+        // store in pathname folder
         final ObjectMetadata om = new ObjectMetadata();
         for (Iterator<Entry<String, Object>> i = metadata.entrySet().iterator(); i.hasNext(); ) {
             final Entry<String, Object> entry = i.next();
@@ -54,8 +60,9 @@ public class AwsS3HelperImpl implements UploadHelper {
                 om.addUserMetadata(key, value.toString());
             }
         }
-        PutObjectResult result = client().putObject(new PutObjectRequest(bucket,
-            resource.getFilename(),
+        final String name = resource.getFilename();
+        PutObjectResult result = client.putObject(new PutObjectRequest(bucket,
+            name,
             resource.getInputStream(),
             om));
         return result.getETag();
