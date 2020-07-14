@@ -40,7 +40,6 @@ import com.amazonaws.services.workdocs.model.InitiateDocumentVersionUploadReques
 import com.amazonaws.services.workdocs.model.InitiateDocumentVersionUploadResult;
 import com.amazonaws.services.workdocs.model.UpdateDocumentRequest;
 import com.amazonaws.services.workdocs.model.UpdateDocumentVersionRequest;
-import com.amazonaws.services.workdocs.model.UpdateDocumentVersionResult;
 import com.amazonaws.services.workdocs.model.UpdateFolderRequest;
 import com.amazonaws.services.workdocs.model.UploadMetadata;
 import com.amazonaws.services.workdocs.model.User;
@@ -198,7 +197,6 @@ public class WorkDocsHelper {
         request.setVersionId(versionId);
         request.setVersionStatus(DocumentVersionStatus.ACTIVE);
         /*UpdateDocumentVersionResult result = */client.updateDocumentVersion(request);
-        //result.getSdkResponseMetadata().getRequestId();
     }
 
     public static void removeFile(AmazonWorkDocs client, String pathname) {
