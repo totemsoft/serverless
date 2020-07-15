@@ -2,10 +2,16 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
+Description: >
+    Elixir Survey 
+     Lambda function using an SQS Queue as the trigger and SQS queues as destinations
+
 Globals:
   Api:
     #Auth: []
     EndpointConfiguration: REGIONAL
+  Function:
+    Timeout: 15
 
 Description: AWS Serverless Spring API - au.com.totemsoft.serverless.elixir::elixir-service
 
@@ -18,6 +24,25 @@ Parameters:
 #     Default: 'Yhf0y3epT'
 
 Resources:
+  # SQS Queue to receive a message on successful Lambda execution
+  #OnSuccessDestinationSQSQueue:
+  #  Type: AWS::SQS::Queue
+
+  # Destinations CloudFormation configuration
+#   ElixirEventInvokeConfig:
+#     Type: AWS::Lambda::EventInvokeConfig
+#     Properties:
+#       FunctionName:
+#         Ref: ElixirServiceFunction
+#       Qualifier: '$LATEST'
+#       MaximumEventAgeInSeconds: 600
+#       MaximumRetryAttempts: 0
+#       DestinationConfig:
+#         OnSuccess:
+#           Destination: arn:aws:sqs:ap-southeast-2:708851056257:elixir-survey
+#         OnFailure:
+#           Destination: arn:aws:sns:ap-southeast-2:708851056257:elixir-xir
+
   # Define Amazon Cognito User Pool
   ElixirApi:
     Type: AWS::Serverless::Api
@@ -45,7 +70,10 @@ Resources:
       CodeUri: .
       MemorySize: 512
       Policies: AWSLambdaBasicExecutionRole
-      Timeout: 15
+      Timeout: 30
+      Environment:
+        Variables:
+          AWS_WORKDOCS_FOLDER: c41a559256c02428d916089d86487e66d64e205cd5125cd41ea75860c16b3316
       Events:
         health:
           Type: Api
