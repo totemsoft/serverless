@@ -67,6 +67,9 @@ Resources:
     Properties:
       Handler: au.com.totemsoft.serverless.elixir.StreamLambdaHandler::handleRequest
       Runtime: java8
+      Policies:
+      - AmazonSQSFullAccess
+      - AmazonSNSFullAccess
       CodeUri: .
       MemorySize: 512
       Policies: AWSLambdaBasicExecutionRole
