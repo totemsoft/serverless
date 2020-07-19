@@ -13,10 +13,10 @@ import com.amazonaws.SdkClientException;
 import com.amazonaws.services.workdocs.AmazonWorkDocs;
 import com.amazonaws.services.workdocs.AmazonWorkDocsClientBuilder;
 
-import au.com.totemsoft.serverless.elixir.service.UploadHelper;
+import au.com.totemsoft.serverless.elixir.service.UploadService;
 
-@Service("workDocsUploadHelper")
-public class AwsWorkDocsHelperImpl implements UploadHelper {
+@Service("workDocsUploadService")
+public class AwsWorkDocsServiceImpl implements UploadService {
 
     /** The name of an existing bucket, or access point ARN, to which the new object will be uploaded. */
     @Value("#{environment.AWS_WORKDOCS_FOLDER}")

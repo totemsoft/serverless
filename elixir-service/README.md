@@ -80,6 +80,14 @@ ElixirServiceApi - URL for application       https://xxxxxxxxxx.execute-api.ap-s
 -------------------------------------------------------------------------------------------------------------
 ```
 
+Asynchronous invocation
+
+```
+aws lambda invoke --function-name elixir-service-ElixirServiceFunction-17O69M1FYNDJI --invocation-type Event\
+  --payload '{ "path": "/health" }'\
+  response.json
+```
+
 Copy the `OutputValue` into a browser or use curl to test your first request:
 
 ```bash

@@ -16,10 +16,10 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 
-import au.com.totemsoft.serverless.elixir.service.UploadHelper;
+import au.com.totemsoft.serverless.elixir.service.UploadService;
 
-@Service("s3UploadHelper")
-public class AwsS3HelperImpl implements UploadHelper {
+@Service("s3UploadService")
+public class AwsS3ServiceImpl implements UploadService {
 
     /** The name of an existing bucket, or access point ARN, to which the new object will be uploaded. */
     @Value("#{environment.AWS_BUCKET ?: 'MY_BUCKET'}")

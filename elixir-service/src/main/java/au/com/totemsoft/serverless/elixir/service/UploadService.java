@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.core.io.Resource;
 
-public interface UploadHelper {
+public interface UploadService {
 
     /** lastModified */
     String LAST_MODIFIED = "lastModified";

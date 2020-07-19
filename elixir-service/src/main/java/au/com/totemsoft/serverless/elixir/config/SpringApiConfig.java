@@ -15,15 +15,15 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import au.com.totemsoft.serverless.elixir.controller.SurveyController;
 import au.com.totemsoft.serverless.elixir.service.SurveyApiImpl;
-import au.com.totemsoft.serverless.elixir.service.s3.AwsS3HelperImpl;
-import au.com.totemsoft.serverless.elixir.service.workdocs.AwsWorkDocsHelperImpl;
+import au.com.totemsoft.serverless.elixir.service.s3.AwsS3ServiceImpl;
+import au.com.totemsoft.serverless.elixir.service.workdocs.AwsWorkDocsServiceImpl;
 
 @Configuration
 @Import({
     SurveyController.class,
     SurveyApiImpl.class,
-    AwsWorkDocsHelperImpl.class,
-    AwsS3HelperImpl.class,
+    AwsWorkDocsServiceImpl.class,
+    AwsS3ServiceImpl.class,
 })
 public class SpringApiConfig {
 

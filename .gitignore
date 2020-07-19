@@ -7,3 +7,5 @@
 /**/target/
 /**/.settings/
 /**/.aws-sam/
+/*.json
+/**/config/

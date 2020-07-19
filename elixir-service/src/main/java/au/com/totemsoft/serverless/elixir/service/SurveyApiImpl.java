@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,12 +26,13 @@ import au.com.totemsoft.elixir.survey.v1.model.ResponseUpload;
 @Service("surveyApi")
 public class SurveyApiImpl implements SurveyApi {
 
-    private boolean debug = true;
+    @Value("#{environment.DEBUG ?: 'true'}")
+    private boolean debug;
 
     @Autowired
-    @Qualifier("workDocsUploadHelper")
-    //@Qualifier("s3UploadHelper")
-    private UploadHelper uploadHelper;
+    @Qualifier("workDocsUploadService")
+    //@Qualifier("s3UploadService")
+    private UploadService uploadService;
 
     @Override
     public SurveyApi getDelegate() {
@@ -64,10 +66,10 @@ public class SurveyApiImpl implements SurveyApi {
             // save s3
             Resource r = fileUpload.getResource();
             Map<String, Object> metadata = new TreeMap<>();
-            metadata.put(UploadHelper.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
-            metadata.put(UploadHelper.CONTENT_TYPE, fileUpload.getContentType());
-            metadata.put(UploadHelper.FILE_NOTE, fileNote);
-            String uploadResult = uploadHelper.upload(r, fileReference, metadata);
+            metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
+            metadata.put(UploadService.CONTENT_TYPE, fileUpload.getContentType());
+            metadata.put(UploadService.FILE_NOTE, fileNote);
+            String uploadResult = uploadService.upload(r, fileReference, metadata);
             // result
             ResponseUpload result = new ResponseUpload()
                 .surveyId(uploadResult + ": [" + fileReference + "]" + fileNote + " - " + fileInfo);
