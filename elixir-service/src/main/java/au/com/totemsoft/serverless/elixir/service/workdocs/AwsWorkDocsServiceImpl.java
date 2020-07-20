@@ -25,6 +25,7 @@ public class AwsWorkDocsServiceImpl implements UploadService {
     //** WorkDoks does not require region selection ??? */
     //@Value("#{environment.AWS_REGION ?: 'ap-southeast-2'}")
     //private String region;
+    //private Region DEFAULT_REGION = Region.getRegion(Regions.AP_SOUTHEAST_2);
 
     private AmazonWorkDocsClientBuilder builder;
 

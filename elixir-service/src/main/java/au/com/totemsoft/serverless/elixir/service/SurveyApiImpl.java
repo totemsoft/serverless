@@ -34,6 +34,10 @@ public class SurveyApiImpl implements SurveyApi {
     //@Qualifier("s3UploadService")
     private UploadService uploadService;
 
+    @Autowired
+    @Qualifier("sqsService")
+    private MessageService messageService;
+
     @Override
     public SurveyApi getDelegate() {
         return this;
@@ -42,6 +46,9 @@ public class SurveyApiImpl implements SurveyApi {
     @Override
     public ResponseEntity<ResponseSurvey> surveyQuestions(String xV, RequestSurvey surveyRequest) {
         try {
+            // send message to JMS (AWS SQS)
+            messageService.sendMessage(surveyRequest);
+            // TODO: questions (depends on sendMessage result ???)
             ResponseSurvey result = new ResponseSurvey()
                 .surveyId(surveyRequest.getSurveyId())
                 .addQuestionsItem(new Question()

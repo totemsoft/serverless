@@ -20,8 +20,9 @@ dependencies {
     'com.fasterxml.jackson.core:jackson-databind:2.10.3',
     'org.apache.commons:commons-lang3:3.10',
     'com.amazonaws:aws-lambda-java-log4j2:1.1.0',
-    'com.amazonaws:aws-java-sdk-workdocs:1.11.819',
-    'com.amazonaws:aws-java-sdk-s3:1.11.819',
+    'com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8',
+    'com.amazonaws:aws-java-sdk-workdocs:1.11.822',
+    'com.amazonaws:aws-java-sdk-s3:1.11.822',
     'au.com.totemsoft.serverless.schema:survey:1.0.0-SNAPSHOT',
   )
 

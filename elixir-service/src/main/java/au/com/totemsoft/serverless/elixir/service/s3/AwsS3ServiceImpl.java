@@ -22,12 +22,13 @@ import au.com.totemsoft.serverless.elixir.service.UploadService;
 public class AwsS3ServiceImpl implements UploadService {
 
     /** The name of an existing bucket, or access point ARN, to which the new object will be uploaded. */
-    @Value("#{environment.AWS_BUCKET ?: 'MY_BUCKET'}")
+    @Value("#{environment.AWS_BUCKET}")
     private String bucket;
 
     //** S3 does not require region selection */
     //@Value("#{environment.AWS_REGION ?: 'ap-southeast-2'}")
     //private String region;
+    //private Region DEFAULT_REGION = Region.getRegion(Regions.AP_SOUTHEAST_2);
 
     private AmazonS3ClientBuilder builder;
 

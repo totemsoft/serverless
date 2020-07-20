@@ -68,15 +68,18 @@ Resources:
       Handler: au.com.totemsoft.serverless.elixir.StreamLambdaHandler::handleRequest
       Runtime: java8
       Policies:
-      - AmazonSQSFullAccess
-      - AmazonSNSFullAccess
+        - AWSLambdaBasicExecutionRole
+        - AmazonSQSFullAccess
+        #- AmazonSNSFullAccess
       CodeUri: .
       MemorySize: 512
-      Policies: AWSLambdaBasicExecutionRole
       Timeout: 30
       Environment:
         Variables:
+          DEBUG: true
           AWS_WORKDOCS_FOLDER: c41a559256c02428d916089d86487e66d64e205cd5125cd41ea75860c16b3316
+          AWS_BUCKET: elixir-survey
+          AWS_SQS_QUEUE_NAME: elixir-survey
       Events:
         health:
           Type: Api
