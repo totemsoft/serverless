@@ -22,7 +22,7 @@ Run `pod install`
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://survey.holder.com.au/survey-au/v1*
+All URIs are relative to *https://$.execute-api.$.amazonaws.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -42,26 +42,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Authorization
 
-
-## ApiKeyAuth
-
-- **Type**: API key
-- **API key parameter name**: X-API-Key
-- **Location**: HTTP header
-
-## BasicAuth
-
-- **Type**: HTTP basic authentication
-
-## OAuth2
-
-- **Type**: OAuth
-- **Flow**: accessCode
-- **Authorization URL**: https://example.com/oauth/authorize
-- **Scopes**: 
- - **read**: Grants read access
- - **write**: Grants write access
- - **admin**: Grants read and write access to administrative information
+ All endpoints do not require authorization.
 
 
 ## Author
