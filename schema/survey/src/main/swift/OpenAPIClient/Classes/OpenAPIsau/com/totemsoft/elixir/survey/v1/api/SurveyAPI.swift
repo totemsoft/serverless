@@ -14,12 +14,13 @@ open class SurveyAPI {
      Get Survey Questions
      
      - parameter xV: (header) Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers). 
+     - parameter reference: (header) Reference of request. See [HTTP Headers](#request-headers). 
      - parameter surveyRequest: (body) Survey Request 
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func surveyQuestions(xV: String, surveyRequest: RequestSurvey, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: ResponseSurvey?,_ error: Error?) -> Void)) {
-        surveyQuestionsWithRequestBuilder(xV: xV, surveyRequest: surveyRequest).execute(apiResponseQueue) { result -> Void in
+    open class func surveyQuestions(xV: String, reference: String, surveyRequest: RequestSurvey, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: ResponseSurvey?,_ error: Error?) -> Void)) {
+        surveyQuestionsWithRequestBuilder(xV: xV, reference: reference, surveyRequest: surveyRequest).execute(apiResponseQueue) { result -> Void in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -35,17 +36,19 @@ open class SurveyAPI {
      - Obtain a list of survey questions
      - responseHeaders: [x-v(String)]
      - parameter xV: (header) Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers). 
+     - parameter reference: (header) Reference of request. See [HTTP Headers](#request-headers). 
      - parameter surveyRequest: (body) Survey Request 
      - returns: RequestBuilder<ResponseSurvey> 
      */
-    open class func surveyQuestionsWithRequestBuilder(xV: String, surveyRequest: RequestSurvey) -> RequestBuilder<ResponseSurvey> {
+    open class func surveyQuestionsWithRequestBuilder(xV: String, reference: String, surveyRequest: RequestSurvey) -> RequestBuilder<ResponseSurvey> {
         let path = "/survey/questions"
         let URLString = OpenAPIClientAPI.basePath + path
         let parameters = JSONEncodingHelper.encodingParameters(forEncodableObject: surveyRequest)
 
         let url = URLComponents(string: URLString)
         let nillableHeaders: [String: Any?] = [
-            "x-v": xV.encodeToJSON()
+            "x-v": xV.encodeToJSON(),
+            "reference": reference.encodeToJSON()
         ]
         let headerParameters = APIHelper.rejectNilHeaders(nillableHeaders)
 
@@ -57,13 +60,15 @@ open class SurveyAPI {
     /**
      Uploads a file.
      
+     - parameter xV: (header) Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers). 
+     - parameter reference: (header) Reference of request. See [HTTP Headers](#request-headers). 
      - parameter fileUpload: (form) The file to upload. 
-     - parameter fileNote: (form) Description of file contents. (optional)
+     - parameter fileNote: (form) Description of file content. (optional)
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func surveyUpload(fileUpload: URL, fileNote: String? = nil, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: ResponseUpload?,_ error: Error?) -> Void)) {
-        surveyUploadWithRequestBuilder(fileUpload: fileUpload, fileNote: fileNote).execute(apiResponseQueue) { result -> Void in
+    open class func surveyUpload(xV: String, reference: String, fileUpload: URL, fileNote: String? = nil, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: ResponseUpload?,_ error: Error?) -> Void)) {
+        surveyUploadWithRequestBuilder(xV: xV, reference: reference, fileUpload: fileUpload, fileNote: fileNote).execute(apiResponseQueue) { result -> Void in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -77,11 +82,13 @@ open class SurveyAPI {
      Uploads a file.
      - POST /survey/upload
      - Uploads a file.
+     - parameter xV: (header) Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers). 
+     - parameter reference: (header) Reference of request. See [HTTP Headers](#request-headers). 
      - parameter fileUpload: (form) The file to upload. 
-     - parameter fileNote: (form) Description of file contents. (optional)
+     - parameter fileNote: (form) Description of file content. (optional)
      - returns: RequestBuilder<ResponseUpload> 
      */
-    open class func surveyUploadWithRequestBuilder(fileUpload: URL, fileNote: String? = nil) -> RequestBuilder<ResponseUpload> {
+    open class func surveyUploadWithRequestBuilder(xV: String, reference: String, fileUpload: URL, fileNote: String? = nil) -> RequestBuilder<ResponseUpload> {
         let path = "/survey/upload"
         let URLString = OpenAPIClientAPI.basePath + path
         let formParams: [String:Any?] = [
@@ -93,10 +100,15 @@ open class SurveyAPI {
         let parameters = APIHelper.convertBoolToString(nonNullParameters)
         
         let url = URLComponents(string: URLString)
+        let nillableHeaders: [String: Any?] = [
+            "x-v": xV.encodeToJSON(),
+            "reference": reference.encodeToJSON()
+        ]
+        let headerParameters = APIHelper.rejectNilHeaders(nillableHeaders)
 
         let requestBuilder: RequestBuilder<ResponseUpload>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return requestBuilder.init(method: "POST", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
+        return requestBuilder.init(method: "POST", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false, headers: headerParameters)
     }
 
 }

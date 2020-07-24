@@ -1,6 +1,6 @@
 # SurveyAPI
 
-All URIs are relative to *https://survey.holder.com.au/survey-au/v1*
+All URIs are relative to *https://$.execute-api.$.amazonaws.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 # **surveyQuestions**
 ```swift
-    open class func surveyQuestions(xV: String, surveyRequest: RequestSurvey, completion: @escaping (_ data: ResponseSurvey?, _ error: Error?) -> Void)
+    open class func surveyQuestions(xV: String, reference: String, surveyRequest: RequestSurvey, completion: @escaping (_ data: ResponseSurvey?, _ error: Error?) -> Void)
 ```
 
 Get Survey Questions
@@ -23,10 +23,11 @@ Obtain a list of survey questions
 import OpenAPIClient
 
 let xV = "xV_example" // String | Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers).
+let reference = "reference_example" // String | Reference of request. See [HTTP Headers](#request-headers).
 let surveyRequest = RequestSurvey(surveyId: "surveyId_example") // RequestSurvey | Survey Request
 
 // Get Survey Questions
-SurveyAPI.surveyQuestions(xV: xV, surveyRequest: surveyRequest) { (response, error) in
+SurveyAPI.surveyQuestions(xV: xV, reference: reference, surveyRequest: surveyRequest) { (response, error) in
     guard error == nil else {
         print(error)
         return
@@ -43,6 +44,7 @@ SurveyAPI.surveyQuestions(xV: xV, surveyRequest: surveyRequest) { (response, err
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xV** | **String** | Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers). | 
+ **reference** | **String** | Reference of request. See [HTTP Headers](#request-headers). | 
  **surveyRequest** | [**RequestSurvey**](RequestSurvey.md) | Survey Request | 
 
 ### Return type
@@ -62,7 +64,7 @@ No authorization required
 
 # **surveyUpload**
 ```swift
-    open class func surveyUpload(fileUpload: URL, fileNote: String? = nil, completion: @escaping (_ data: ResponseUpload?, _ error: Error?) -> Void)
+    open class func surveyUpload(xV: String, reference: String, fileUpload: URL, fileNote: String? = nil, completion: @escaping (_ data: ResponseUpload?, _ error: Error?) -> Void)
 ```
 
 Uploads a file.
@@ -74,11 +76,13 @@ Uploads a file.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
+let xV = "xV_example" // String | Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers).
+let reference = "reference_example" // String | Reference of request. See [HTTP Headers](#request-headers).
 let fileUpload = URL(string: "https://example.com")! // URL | The file to upload.
-let fileNote = "fileNote_example" // String | Description of file contents. (optional)
+let fileNote = "fileNote_example" // String | Description of file content. (optional)
 
 // Uploads a file.
-SurveyAPI.surveyUpload(fileUpload: fileUpload, fileNote: fileNote) { (response, error) in
+SurveyAPI.surveyUpload(xV: xV, reference: reference, fileUpload: fileUpload, fileNote: fileNote) { (response, error) in
     guard error == nil else {
         print(error)
         return
@@ -94,8 +98,10 @@ SurveyAPI.surveyUpload(fileUpload: fileUpload, fileNote: fileNote) { (response, 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **xV** | **String** | Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers). | 
+ **reference** | **String** | Reference of request. See [HTTP Headers](#request-headers). | 
  **fileUpload** | **URL** | The file to upload. | 
- **fileNote** | **String** | Description of file contents. | [optional] 
+ **fileNote** | **String** | Description of file content. | [optional] 
 
 ### Return type
 
