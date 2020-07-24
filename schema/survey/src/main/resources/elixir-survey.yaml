@@ -24,8 +24,8 @@ produces:
 #   OAuth2:
 #     type: oauth2
 #     flow: accessCode
-#     authorizationUrl: https://elixir.auth.ap-southeast-2.amazoncognito.com/oauth2/authorize
-#     tokenUrl: https://elixir.auth.ap-southeast-2.amazoncognito.com/oauth2/token
+#     authorizationUrl: https://elixir.auth.${AWS::Region}.amazoncognito.com/oauth2/authorize
+#     tokenUrl: https://elixir.auth.${AWS::Region}.amazoncognito.com/oauth2/token
 #     scopes:
 #       read: Grants read access
 #       write: Grants write access
@@ -40,6 +40,7 @@ paths:
         - Survey
       parameters:
         - $ref: '#/parameters/RequestHeader_x-v'
+        - $ref: '#/parameters/RequestReference'
         - $ref: '#/parameters/RequestSurvey'
       responses:
         200:
@@ -61,6 +62,8 @@ paths:
       consumes:
         - multipart/form-data
       parameters:
+        - $ref: '#/parameters/RequestHeader_x-v'
+        - $ref: '#/parameters/RequestReference'
         - in: formData
           name: fileUpload
           type: file
@@ -70,7 +73,7 @@ paths:
           name: fileNote
           type: string
           required: false
-          description: Description of file contents.
+          description: Description of file content.
       responses:
         200:
           description: Success
@@ -80,11 +83,18 @@ paths:
           description: Not authenticated
         403:
           description: Access token does not have the required scope
+      x-version: 1
 # parameters
 parameters:
   RequestHeader_x-v:
     name: x-v
     description: Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers).
+    in: header
+    type: string
+    required: true
+  RequestReference:
+    name: reference
+    description: Reference of request. See [HTTP Headers](#request-headers).
     in: header
     type: string
     required: true
