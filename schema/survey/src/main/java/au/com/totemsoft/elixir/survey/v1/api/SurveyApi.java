@@ -36,6 +36,7 @@ public interface SurveyApi {
      * Obtain a list of survey questions
      *
      * @param xV Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers). (required)
+     * @param reference Reference of request. See [HTTP Headers](#request-headers). (required)
      * @param surveyRequest Survey Request (required)
      * @return Success (status code 200)
      */
@@ -46,8 +47,8 @@ public interface SurveyApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    default ResponseEntity<ResponseSurvey> surveyQuestions(@ApiParam(value = "Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="x-v", required=true) String xV,@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody RequestSurvey surveyRequest) {
-        return getDelegate().surveyQuestions(xV, surveyRequest);
+    default ResponseEntity<ResponseSurvey> surveyQuestions(@ApiParam(value = "Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="x-v", required=true) String xV,@ApiParam(value = "Reference of request. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="reference", required=true) String reference,@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody RequestSurvey surveyRequest) {
+        return getDelegate().surveyQuestions(xV, reference, surveyRequest);
     }
 
 
@@ -55,8 +56,10 @@ public interface SurveyApi {
      * POST /survey/upload : Uploads a file.
      * Uploads a file.
      *
+     * @param xV Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers). (required)
+     * @param reference Reference of request. See [HTTP Headers](#request-headers). (required)
      * @param fileUpload The file to upload. (required)
-     * @param fileNote Description of file contents. (optional)
+     * @param fileNote Description of file content. (optional)
      * @return Success (status code 200)
      *         or Not authenticated (status code 401)
      *         or Access token does not have the required scope (status code 403)
@@ -70,8 +73,8 @@ public interface SurveyApi {
         produces = { "application/json" }, 
         consumes = { "multipart/form-data" },
         method = RequestMethod.POST)
-    default ResponseEntity<ResponseUpload> surveyUpload(@ApiParam(value = "The file to upload.") @Valid @RequestPart(value = "fileUpload") MultipartFile fileUpload,@ApiParam(value = "Description of file contents.") @RequestPart(value="fileNote", required=false)  String fileNote) {
-        return getDelegate().surveyUpload(fileUpload, fileNote);
+    default ResponseEntity<ResponseUpload> surveyUpload(@ApiParam(value = "Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="x-v", required=true) String xV,@ApiParam(value = "Reference of request. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="reference", required=true) String reference,@ApiParam(value = "The file to upload.") @Valid @RequestPart(value = "fileUpload") MultipartFile fileUpload,@ApiParam(value = "Description of file content.") @RequestPart(value="fileNote", required=false)  String fileNote) {
+        return getDelegate().surveyUpload(xV, reference, fileUpload, fileNote);
     }
 
 }

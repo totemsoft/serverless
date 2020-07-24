@@ -44,7 +44,8 @@ public class SurveyApiImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<ResponseSurvey> surveyQuestions(String xV, RequestSurvey surveyRequest) {
+    public ResponseEntity<ResponseSurvey> surveyQuestions(String xV, String reference,
+        RequestSurvey surveyRequest) {
         try {
             // send message to JMS (AWS SQS)
             messageService.sendMessage(surveyRequest);
@@ -66,20 +67,20 @@ public class SurveyApiImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<ResponseUpload> surveyUpload(MultipartFile fileUpload, String fileNote) {
-        String fileReference = ""; // TODO: pass as parameter
+    public ResponseEntity<ResponseUpload> surveyUpload(String xV, String reference,
+        MultipartFile fileUpload, String fileNote) {
         try {
-            String fileInfo = String.format("name: %s, size: %d", fileUpload.getOriginalFilename(), fileUpload.getSize());
+            String fileInfo = String.format("reference: %s, name: %s, size: %d", reference, fileUpload.getOriginalFilename(), fileUpload.getSize());
             // save s3
             Resource r = fileUpload.getResource();
             Map<String, Object> metadata = new TreeMap<>();
             metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
             metadata.put(UploadService.CONTENT_TYPE, fileUpload.getContentType());
             metadata.put(UploadService.FILE_NOTE, fileNote);
-            String uploadResult = uploadService.upload(r, fileReference, metadata);
+            String uploadResult = uploadService.upload(r, reference, metadata);
             // result
             ResponseUpload result = new ResponseUpload()
-                .surveyId(uploadResult + ": [" + fileReference + "]" + fileNote + " - " + fileInfo);
+                .surveyId(uploadResult + ": [" + reference + "]" + fileNote + " - " + fileInfo);
             return entity(result, null);
         } catch (Exception e) {
             ResponseUpload error = new ResponseUpload().surveyId(error(e));

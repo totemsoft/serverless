@@ -43,7 +43,7 @@ public class AwsS3ServiceImpl implements UploadService {
     }
 
     @Override
-    public String upload(Resource resource, String pathname, Map<String, Object> metadata) throws IOException {
+    public String upload(Resource resource, String folderId, Map<String, Object> metadata) throws IOException {
         final AmazonS3 client = client();
         // TODO: use pathname
         

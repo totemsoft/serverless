@@ -9,6 +9,7 @@ import static org.junit.Assert.fail;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.HttpHeaders;
@@ -77,8 +78,10 @@ public class StreamLambdaHandlerTest {
         InputStream requestStream = new AwsProxyRequestBuilder("/survey/upload", HttpMethod.POST)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA + "; boundary=survey_upload")
             .header(HttpHeaders.AUTHORIZATION, "Bearer " + System.getProperty("access_token", "{{access_token}}"))
+            .header("x-v", "1")
+            .header("reference", UUID.randomUUID().toString())
             .formFilePart("fileUpload", "document.json", IOUtils.readBytesFromStream(contentStream))
-            .buildStream();
+            .toHttpApiV2RequestStream();
         ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
 
         handle(requestStream, responseStream);
