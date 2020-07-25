@@ -93,6 +93,13 @@ Resources:
               Ref: ElixirApi
             Auth:
               Authorizer: NONE
+        survey:
+          Type: Api
+          Properties:
+            Path: /survey
+            Method: post
+            RestApiId:
+              Ref: ElixirApi
         surveyQuestions:
           Type: Api
           Properties:

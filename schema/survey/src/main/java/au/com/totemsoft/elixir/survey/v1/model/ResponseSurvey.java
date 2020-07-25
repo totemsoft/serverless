@@ -1,10 +1,7 @@
 package au.com.totemsoft.elixir.survey.v1.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,12 +13,32 @@ import io.swagger.annotations.ApiModelProperty;
  */
 
 public class ResponseSurvey   {
+  @JsonProperty("reference")
+  private String reference;
+
   @JsonProperty("surveyId")
   private String surveyId;
 
-  @JsonProperty("questions")
-  @Valid
-  private List<Question> questions = new ArrayList<>();
+  public ResponseSurvey reference(String reference) {
+    this.reference = reference;
+    return this;
+  }
+
+  /**
+   * Reference
+   * @return reference
+  */
+  @ApiModelProperty(required = true, value = "Reference")
+  @NotNull
+
+
+  public String getReference() {
+    return reference;
+  }
+
+  public void setReference(String reference) {
+    this.reference = reference;
+  }
 
   public ResponseSurvey surveyId(String surveyId) {
     this.surveyId = surveyId;
@@ -44,33 +61,6 @@ public class ResponseSurvey   {
     this.surveyId = surveyId;
   }
 
-  public ResponseSurvey questions(List<Question> questions) {
-    this.questions = questions;
-    return this;
-  }
-
-  public ResponseSurvey addQuestionsItem(Question questionsItem) {
-    this.questions.add(questionsItem);
-    return this;
-  }
-
-  /**
-   * The list of questions returned. If the filter results in an empty set then this array may have no records.
-   * @return questions
-  */
-  @ApiModelProperty(required = true, value = "The list of questions returned. If the filter results in an empty set then this array may have no records.")
-  @NotNull
-
-  @Valid
-
-  public List<Question> getQuestions() {
-    return questions;
-  }
-
-  public void setQuestions(List<Question> questions) {
-    this.questions = questions;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -81,13 +71,13 @@ public class ResponseSurvey   {
       return false;
     }
     ResponseSurvey responseSurvey = (ResponseSurvey) o;
-    return Objects.equals(this.surveyId, responseSurvey.surveyId) &&
-        Objects.equals(this.questions, responseSurvey.questions);
+    return Objects.equals(this.reference, responseSurvey.reference) &&
+        Objects.equals(this.surveyId, responseSurvey.surveyId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(surveyId, questions);
+    return Objects.hash(reference, surveyId);
   }
 
   @Override
@@ -95,8 +85,8 @@ public class ResponseSurvey   {
     StringBuilder sb = new StringBuilder();
     sb.append("class ResponseSurvey {\n");
     
+    sb.append("    reference: ").append(toIndentedString(reference)).append("\n");
     sb.append("    surveyId: ").append(toIndentedString(surveyId)).append("\n");
-    sb.append("    questions: ").append(toIndentedString(questions)).append("\n");
     sb.append("}");
     return sb.toString();
   }

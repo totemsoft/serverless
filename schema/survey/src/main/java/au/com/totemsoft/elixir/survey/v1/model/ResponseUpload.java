@@ -13,8 +13,32 @@ import io.swagger.annotations.ApiModelProperty;
  */
 
 public class ResponseUpload   {
+  @JsonProperty("reference")
+  private String reference;
+
   @JsonProperty("surveyId")
   private String surveyId;
+
+  public ResponseUpload reference(String reference) {
+    this.reference = reference;
+    return this;
+  }
+
+  /**
+   * Reference
+   * @return reference
+  */
+  @ApiModelProperty(required = true, value = "Reference")
+  @NotNull
+
+
+  public String getReference() {
+    return reference;
+  }
+
+  public void setReference(String reference) {
+    this.reference = reference;
+  }
 
   public ResponseUpload surveyId(String surveyId) {
     this.surveyId = surveyId;
@@ -47,12 +71,13 @@ public class ResponseUpload   {
       return false;
     }
     ResponseUpload responseUpload = (ResponseUpload) o;
-    return Objects.equals(this.surveyId, responseUpload.surveyId);
+    return Objects.equals(this.reference, responseUpload.reference) &&
+        Objects.equals(this.surveyId, responseUpload.surveyId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(surveyId);
+    return Objects.hash(reference, surveyId);
   }
 
   @Override
@@ -60,6 +85,7 @@ public class ResponseUpload   {
     StringBuilder sb = new StringBuilder();
     sb.append("class ResponseUpload {\n");
     
+    sb.append("    reference: ").append(toIndentedString(reference)).append("\n");
     sb.append("    surveyId: ").append(toIndentedString(surveyId)).append("\n");
     sb.append("}");
     return sb.toString();

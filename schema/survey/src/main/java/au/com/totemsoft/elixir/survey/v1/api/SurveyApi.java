@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import au.com.totemsoft.elixir.survey.v1.model.RequestSurvey;
 import au.com.totemsoft.elixir.survey.v1.model.ResponseSurvey;
+import au.com.totemsoft.elixir.survey.v1.model.ResponseSurveyQuestions;
 import au.com.totemsoft.elixir.survey.v1.model.ResponseUpload;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,23 +33,41 @@ public interface SurveyApi {
     SurveyApi getDelegate();
 
     /**
+     * POST /survey : Get/Create Survey
+     * Obtain a survey (will create one if does not exists)
+     *
+     * @param surveyRequest Survey Request (required)
+     * @return Success (status code 200)
+     */
+    @ApiOperation(value = "Get/Create Survey", nickname = "survey", notes = "Obtain a survey (will create one if does not exists)", response = ResponseSurvey.class, tags={ "Survey", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "Success", response = ResponseSurvey.class) })
+    @RequestMapping(value = "/survey",
+        produces = { "application/json" }, 
+        consumes = { "application/json" },
+        method = RequestMethod.POST)
+    default ResponseEntity<ResponseSurvey> survey(@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody RequestSurvey surveyRequest) {
+        return getDelegate().survey(surveyRequest);
+    }
+
+
+    /**
      * POST /survey/questions : Get Survey Questions
      * Obtain a list of survey questions
      *
-     * @param xV Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers). (required)
      * @param reference Reference of request. See [HTTP Headers](#request-headers). (required)
      * @param surveyRequest Survey Request (required)
      * @return Success (status code 200)
      */
-    @ApiOperation(value = "Get Survey Questions", nickname = "surveyQuestions", notes = "Obtain a list of survey questions", response = ResponseSurvey.class, tags={ "Survey", })
+    @ApiOperation(value = "Get Survey Questions", nickname = "surveyQuestions", notes = "Obtain a list of survey questions", response = ResponseSurveyQuestions.class, tags={ "Survey", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Success", response = ResponseSurvey.class) })
+        @ApiResponse(code = 200, message = "Success", response = ResponseSurveyQuestions.class) })
     @RequestMapping(value = "/survey/questions",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    default ResponseEntity<ResponseSurvey> surveyQuestions(@ApiParam(value = "Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="x-v", required=true) String xV,@ApiParam(value = "Reference of request. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="reference", required=true) String reference,@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody RequestSurvey surveyRequest) {
-        return getDelegate().surveyQuestions(xV, reference, surveyRequest);
+    default ResponseEntity<ResponseSurveyQuestions> surveyQuestions(@ApiParam(value = "Reference of request. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="reference", required=true) String reference,@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody RequestSurvey surveyRequest) {
+        return getDelegate().surveyQuestions(reference, surveyRequest);
     }
 
 
@@ -56,7 +75,6 @@ public interface SurveyApi {
      * POST /survey/upload : Uploads a file.
      * Uploads a file.
      *
-     * @param xV Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers). (required)
      * @param reference Reference of request. See [HTTP Headers](#request-headers). (required)
      * @param fileUpload The file to upload. (required)
      * @param fileNote Description of file content. (optional)
@@ -73,8 +91,8 @@ public interface SurveyApi {
         produces = { "application/json" }, 
         consumes = { "multipart/form-data" },
         method = RequestMethod.POST)
-    default ResponseEntity<ResponseUpload> surveyUpload(@ApiParam(value = "Version of the API end point requested by the client. Must be set to a positive integer. If all versions requested are not supported then the data holder must respond with a 406 Not Acceptable. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="x-v", required=true) String xV,@ApiParam(value = "Reference of request. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="reference", required=true) String reference,@ApiParam(value = "The file to upload.") @Valid @RequestPart(value = "fileUpload") MultipartFile fileUpload,@ApiParam(value = "Description of file content.") @RequestPart(value="fileNote", required=false)  String fileNote) {
-        return getDelegate().surveyUpload(xV, reference, fileUpload, fileNote);
+    default ResponseEntity<ResponseUpload> surveyUpload(@ApiParam(value = "Reference of request. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="reference", required=true) String reference,@ApiParam(value = "The file to upload.") @Valid @RequestPart(value = "fileUpload") MultipartFile fileUpload,@ApiParam(value = "Description of file content.") @RequestPart(value="fileNote", required=false)  String fileNote) {
+        return getDelegate().surveyUpload(reference, fileUpload, fileNote);
     }
 
 }
