@@ -44,16 +44,10 @@ public class AwsWorkDocsServiceImpl implements UploadService {
     }
 
     @Override
-    public String upload(Resource resource, String folderId, Map<String, Object> metadata) throws IOException {
+    public String upload(Resource resource, String reference, Map<String, Object> metadata) throws IOException {
         final AmazonWorkDocs client = client();
-        if (!WorkDocsHelper.checkFolderId(client, folderId)) {
-            if (StringUtils.isBlank(folderId)) {
-                folderId = documentFolderId; // TODO: test only
-            } else {
-                throw new SdkClientException("Not a valid AWS WorkDocs folderId: " + folderId);
-            }
-        }
         try {
+            final String folderId = folderId(client, reference);
             final String name = resource.getFilename();
             String contentType = metadata.get(CONTENT_TYPE).toString();
             Map<String, String> map = WorkDocsHelper.documentUploadMetadata(client, folderId, name, contentType);
@@ -69,6 +63,20 @@ public class AwsWorkDocsServiceImpl implements UploadService {
         } finally {
             client.shutdown();
         }
+    }
+
+    private String folderId(AmazonWorkDocs client, String reference) {
+        // use WorkDocs folderId as file reference ???
+        if (WorkDocsHelper.checkFolderId(client, reference)) {
+            return reference;
+        }
+        // TODO: remove - test only
+        if (StringUtils.isBlank(reference)) {
+            return documentFolderId;
+        }
+        // TODO: map reference to reference
+        
+        throw new SdkClientException("Not a valid AWS WorkDocs folderId: " + reference);
     }
 
 }

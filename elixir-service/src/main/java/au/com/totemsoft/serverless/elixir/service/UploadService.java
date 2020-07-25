@@ -19,11 +19,11 @@ public interface UploadService {
     /**
      * 
      * @param resource
-     * @param folderId
+     * @param reference
      * @param metadata
      * @return
      * @throws IOException
      */
-    String upload(Resource resource, String folderId, Map<String, Object> metadata) throws IOException;
+    String upload(Resource resource, String reference, Map<String, Object> metadata) throws IOException;
 
 }

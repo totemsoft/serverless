@@ -43,9 +43,9 @@ public class AwsS3ServiceImpl implements UploadService {
     }
 
     @Override
-    public String upload(Resource resource, String folderId, Map<String, Object> metadata) throws IOException {
+    public String upload(Resource resource, String reference, Map<String, Object> metadata) throws IOException {
         final AmazonS3 client = client();
-        // TODO: use pathname
+        // TODO: use reference as path
         
         // store in pathname folder
         final ObjectMetadata om = new ObjectMetadata();
