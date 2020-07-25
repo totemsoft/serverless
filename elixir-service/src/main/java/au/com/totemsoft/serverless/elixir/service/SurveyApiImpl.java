@@ -3,9 +3,11 @@ package au.com.totemsoft.serverless.elixir.service;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,13 +53,20 @@ public class SurveyApiImpl implements SurveyApi {
         final String surveyId = surveyRequest.getSurveyId();
         try {
             //
-            //String reference = UUID.randomUUID().toString();
-            String reference = uploadService.mkdir(surveyId);
-            // send message to JMS (AWS SQS)
+            // check if this is new insured (Elixir file) - create folder to store documents
+            String insuredReference = surveyRequest.getReference();
+            if (StringUtils.isBlank(insuredReference)) {
+                insuredReference = UUID.randomUUID().toString();
+                surveyRequest.setReference(insuredReference);
+            }
+            /*String folderId = */uploadService.mkdir(insuredReference);
+            //
+            // send message via JMS (AWS SQS) - Elixir instance pickup and do job
             messageService.sendMessage(surveyRequest);
-            // TODO: get/create file with reference = WorkDocs folderId
+            //
+            // TODO: get/create file with insured reference (e.g. UUID or WorkDocs folderId)
             ResponseSurvey result = new ResponseSurvey()
-                .reference(reference)
+                .reference(insuredReference)
                 .surveyId(surveyId);
             //
             return entity(result, null);

@@ -117,6 +117,9 @@ definitions:
     required:
       - surveyId
     properties:
+      reference:
+        description: Reference
+        type: string
       surveyId:
         description: Survey Id
         type: string
