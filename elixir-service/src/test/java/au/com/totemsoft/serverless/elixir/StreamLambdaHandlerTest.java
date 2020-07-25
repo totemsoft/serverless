@@ -78,7 +78,6 @@ public class StreamLambdaHandlerTest {
         InputStream requestStream = new AwsProxyRequestBuilder("/survey/upload", HttpMethod.POST)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA + "; boundary=survey_upload")
             .header(HttpHeaders.AUTHORIZATION, "Bearer " + System.getProperty("access_token", "{{access_token}}"))
-            .header("x-v", "1")
             .header("reference", UUID.randomUUID().toString())
             .formFilePart("fileUpload", "document.json", IOUtils.readBytesFromStream(contentStream))
             .toHttpApiV2RequestStream();

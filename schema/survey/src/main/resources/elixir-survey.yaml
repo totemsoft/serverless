@@ -188,12 +188,8 @@ definitions:
   ResponseUpload:
     type: object
     required:
-      - reference
       - surveyId
     properties:
-      reference:
-        description: Reference
-        type: string
       surveyId:
         description: Survey Id
         type: string

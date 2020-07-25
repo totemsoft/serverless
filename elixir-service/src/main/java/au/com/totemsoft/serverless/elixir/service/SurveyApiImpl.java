@@ -3,6 +3,9 @@ package au.com.totemsoft.serverless.elixir.service;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
+
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import au.com.totemsoft.elixir.survey.v1.model.Question;
 import au.com.totemsoft.elixir.survey.v1.model.QuestionType;
 import au.com.totemsoft.elixir.survey.v1.model.RequestSurvey;
 import au.com.totemsoft.elixir.survey.v1.model.ResponseSurvey;
+import au.com.totemsoft.elixir.survey.v1.model.ResponseSurveyQuestions;
 import au.com.totemsoft.elixir.survey.v1.model.ResponseUpload;
 
 @Service("surveyApi")
@@ -44,20 +48,14 @@ public class SurveyApiImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<ResponseSurvey> surveyQuestions(String xV, String reference,
-        RequestSurvey surveyRequest) {
+    public ResponseEntity<ResponseSurvey> survey(@Valid RequestSurvey surveyRequest) {
         try {
             // send message to JMS (AWS SQS)
             messageService.sendMessage(surveyRequest);
             // TODO: questions (depends on sendMessage result ???)
             ResponseSurvey result = new ResponseSurvey()
-                .surveyId(surveyRequest.getSurveyId())
-                .addQuestionsItem(new Question()
-                    .type(QuestionType.TEXT)
-                    .text("What is abra-cadabra?")
-                    .addAnswersItem(new Answer().text("It is cool."))
-                    .addAnswersItem(new Answer().text("It is not cool."))
-            );
+                .reference(UUID.randomUUID().toString())
+                .surveyId(surveyRequest.getSurveyId());
             //
             return entity(result, null);
         } catch (Exception e) {
@@ -67,7 +65,29 @@ public class SurveyApiImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<ResponseUpload> surveyUpload(String xV, String reference,
+    public ResponseEntity<ResponseSurveyQuestions> surveyQuestions(String reference,
+        RequestSurvey surveyRequest) {
+        try {
+            // send message to JMS (AWS SQS)
+            messageService.sendMessage(surveyRequest);
+            // TODO: questions (depends on sendMessage result ???)
+            ResponseSurveyQuestions result = new ResponseSurveyQuestions()
+                .surveyId(surveyRequest.getSurveyId())
+                .addQuestionsItem(new Question()
+                    .type(QuestionType.TEXT)
+                    .text("What is abra-cadabra?")
+                    .addAnswersItem(new Answer().text("It is cool."))
+                    .addAnswersItem(new Answer().text("It is not cool.")));
+            //
+            return entity(result, null);
+        } catch (Exception e) {
+            ResponseSurveyQuestions error = new ResponseSurveyQuestions().surveyId(error(e));
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<ResponseUpload> surveyUpload(String reference,
         MultipartFile fileUpload, String fileNote) {
         try {
             String fileInfo = String.format("reference: %s, name: %s, size: %d", reference, fileUpload.getOriginalFilename(), fileUpload.getSize());
