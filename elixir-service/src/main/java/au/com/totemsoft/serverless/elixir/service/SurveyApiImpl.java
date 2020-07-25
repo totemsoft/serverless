@@ -52,7 +52,7 @@ public class SurveyApiImpl implements SurveyApi {
         try {
             // send message to JMS (AWS SQS)
             messageService.sendMessage(surveyRequest);
-            // TODO: questions (depends on sendMessage result ???)
+            // TODO: get/create file with reference = WorkDocs folderId
             ResponseSurvey result = new ResponseSurvey()
                 .reference(UUID.randomUUID().toString())
                 .surveyId(surveyRequest.getSurveyId());

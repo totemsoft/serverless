@@ -98,7 +98,7 @@ public class AwsSqsServiceImpl implements MessageService {
 
     @Override
     public List<Message> receiveMessages() throws JMSException {
-        final long timeoutMillis = TimeUnit.SECONDS.toMillis(5);
+        final long timeoutMillis = TimeUnit.SECONDS.toMillis(1);
         final SQSConnection connection = connection(client(subscribeQueueName));
         try {
             final Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
@@ -123,7 +123,7 @@ public class AwsSqsServiceImpl implements MessageService {
 
     @Override
     public void receiveMessages(MessageListener callback) throws JMSException {
-        final long timeoutMillis = TimeUnit.SECONDS.toMillis(5);
+        final long timeoutMillis = TimeUnit.SECONDS.toMillis(1);
         final SQSConnection connection = connection(client(subscribeQueueName));
         try {
             final Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);

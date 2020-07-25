@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -12,6 +11,9 @@ import org.springframework.stereotype.Service;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.workdocs.AmazonWorkDocs;
 import com.amazonaws.services.workdocs.AmazonWorkDocsClientBuilder;
+import com.amazonaws.services.workdocs.model.CreateFolderRequest;
+import com.amazonaws.services.workdocs.model.CreateFolderResult;
+import com.amazonaws.services.workdocs.model.EntityAlreadyExistsException;
 
 import au.com.totemsoft.serverless.elixir.service.UploadService;
 
@@ -47,7 +49,8 @@ public class AwsWorkDocsServiceImpl implements UploadService {
     public String upload(Resource resource, String reference, Map<String, Object> metadata) throws IOException {
         final AmazonWorkDocs client = client();
         try {
-            final String folderId = folderId(client, reference);
+            // TODO: use WorkDocs folderId as file reference ???
+            final String folderId = WorkDocsHelper.getOrCreateFolderId(client, documentFolderId, reference);
             final String name = resource.getFilename();
             String contentType = metadata.get(CONTENT_TYPE).toString();
             Map<String, String> map = WorkDocsHelper.documentUploadMetadata(client, folderId, name, contentType);
@@ -63,20 +66,6 @@ public class AwsWorkDocsServiceImpl implements UploadService {
         } finally {
             client.shutdown();
         }
-    }
-
-    private String folderId(AmazonWorkDocs client, String reference) {
-        // use WorkDocs folderId as file reference ???
-        if (WorkDocsHelper.checkFolderId(client, reference)) {
-            return reference;
-        }
-        // TODO: remove - test only
-        if (StringUtils.isBlank(reference)) {
-            return documentFolderId;
-        }
-        // TODO: map reference to reference
-        
-        throw new SdkClientException("Not a valid AWS WorkDocs folderId: " + reference);
     }
 
 }

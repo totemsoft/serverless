@@ -19,6 +19,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.Resource;
 
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.workdocs.AmazonWorkDocs;
 import com.amazonaws.services.workdocs.model.AmazonWorkDocsException;
 import com.amazonaws.services.workdocs.model.CreateFolderRequest;
@@ -67,12 +68,12 @@ public class WorkDocsHelper {
     public static User describeUser(AmazonWorkDocs client, String organizationId, String userName) {
         List<User> users = describeUsers(client, organizationId, userName);
         if (users.isEmpty()) {
-            throw new RuntimeException("No user found: " + userName);
+            throw new SdkClientException("No user found: " + userName);
         }
         if (users.size() == 1) {
             return users.get(0);
         }
-        throw new RuntimeException("Multiple users found: " + userName);
+        throw new SdkClientException("Multiple users found: " + userName);
     }
 
     public static String getRootFolderId(AmazonWorkDocs client, String organizationId, String userName) {
@@ -92,6 +93,22 @@ public class WorkDocsHelper {
             return true;
         }
         return false;
+    }
+
+    public static String getOrCreateFolderId(AmazonWorkDocs client, String folderId, String name) {
+        if (checkFolderId(client, name)) {
+            return name;
+        }
+        // map reference to WorkDocs folderId (create directory if resource does not exist)
+        try {
+            CreateFolderRequest request = new CreateFolderRequest();
+            request.setParentFolderId(folderId);
+            request.setName(name);
+            CreateFolderResult result = client.createFolder(request);
+            return result.getMetadata().getId();
+        } catch (EntityAlreadyExistsException e) {
+            return getFolderId(client, folderId, name);
+        }
     }
 
     /**
@@ -118,7 +135,7 @@ public class WorkDocsHelper {
             }
             marker = result.getMarker();
         } while (marker != null);
-        throw new RuntimeException("No folder found: " + folderId + "/" + name);
+        throw new SdkClientException("No folder found: " + folderId + "/" + name);
     }
 
     public static DocumentMetadata documentMetadata(AmazonWorkDocs client, String folderId, String name) {
@@ -281,7 +298,7 @@ public class WorkDocsHelper {
         //
         DocumentMetadata document = documentMetadata(client, fromFolderId, fromName);
         if (document == null) {
-            throw new RuntimeException("Could not move " + from + " to " + to);
+            throw new SdkClientException("Could not move " + from + " to " + to);
         }
         UpdateDocumentRequest request = new UpdateDocumentRequest();
         request.setDocumentId(document.getId());
