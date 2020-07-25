@@ -26,6 +26,7 @@ All URIs are relative to *https://$.execute-api.$.amazonaws.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*SurveyAPI* | [**survey**](docs/SurveyAPI.md#survey) | **POST** /survey | Get/Create Survey
 *SurveyAPI* | [**surveyQuestions**](docs/SurveyAPI.md#surveyquestions) | **POST** /survey/questions | Get Survey Questions
 *SurveyAPI* | [**surveyUpload**](docs/SurveyAPI.md#surveyupload) | **POST** /survey/upload | Uploads a file.
 
@@ -37,6 +38,7 @@ Class | Method | HTTP request | Description
  - [QuestionType](docs/QuestionType.md)
  - [RequestSurvey](docs/RequestSurvey.md)
  - [ResponseSurvey](docs/ResponseSurvey.md)
+ - [ResponseSurveyQuestions](docs/ResponseSurveyQuestions.md)
  - [ResponseUpload](docs/ResponseUpload.md)
 
 

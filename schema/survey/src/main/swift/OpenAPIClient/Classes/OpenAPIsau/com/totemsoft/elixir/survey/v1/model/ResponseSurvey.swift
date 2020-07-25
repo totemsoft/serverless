@@ -11,14 +11,14 @@ import Foundation
 public struct ResponseSurvey: Codable { 
 
 
+    /** Reference */
+    public var reference: String
     /** Survey Id */
     public var surveyId: String
-    /** The list of questions returned. If the filter results in an empty set then this array may have no records. */
-    public var questions: [Question]
 
-    public init(surveyId: String, questions: [Question]) {
+    public init(reference: String, surveyId: String) {
+        self.reference = reference
         self.surveyId = surveyId
-        self.questions = questions
     }
 
 }
