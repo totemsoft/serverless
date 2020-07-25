@@ -43,6 +43,17 @@ public class AwsWorkDocsServiceImpl implements UploadService {
     }
 
     @Override
+    public String mkdir(String reference) throws IOException {
+        final AmazonWorkDocs client = client();
+        try {
+            // TODO: use WorkDocs folderId as file reference ???
+            return WorkDocsHelper.getOrCreateFolderId(client, documentFolderId, reference);
+        } finally {
+            client.shutdown();
+        }
+    }
+
+    @Override
     public String upload(Resource resource, String reference, Map<String, Object> metadata) throws IOException {
         final AmazonWorkDocs client = client();
         try {

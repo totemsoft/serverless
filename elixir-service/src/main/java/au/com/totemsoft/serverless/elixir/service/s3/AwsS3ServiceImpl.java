@@ -43,10 +43,13 @@ public class AwsS3ServiceImpl implements UploadService {
     }
 
     @Override
+    public String mkdir(String reference) throws IOException {
+        return reference;
+    }
+
+    @Override
     public String upload(Resource resource, String reference, Map<String, Object> metadata) throws IOException {
         final AmazonS3 client = client();
-        // TODO: use reference as path
-        
         // store in pathname folder
         final ObjectMetadata om = new ObjectMetadata();
         for (Iterator<Entry<String, Object>> i = metadata.entrySet().iterator(); i.hasNext(); ) {
@@ -63,7 +66,7 @@ public class AwsS3ServiceImpl implements UploadService {
         }
         final String name = resource.getFilename();
         PutObjectResult result = client.putObject(new PutObjectRequest(bucket,
-            name,
+            reference + '/' + name,
             resource.getInputStream(),
             om));
         return result.getETag();

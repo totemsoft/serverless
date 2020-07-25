@@ -17,6 +17,14 @@ public interface UploadService {
     String FILE_NOTE = "fileNote";
 
     /**
+     * Translate reference to folderId (could be different, eg for AWS WorkDocs)
+     * @param reference
+     * @return folderId
+     * @throws IOException
+     */
+    String mkdir(String reference) throws IOException;
+
+    /**
      * 
      * @param resource
      * @param reference

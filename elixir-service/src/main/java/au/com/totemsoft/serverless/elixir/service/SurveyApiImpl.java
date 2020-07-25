@@ -3,7 +3,6 @@ package au.com.totemsoft.serverless.elixir.service;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -49,13 +48,17 @@ public class SurveyApiImpl implements SurveyApi {
 
     @Override
     public ResponseEntity<ResponseSurvey> survey(@Valid RequestSurvey surveyRequest) {
+        final String surveyId = surveyRequest.getSurveyId();
         try {
+            //
+            //String reference = UUID.randomUUID().toString();
+            String reference = uploadService.mkdir(surveyId);
             // send message to JMS (AWS SQS)
             messageService.sendMessage(surveyRequest);
             // TODO: get/create file with reference = WorkDocs folderId
             ResponseSurvey result = new ResponseSurvey()
-                .reference(UUID.randomUUID().toString())
-                .surveyId(surveyRequest.getSurveyId());
+                .reference(reference)
+                .surveyId(surveyId);
             //
             return entity(result, null);
         } catch (Exception e) {
