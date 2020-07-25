@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.workdocs.AmazonWorkDocs;
 import com.amazonaws.services.workdocs.AmazonWorkDocsClientBuilder;
-import com.amazonaws.services.workdocs.model.CreateFolderRequest;
-import com.amazonaws.services.workdocs.model.CreateFolderResult;
-import com.amazonaws.services.workdocs.model.EntityAlreadyExistsException;
 
 import au.com.totemsoft.serverless.elixir.service.UploadService;
 
