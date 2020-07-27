@@ -30,6 +30,7 @@
         <amazonaws.version>1.11.822</amazonaws.version>
         <amazonaws-sqs.version>1.0.8</amazonaws-sqs.version>
 
+        <spring-mobile.version>1.1.5.RELEASE</spring-mobile.version>
         <spring-cloud.version>2.2.2.RELEASE</spring-cloud.version>
         <log4j.version>2.13.3</log4j.version>
 
@@ -98,6 +99,12 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-indexer</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.mobile</groupId>
+            <artifactId>spring-mobile-device</artifactId>
+            <version>${spring-mobile.version}</version>
         </dependency>
 
         <dependency>
