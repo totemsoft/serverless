@@ -1,6 +1,7 @@
 package au.com.totemsoft.serverless.elixir.service.s3;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class AwsS3ServiceImpl implements UploadService {
     }
 
     @Override
-    public String upload(Resource resource, String reference, Map<String, Object> metadata) throws IOException {
+    public String upload(String reference, Resource resource, Map<String, Object> metadata) throws IOException {
         final AmazonS3 client = client();
         // store in pathname folder
         final ObjectMetadata om = new ObjectMetadata();
@@ -70,6 +71,12 @@ public class AwsS3ServiceImpl implements UploadService {
             resource.getInputStream(),
             om));
         return result.getETag();
+    }
+
+    @Override
+    public void download(String reference, OutputStream target) throws IOException {
+        // TODO Auto-generated method stub
+        throw new IllegalArgumentException("Not implememnted yet.");
     }
 
 }

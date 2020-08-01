@@ -1,6 +1,7 @@
 package au.com.totemsoft.serverless.elixir.service;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
@@ -26,12 +27,20 @@ public interface UploadService {
 
     /**
      * 
-     * @param resource
      * @param reference
+     * @param resource
      * @param metadata
      * @return
      * @throws IOException
      */
-    String upload(Resource resource, String reference, Map<String, Object> metadata) throws IOException;
+    String upload(String reference, Resource resource, Map<String, Object> metadata) throws IOException;
+
+    /**
+     * 
+     * @param reference
+     * @param target
+     * @throws IOException
+     */
+    public void download(String reference, OutputStream target) throws IOException;
 
 }

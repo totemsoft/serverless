@@ -183,9 +183,6 @@ definitions:
     description: Insured details
     type: object
     required: 
-      - firstname
-      - surname
-      - mobile
       - email
     properties:
       firstname:

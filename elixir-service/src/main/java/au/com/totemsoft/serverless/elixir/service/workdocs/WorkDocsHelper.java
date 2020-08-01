@@ -1,15 +1,11 @@
 package au.com.totemsoft.serverless.elixir.service.workdocs;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -159,18 +155,13 @@ public class WorkDocsHelper {
         return result.getMetadata().getSource().get(DocumentSourceType.ORIGINAL.name());
     }
 
-    public static File documentDownload(String downloadUrl, File file) throws Exception {
+    public static void documentDownload(String downloadUrl, OutputStream output) throws IOException {
         // get doc from provided URL
         URL url = new URL(downloadUrl);
         URLConnection connection = url.openConnection();
-        if (file == null) {
-            file = File.createTempFile("WorkDocsHelper", null);
+        try (final InputStream input = connection.getInputStream();) {
+            IOUtils.copy(input, output);
         }
-        final Path destination = Paths.get(file.getCanonicalPath());
-        try (final InputStream in = connection.getInputStream();) {
-            Files.copy(in, destination);
-        }
-        return file;
     }
 
     public static Map<String, String> documentUploadMetadata(AmazonWorkDocs client, String folderId, String name, String contentType) {

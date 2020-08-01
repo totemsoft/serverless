@@ -45,8 +45,7 @@ public class InsuredDetails   {
    * Client's name
    * @return firstname
   */
-  @ApiModelProperty(required = true, value = "Client's name")
-  @NotNull
+  @ApiModelProperty(value = "Client's name")
 
 
   public String getFirstname() {
@@ -66,8 +65,7 @@ public class InsuredDetails   {
    * Client's surname
    * @return surname
   */
-  @ApiModelProperty(required = true, value = "Client's surname")
-  @NotNull
+  @ApiModelProperty(value = "Client's surname")
 
 
   public String getSurname() {
@@ -87,8 +85,7 @@ public class InsuredDetails   {
    * Client's mobile
    * @return mobile
   */
-  @ApiModelProperty(required = true, value = "Client's mobile")
-  @NotNull
+  @ApiModelProperty(value = "Client's mobile")
 
 
   public String getMobile() {

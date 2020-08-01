@@ -121,6 +121,13 @@ Resources:
             Method: post
             RestApiId:
               Ref: ElixirApi
+        download:
+          Type: Api
+          Properties:
+            Path: /survey/download/{reference}
+            Method: get
+            RestApiId:
+              Ref: ElixirApi
 
 Outputs:
   ElixirServiceApi:

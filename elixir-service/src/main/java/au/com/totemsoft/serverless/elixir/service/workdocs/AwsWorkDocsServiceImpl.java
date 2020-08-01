@@ -1,6 +1,7 @@
 package au.com.totemsoft.serverless.elixir.service.workdocs;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.Map;
 
@@ -54,7 +55,7 @@ public class AwsWorkDocsServiceImpl implements UploadService {
     }
 
     @Override
-    public String upload(Resource resource, String reference, Map<String, Object> metadata) throws IOException {
+    public String upload(String reference, Resource resource, Map<String, Object> metadata) throws IOException {
         final AmazonWorkDocs client = client();
         try {
             // TODO: use WorkDocs folderId as file reference ???
@@ -74,6 +75,12 @@ public class AwsWorkDocsServiceImpl implements UploadService {
         } finally {
             client.shutdown();
         }
+    }
+
+    @Override
+    public void download(String reference, OutputStream target) throws IOException {
+        String downloadUrl = "";
+        WorkDocsHelper.documentDownload(downloadUrl, target);
     }
 
 }
