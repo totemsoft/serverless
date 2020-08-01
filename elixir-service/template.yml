@@ -93,21 +93,28 @@ Resources:
               Ref: ElixirApi
             Auth:
               Authorizer: NONE
-        survey:
+        create:
           Type: Api
           Properties:
-            Path: /survey
+            Path: /survey/create
             Method: post
             RestApiId:
               Ref: ElixirApi
-        surveyQuestions:
+        find:
           Type: Api
           Properties:
-            Path: /survey/questions
-            Method: post
+            Path: /survey/find/{reference}
+            Method: get
             RestApiId:
               Ref: ElixirApi
-        surveyUpload:
+        update:
+          Type: Api
+          Properties:
+            Path: /survey/update
+            Method: put
+            RestApiId:
+              Ref: ElixirApi
+        upload:
           Type: Api
           Properties:
             Path: /survey/upload

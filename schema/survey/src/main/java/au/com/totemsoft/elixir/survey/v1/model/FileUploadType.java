@@ -4,25 +4,17 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Question Types
+ * File Upload Types
  */
-public enum QuestionType {
+public enum FileUploadType {
   
-  TEXT("TEXT"),
+  SURVEY("SURVEY"),
   
-  RADIOGROUP("RADIOGROUP"),
-  
-  DROPDOWN("DROPDOWN"),
-  
-  CHECKBOXES("CHECKBOXES"),
-  
-  BOOLEAN("BOOLEAN"),
-  
-  COMMENT("COMMENT");
+  DOCUMENT("DOCUMENT");
 
   private String value;
 
-  QuestionType(String value) {
+  FileUploadType(String value) {
     this.value = value;
   }
 
@@ -37,8 +29,8 @@ public enum QuestionType {
   }
 
   @JsonCreator
-  public static QuestionType fromValue(String value) {
-    for (QuestionType b : QuestionType.values()) {
+  public static FileUploadType fromValue(String value) {
+    for (FileUploadType b : FileUploadType.values()) {
       if (b.value.equals(value)) {
         return b;
       }

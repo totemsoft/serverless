@@ -20,13 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import au.com.totemsoft.elixir.survey.v1.api.SurveyApi;
-import au.com.totemsoft.elixir.survey.v1.model.Answer;
-import au.com.totemsoft.elixir.survey.v1.model.Question;
-import au.com.totemsoft.elixir.survey.v1.model.QuestionType;
-import au.com.totemsoft.elixir.survey.v1.model.RequestSurvey;
-import au.com.totemsoft.elixir.survey.v1.model.ResponseSurvey;
-import au.com.totemsoft.elixir.survey.v1.model.ResponseSurveyQuestions;
-import au.com.totemsoft.elixir.survey.v1.model.ResponseUpload;
+import au.com.totemsoft.elixir.survey.v1.model.SurveyRequest;
+import au.com.totemsoft.elixir.survey.v1.model.SurveyResponse;
+import au.com.totemsoft.elixir.survey.v1.model.UploadResponse;
 
 @Service("surveyApi")
 public class SurveyApiImpl implements SurveyApi {
@@ -49,60 +45,81 @@ public class SurveyApiImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<ResponseSurvey> survey(@Valid RequestSurvey surveyRequest) {
-        final String surveyId = surveyRequest.getSurveyId();
+    public ResponseEntity<SurveyResponse> create(@Valid SurveyRequest surveyRequest) {
         try {
             //
             // check if this is new insured (Elixir file) - create folder to store documents
-            String insuredReference = surveyRequest.getReference();
-            if (StringUtils.isBlank(insuredReference)) {
-                insuredReference = UUID.randomUUID().toString();
-                surveyRequest.setReference(insuredReference);
+            String reference = surveyRequest.getReference();
+            if (StringUtils.isBlank(reference)) {
+                reference = UUID.randomUUID().toString();
+                surveyRequest.setReference(reference);
             }
-            /*String folderId = */uploadService.mkdir(insuredReference);
+            /*String folderId = */uploadService.mkdir(reference);
             //
             // send message via JMS (AWS SQS) - Elixir instance pickup and do job
+            // get/create file with insured file reference (UUID)
             messageService.sendMessage(surveyRequest);
             //
-            // TODO: get/create file with insured reference (e.g. UUID or WorkDocs folderId)
-            ResponseSurvey result = new ResponseSurvey()
-                .reference(insuredReference)
-                .surveyId(surveyId);
+            SurveyResponse result = new SurveyResponse()
+                .reference(reference);
             //
             return entity(result, null);
         } catch (Exception e) {
-            ResponseSurvey error = new ResponseSurvey().surveyId(error(e));
+            SurveyResponse error = new SurveyResponse().reference(error(e));
             return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public ResponseEntity<ResponseSurveyQuestions> surveyQuestions(String reference,
-        RequestSurvey surveyRequest) {
+    public ResponseEntity<SurveyResponse> find(String reference) {
         try {
-            // send message to JMS (AWS SQS)
-            messageService.sendMessage(surveyRequest);
-            // TODO: questions (depends on sendMessage result ???)
-            ResponseSurveyQuestions result = new ResponseSurveyQuestions()
-                .surveyId(surveyRequest.getSurveyId())
-                .addQuestionsItem(new Question()
-                    .type(QuestionType.TEXT)
-                    .text("What is abra-cadabra?")
-                    .addAnswersItem(new Answer().text("It is cool."))
-                    .addAnswersItem(new Answer().text("It is not cool.")));
+            //
+            // check if this is new insured (Elixir file) - create folder to store documents
+            //String folderId = uploadService.mkdir(reference);
+            //
+            //
+            SurveyResponse result = new SurveyResponse()
+                .reference(reference);
             //
             return entity(result, null);
         } catch (Exception e) {
-            ResponseSurveyQuestions error = new ResponseSurveyQuestions().surveyId(error(e));
+            SurveyResponse error = new SurveyResponse().reference(error(e));
             return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public ResponseEntity<ResponseUpload> surveyUpload(String reference,
-        MultipartFile fileUpload, String fileNote) {
+    public ResponseEntity<SurveyResponse> update(@Valid SurveyRequest surveyRequest) {
         try {
-            String fileInfo = String.format("reference: %s, name: %s, size: %d", reference, fileUpload.getOriginalFilename(), fileUpload.getSize());
+            //
+            // check if this is new insured (Elixir file) - create folder to store documents
+            String reference = surveyRequest.getReference();
+            if (StringUtils.isBlank(reference)) {
+                reference = UUID.randomUUID().toString();
+                surveyRequest.setReference(reference);
+            }
+            /*String folderId = */uploadService.mkdir(reference);
+            //
+            // send message via JMS (AWS SQS) - Elixir instance pickup and do job
+            // get/create file with insured file reference (UUID)
+            messageService.sendMessage(surveyRequest);
+            //
+            SurveyResponse result = new SurveyResponse()
+                .reference(reference);
+            //
+            return entity(result, null);
+        } catch (Exception e) {
+            SurveyResponse error = new SurveyResponse().reference(error(e));
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<UploadResponse> upload(String reference,
+        @Valid MultipartFile fileUpload, String fileNote) {
+        try {
+            String fileInfo = String.format("reference: %s, name: %s, size: %d",
+                reference, fileUpload.getOriginalFilename(), fileUpload.getSize());
             // save s3
             Resource r = fileUpload.getResource();
             Map<String, Object> metadata = new TreeMap<>();
@@ -111,11 +128,11 @@ public class SurveyApiImpl implements SurveyApi {
             metadata.put(UploadService.FILE_NOTE, fileNote);
             String uploadResult = uploadService.upload(r, reference, metadata);
             // result
-            ResponseUpload result = new ResponseUpload()
-                .surveyId(uploadResult + ": [" + reference + "]" + fileNote + " - " + fileInfo);
+            UploadResponse result = new UploadResponse()
+                .reference(uploadResult + ": [" + reference + "]" + fileNote + " - " + fileInfo);
             return entity(result, null);
         } catch (Exception e) {
-            ResponseUpload error = new ResponseUpload().surveyId(error(e));
+            UploadResponse error = new UploadResponse().reference(error(e));
             return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

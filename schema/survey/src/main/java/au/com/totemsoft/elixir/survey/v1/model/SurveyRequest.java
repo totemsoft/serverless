@@ -9,26 +9,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * ResponseSurvey
+ * SurveyRequest
  */
 
-public class ResponseSurvey   {
+public class SurveyRequest   {
   @JsonProperty("reference")
   private String reference;
 
-  @JsonProperty("surveyId")
-  private String surveyId;
-
-  public ResponseSurvey reference(String reference) {
+  public SurveyRequest reference(String reference) {
     this.reference = reference;
     return this;
   }
 
   /**
-   * Reference
+   * Reference (Survey Id)
    * @return reference
   */
-  @ApiModelProperty(required = true, value = "Reference")
+  @ApiModelProperty(required = true, value = "Reference (Survey Id)")
   @NotNull
 
 
@@ -40,27 +37,6 @@ public class ResponseSurvey   {
     this.reference = reference;
   }
 
-  public ResponseSurvey surveyId(String surveyId) {
-    this.surveyId = surveyId;
-    return this;
-  }
-
-  /**
-   * Survey Id
-   * @return surveyId
-  */
-  @ApiModelProperty(required = true, value = "Survey Id")
-  @NotNull
-
-
-  public String getSurveyId() {
-    return surveyId;
-  }
-
-  public void setSurveyId(String surveyId) {
-    this.surveyId = surveyId;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -70,23 +46,21 @@ public class ResponseSurvey   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ResponseSurvey responseSurvey = (ResponseSurvey) o;
-    return Objects.equals(this.reference, responseSurvey.reference) &&
-        Objects.equals(this.surveyId, responseSurvey.surveyId);
+    SurveyRequest surveyRequest = (SurveyRequest) o;
+    return Objects.equals(this.reference, surveyRequest.reference);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(reference, surveyId);
+    return Objects.hash(reference);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ResponseSurvey {\n");
+    sb.append("class SurveyRequest {\n");
     
     sb.append("    reference: ").append(toIndentedString(reference)).append("\n");
-    sb.append("    surveyId: ").append(toIndentedString(surveyId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

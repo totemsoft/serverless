@@ -9,17 +9,16 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import au.com.totemsoft.elixir.survey.v1.model.RequestSurvey;
-import au.com.totemsoft.elixir.survey.v1.model.ResponseSurvey;
-import au.com.totemsoft.elixir.survey.v1.model.ResponseSurveyQuestions;
-import au.com.totemsoft.elixir.survey.v1.model.ResponseUpload;
+import au.com.totemsoft.elixir.survey.v1.model.SurveyRequest;
+import au.com.totemsoft.elixir.survey.v1.model.SurveyResponse;
+import au.com.totemsoft.elixir.survey.v1.model.UploadResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,41 +32,58 @@ public interface SurveyApi {
     SurveyApi getDelegate();
 
     /**
-     * POST /survey : Get/Create Survey
-     * Obtain a survey (will create one if does not exists)
+     * POST /survey/create : Create Survey
+     * Create Survey
      *
      * @param surveyRequest Survey Request (required)
      * @return Success (status code 200)
      */
-    @ApiOperation(value = "Get/Create Survey", nickname = "survey", notes = "Obtain a survey (will create one if does not exists)", response = ResponseSurvey.class, tags={ "Survey", })
+    @ApiOperation(value = "Create Survey", nickname = "create", notes = "Create Survey", response = SurveyResponse.class, tags={  })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Success", response = ResponseSurvey.class) })
-    @RequestMapping(value = "/survey",
+        @ApiResponse(code = 200, message = "Success", response = SurveyResponse.class) })
+    @RequestMapping(value = "/survey/create",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    default ResponseEntity<ResponseSurvey> survey(@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody RequestSurvey surveyRequest) {
-        return getDelegate().survey(surveyRequest);
+    default ResponseEntity<SurveyResponse> create(@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody SurveyRequest surveyRequest) {
+        return getDelegate().create(surveyRequest);
     }
 
 
     /**
-     * POST /survey/questions : Get Survey Questions
-     * Obtain a list of survey questions
+     * GET /survey/find/{reference} : Get Survey
+     * Get Survey
      *
-     * @param reference Reference of request. See [HTTP Headers](#request-headers). (required)
+     * @param reference Reference of request. (required)
+     * @return Success (status code 200)
+     */
+    @ApiOperation(value = "Get Survey", nickname = "find", notes = "Get Survey", response = SurveyResponse.class, tags={  })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "Success", response = SurveyResponse.class) })
+    @RequestMapping(value = "/survey/find/{reference}",
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
+    default ResponseEntity<SurveyResponse> find(@ApiParam(value = "Reference of request.",required=true) @PathVariable("reference") String reference) {
+        return getDelegate().find(reference);
+    }
+
+
+    /**
+     * PUT /survey/update : Update Survey
+     * Update Survey
+     *
      * @param surveyRequest Survey Request (required)
      * @return Success (status code 200)
      */
-    @ApiOperation(value = "Get Survey Questions", nickname = "surveyQuestions", notes = "Obtain a list of survey questions", response = ResponseSurveyQuestions.class, tags={ "Survey", })
+    @ApiOperation(value = "Update Survey", nickname = "update", notes = "Update Survey", response = SurveyResponse.class, tags={  })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Success", response = ResponseSurveyQuestions.class) })
-    @RequestMapping(value = "/survey/questions",
+        @ApiResponse(code = 200, message = "Success", response = SurveyResponse.class) })
+    @RequestMapping(value = "/survey/update",
         produces = { "application/json" }, 
         consumes = { "application/json" },
-        method = RequestMethod.POST)
-    default ResponseEntity<ResponseSurveyQuestions> surveyQuestions(@ApiParam(value = "Reference of request. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="reference", required=true) String reference,@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody RequestSurvey surveyRequest) {
-        return getDelegate().surveyQuestions(reference, surveyRequest);
+        method = RequestMethod.PUT)
+    default ResponseEntity<SurveyResponse> update(@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody SurveyRequest surveyRequest) {
+        return getDelegate().update(surveyRequest);
     }
 
 
@@ -75,24 +91,24 @@ public interface SurveyApi {
      * POST /survey/upload : Uploads a file.
      * Uploads a file.
      *
-     * @param reference Reference of request. See [HTTP Headers](#request-headers). (required)
+     * @param reference Reference of request. (required)
      * @param fileUpload The file to upload. (required)
      * @param fileNote Description of file content. (optional)
      * @return Success (status code 200)
      *         or Not authenticated (status code 401)
      *         or Access token does not have the required scope (status code 403)
      */
-    @ApiOperation(value = "Uploads a file.", nickname = "surveyUpload", notes = "Uploads a file.", response = ResponseUpload.class, tags={ "Survey", })
+    @ApiOperation(value = "Uploads a file.", nickname = "upload", notes = "Uploads a file.", response = UploadResponse.class, tags={  })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Success", response = ResponseUpload.class),
+        @ApiResponse(code = 200, message = "Success", response = UploadResponse.class),
         @ApiResponse(code = 401, message = "Not authenticated"),
         @ApiResponse(code = 403, message = "Access token does not have the required scope") })
     @RequestMapping(value = "/survey/upload",
         produces = { "application/json" }, 
         consumes = { "multipart/form-data" },
         method = RequestMethod.POST)
-    default ResponseEntity<ResponseUpload> surveyUpload(@ApiParam(value = "Reference of request. See [HTTP Headers](#request-headers)." ,required=true) @RequestHeader(value="reference", required=true) String reference,@ApiParam(value = "The file to upload.") @Valid @RequestPart(value = "fileUpload") MultipartFile fileUpload,@ApiParam(value = "Description of file content.") @RequestPart(value="fileNote", required=false)  String fileNote) {
-        return getDelegate().surveyUpload(reference, fileUpload, fileNote);
+    default ResponseEntity<UploadResponse> upload(@ApiParam(value = "Reference of request.",required=true) @PathVariable("reference") String reference,@ApiParam(value = "The file to upload.") @Valid @RequestPart(value = "fileUpload") MultipartFile fileUpload,@ApiParam(value = "Description of file content.") @RequestPart(value="fileNote", required=false)  String fileNote) {
+        return getDelegate().upload(reference, fileUpload, fileNote);
     }
 
 }

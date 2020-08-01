@@ -31,46 +31,51 @@ produces:
 #       write: Grants write access
 #       admin: Grants read and write access to administrative information
 paths:
-  /survey:
+  /survey/create:
     post:
-      summary: Get/Create Survey
-      description: Obtain a survey (will create one if does not exists)
-      operationId: survey
-      tags:
-        - Survey
+      summary: Create Survey
+      description: Create Survey
+      operationId: create
       parameters:
-        - $ref: '#/parameters/RequestSurvey'
+        - $ref: '#/parameters/SurveyRequest'
       responses:
         200:
           description: Success
           schema:
-            $ref: '#/definitions/ResponseSurvey'
-  /survey/questions:
-    post:
-      summary: Get Survey Questions
-      description: Obtain a list of survey questions
-      operationId: surveyQuestions
-      tags:
-        - Survey
+            $ref: '#/definitions/SurveyResponse'
+  /survey/find/{reference}:
+    get:
+      summary: Get Survey
+      description: Get Survey
+      operationId: find
       parameters:
-        - $ref: '#/parameters/RequestReference'
-        - $ref: '#/parameters/RequestSurvey'
+        - $ref: '#/parameters/Reference'
       responses:
         200:
           description: Success
           schema:
-            $ref: '#/definitions/ResponseSurveyQuestions'
+            $ref: '#/definitions/SurveyResponse'
+  /survey/update:
+    put:
+      summary: Update Survey
+      description: Update Survey
+      operationId: update
+      parameters:
+        - $ref: '#/parameters/SurveyRequest'
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/SurveyResponse'
   /survey/upload:
     post:
       summary: Uploads a file.
       description: Uploads a file.
-      operationId: surveyUpload
-      tags:
-        - Survey
+      operationId: upload
       consumes:
         - multipart/form-data
       parameters:
-        - $ref: '#/parameters/RequestReference'
+        - $ref: '#/parameters/Reference'
         - in: formData
           name: fileUpload
           type: file
@@ -85,7 +90,7 @@ paths:
         200:
           description: Success
           schema:
-            $ref: '#/definitions/ResponseUpload'
+            $ref: '#/definitions/UploadResponse'
         401:
           description: Not authenticated
         403:
@@ -94,105 +99,54 @@ paths:
 # parameters
 #
 parameters:
-  RequestReference:
+  Reference:
+    in: path
     name: reference
-    description: Reference of request. See [HTTP Headers](#request-headers).
-    in: header
+    description: Reference of request.
     type: string
     required: true
-  RequestSurvey:
+  SurveyRequest:
     name: surveyRequest
     in: body
     description: Survey Request
     required: true
     schema:
-      $ref: '#/definitions/RequestSurvey'
+      $ref: '#/definitions/SurveyRequest'
 #
 # definitions
 #
 definitions:
   #
-  RequestSurvey:
-    type: object
-    required:
-      - surveyId
-    properties:
-      reference:
-        description: Reference
-        type: string
-      surveyId:
-        description: Survey Id
-        type: string
-  #
-  ResponseSurvey:
+  SurveyRequest:
     type: object
     required:
       - reference
-      - surveyId
     properties:
       reference:
-        description: Reference
-        type: string
-      surveyId:
-        description: Survey Id
+        description: Reference (Survey Id)
         type: string
   #
-  ResponseSurveyQuestions:
+  SurveyResponse:
     type: object
     required:
-      - surveyId
-      - questions
+      - reference
     properties:
-      surveyId:
-        description: Survey Id
+      reference:
+        description: Reference (Survey Id)
         type: string
-      questions:
-        description: The list of questions returned. If the filter results in an empty set then this array may have no records.
-        type: array
-        items:
-          $ref: '#/definitions/Question'
-  Question:
-    type: object
-    required:
-      - type
-      - text
-      - answers
-    properties:
-      type:
-        $ref: '#/definitions/QuestionType'
-      text:
-        type: string
-        description: Question text
-      answers:
-        description: An array of question answers
-        type: array
-        items:
-          $ref: '#/definitions/Answer'
-  QuestionType:
-    type: string
-    description: Question Types
-    enum:
-      - TEXT
-      - RADIOGROUP
-      - DROPDOWN
-      - CHECKBOXES
-      - BOOLEAN
-      - COMMENT
-  Answer:
-    type: object
-    description: Question Answer
-    required:
-      - text
-    properties:
-      text:
-        type: string
-        description: Answer text
   # 
-  ResponseUpload:
+  UploadResponse:
     type: object
     required:
-      - surveyId
+      - reference
     properties:
-      surveyId:
-        description: Survey Id
+      reference:
+        description: Reference (Survey Id)
         type: string
+  #
+  FileUploadType:
+    type: string
+    description: File Upload Types
+    enum:
+      - SURVEY
+      - DOCUMENT

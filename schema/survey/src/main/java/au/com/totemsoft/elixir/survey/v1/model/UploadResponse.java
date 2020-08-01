@@ -6,37 +6,35 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Question Answer
+ * UploadResponse
  */
-@ApiModel(description = "Question Answer")
 
-public class Answer   {
-  @JsonProperty("text")
-  private String text;
+public class UploadResponse   {
+  @JsonProperty("reference")
+  private String reference;
 
-  public Answer text(String text) {
-    this.text = text;
+  public UploadResponse reference(String reference) {
+    this.reference = reference;
     return this;
   }
 
   /**
-   * Answer text
-   * @return text
+   * Reference (Survey Id)
+   * @return reference
   */
-  @ApiModelProperty(required = true, value = "Answer text")
+  @ApiModelProperty(required = true, value = "Reference (Survey Id)")
   @NotNull
 
 
-  public String getText() {
-    return text;
+  public String getReference() {
+    return reference;
   }
 
-  public void setText(String text) {
-    this.text = text;
+  public void setReference(String reference) {
+    this.reference = reference;
   }
 
 
@@ -48,21 +46,21 @@ public class Answer   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Answer answer = (Answer) o;
-    return Objects.equals(this.text, answer.text);
+    UploadResponse uploadResponse = (UploadResponse) o;
+    return Objects.equals(this.reference, uploadResponse.reference);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(text);
+    return Objects.hash(reference);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Answer {\n");
+    sb.append("class UploadResponse {\n");
     
-    sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("    reference: ").append(toIndentedString(reference)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -9,32 +9,32 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * ResponseUpload
+ * SurveyResponse
  */
 
-public class ResponseUpload   {
-  @JsonProperty("surveyId")
-  private String surveyId;
+public class SurveyResponse   {
+  @JsonProperty("reference")
+  private String reference;
 
-  public ResponseUpload surveyId(String surveyId) {
-    this.surveyId = surveyId;
+  public SurveyResponse reference(String reference) {
+    this.reference = reference;
     return this;
   }
 
   /**
-   * Survey Id
-   * @return surveyId
+   * Reference (Survey Id)
+   * @return reference
   */
-  @ApiModelProperty(required = true, value = "Survey Id")
+  @ApiModelProperty(required = true, value = "Reference (Survey Id)")
   @NotNull
 
 
-  public String getSurveyId() {
-    return surveyId;
+  public String getReference() {
+    return reference;
   }
 
-  public void setSurveyId(String surveyId) {
-    this.surveyId = surveyId;
+  public void setReference(String reference) {
+    this.reference = reference;
   }
 
 
@@ -46,21 +46,21 @@ public class ResponseUpload   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ResponseUpload responseUpload = (ResponseUpload) o;
-    return Objects.equals(this.surveyId, responseUpload.surveyId);
+    SurveyResponse surveyResponse = (SurveyResponse) o;
+    return Objects.equals(this.reference, surveyResponse.reference);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(surveyId);
+    return Objects.hash(reference);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ResponseUpload {\n");
+    sb.append("class SurveyResponse {\n");
     
-    sb.append("    surveyId: ").append(toIndentedString(surveyId)).append("\n");
+    sb.append("    reference: ").append(toIndentedString(reference)).append("\n");
     sb.append("}");
     return sb.toString();
   }
