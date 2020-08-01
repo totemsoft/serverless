@@ -102,8 +102,9 @@ parameters:
   Reference:
     in: path
     name: reference
-    description: Reference of request.
+    description: Reference (Survey Id)
     type: string
+    format: UUID
     required: true
   SurveyRequest:
     name: surveyRequest
@@ -117,14 +118,22 @@ parameters:
 #
 definitions:
   #
+  Reference:
+    description: Reference (Survey Id)
+    type: string
+    format: UUID
+  #
+  Message:
+    description: Message (could be error)
+    type: string
+  #
   SurveyRequest:
     type: object
     required:
       - reference
     properties:
       reference:
-        description: Reference (Survey Id)
-        type: string
+        $ref: '#/definitions/Reference'
   #
   SurveyResponse:
     type: object
@@ -132,8 +141,9 @@ definitions:
       - reference
     properties:
       reference:
-        description: Reference (Survey Id)
-        type: string
+        $ref: '#/definitions/Reference'
+      message:
+        $ref: '#/definitions/Message'
   # 
   UploadResponse:
     type: object
@@ -141,8 +151,9 @@ definitions:
       - reference
     properties:
       reference:
-        description: Reference (Survey Id)
-        type: string
+        $ref: '#/definitions/Reference'
+      message:
+        $ref: '#/definitions/Message'
   #
   FileUploadType:
     type: string

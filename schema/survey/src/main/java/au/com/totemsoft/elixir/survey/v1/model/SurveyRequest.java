@@ -1,7 +1,9 @@
 package au.com.totemsoft.elixir.survey.v1.model;
 
 import java.util.Objects;
+import java.util.UUID;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,9 +16,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class SurveyRequest   {
   @JsonProperty("reference")
-  private String reference;
+  private UUID reference;
 
-  public SurveyRequest reference(String reference) {
+  public SurveyRequest reference(UUID reference) {
     this.reference = reference;
     return this;
   }
@@ -28,12 +30,13 @@ public class SurveyRequest   {
   @ApiModelProperty(required = true, value = "Reference (Survey Id)")
   @NotNull
 
+  @Valid
 
-  public String getReference() {
+  public UUID getReference() {
     return reference;
   }
 
-  public void setReference(String reference) {
+  public void setReference(UUID reference) {
     this.reference = reference;
   }
 

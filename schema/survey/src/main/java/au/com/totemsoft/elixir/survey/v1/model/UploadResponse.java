@@ -1,7 +1,9 @@
 package au.com.totemsoft.elixir.survey.v1.model;
 
 import java.util.Objects;
+import java.util.UUID;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,9 +16,12 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class UploadResponse   {
   @JsonProperty("reference")
-  private String reference;
+  private UUID reference;
 
-  public UploadResponse reference(String reference) {
+  @JsonProperty("message")
+  private String message;
+
+  public UploadResponse reference(UUID reference) {
     this.reference = reference;
     return this;
   }
@@ -28,13 +33,34 @@ public class UploadResponse   {
   @ApiModelProperty(required = true, value = "Reference (Survey Id)")
   @NotNull
 
+  @Valid
 
-  public String getReference() {
+  public UUID getReference() {
     return reference;
   }
 
-  public void setReference(String reference) {
+  public void setReference(UUID reference) {
     this.reference = reference;
+  }
+
+  public UploadResponse message(String message) {
+    this.message = message;
+    return this;
+  }
+
+  /**
+   * Message (could be error)
+   * @return message
+  */
+  @ApiModelProperty(value = "Message (could be error)")
+
+
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
   }
 
 
@@ -47,12 +73,13 @@ public class UploadResponse   {
       return false;
     }
     UploadResponse uploadResponse = (UploadResponse) o;
-    return Objects.equals(this.reference, uploadResponse.reference);
+    return Objects.equals(this.reference, uploadResponse.reference) &&
+        Objects.equals(this.message, uploadResponse.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(reference);
+    return Objects.hash(reference, message);
   }
 
   @Override
@@ -61,6 +88,7 @@ public class UploadResponse   {
     sb.append("class UploadResponse {\n");
     
     sb.append("    reference: ").append(toIndentedString(reference)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();
   }

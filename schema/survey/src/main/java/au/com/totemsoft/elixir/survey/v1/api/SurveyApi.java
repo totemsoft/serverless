@@ -5,6 +5,8 @@
  */
 package au.com.totemsoft.elixir.survey.v1.api;
 
+import java.util.UUID;
+
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -54,7 +56,7 @@ public interface SurveyApi {
      * GET /survey/find/{reference} : Get Survey
      * Get Survey
      *
-     * @param reference Reference of request. (required)
+     * @param reference Reference (Survey Id) (required)
      * @return Success (status code 200)
      */
     @ApiOperation(value = "Get Survey", nickname = "find", notes = "Get Survey", response = SurveyResponse.class, tags={  })
@@ -63,7 +65,7 @@ public interface SurveyApi {
     @RequestMapping(value = "/survey/find/{reference}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<SurveyResponse> find(@ApiParam(value = "Reference of request.",required=true) @PathVariable("reference") String reference) {
+    default ResponseEntity<SurveyResponse> find(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference) {
         return getDelegate().find(reference);
     }
 
@@ -91,7 +93,7 @@ public interface SurveyApi {
      * POST /survey/upload/{reference} : Uploads a file.
      * Uploads a file.
      *
-     * @param reference Reference of request. (required)
+     * @param reference Reference (Survey Id) (required)
      * @param fileUpload The file to upload. (required)
      * @param fileNote Description of file content. (optional)
      * @return Success (status code 200)
@@ -107,7 +109,7 @@ public interface SurveyApi {
         produces = { "application/json" }, 
         consumes = { "multipart/form-data" },
         method = RequestMethod.POST)
-    default ResponseEntity<UploadResponse> upload(@ApiParam(value = "Reference of request.",required=true) @PathVariable("reference") String reference,@ApiParam(value = "The file to upload.") @Valid @RequestPart(value = "fileUpload") MultipartFile fileUpload,@ApiParam(value = "Description of file content.") @RequestPart(value="fileNote", required=false)  String fileNote) {
+    default ResponseEntity<UploadResponse> upload(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "The file to upload.") @Valid @RequestPart(value = "fileUpload") MultipartFile fileUpload,@ApiParam(value = "Description of file content.") @RequestPart(value="fileNote", required=false)  String fileNote) {
         return getDelegate().upload(reference, fileUpload, fileNote);
     }
 
