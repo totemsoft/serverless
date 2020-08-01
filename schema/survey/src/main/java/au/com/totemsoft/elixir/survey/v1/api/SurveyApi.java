@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,6 +54,26 @@ public interface SurveyApi {
 
 
     /**
+     * GET /survey/download/{reference} : Download a file.
+     * Download a file.
+     *
+     * @param reference Reference (Survey Id) (required)
+     * @return Success (status code 200)
+     *         or Survey not found (status code 404)
+     */
+    @ApiOperation(value = "Download a file.", nickname = "download", notes = "Download a file.", response = Resource.class, tags={  })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "Success", response = Resource.class),
+        @ApiResponse(code = 404, message = "Survey not found") })
+    @RequestMapping(value = "/survey/download/{reference}",
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
+    default ResponseEntity<Resource> download(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference) {
+        return getDelegate().download(reference);
+    }
+
+
+    /**
      * GET /survey/find/{reference} : Get Survey
      * Get Survey
      *
@@ -90,7 +111,7 @@ public interface SurveyApi {
 
 
     /**
-     * POST /survey/upload/{reference} : Uploads a file.
+     * POST /survey/upload/{reference} : Upload a file.
      * Uploads a file.
      *
      * @param reference Reference (Survey Id) (required)
@@ -100,7 +121,7 @@ public interface SurveyApi {
      *         or Not authenticated (status code 401)
      *         or Access token does not have the required scope (status code 403)
      */
-    @ApiOperation(value = "Uploads a file.", nickname = "upload", notes = "Uploads a file.", response = UploadResponse.class, tags={  })
+    @ApiOperation(value = "Upload a file.", nickname = "upload", notes = "Uploads a file.", response = UploadResponse.class, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = UploadResponse.class),
         @ApiResponse(code = 401, message = "Not authenticated"),

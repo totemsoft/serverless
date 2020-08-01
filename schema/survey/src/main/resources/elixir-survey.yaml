@@ -69,7 +69,7 @@ paths:
             $ref: '#/definitions/SurveyResponse'
   /survey/upload/{reference}:
     post:
-      summary: Uploads a file.
+      summary: Upload a file.
       description: Uploads a file.
       operationId: upload
       consumes:
@@ -95,6 +95,20 @@ paths:
           description: Not authenticated
         403:
           description: Access token does not have the required scope
+  /survey/download/{reference}:
+    get:
+      summary: Download a file.
+      description: Download a file.
+      operationId: download
+      parameters:
+        - $ref: '#/parameters/Reference'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: file
+        404:
+          description: Survey not found
 #
 # parameters
 #
@@ -134,6 +148,8 @@ definitions:
     properties:
       reference:
         $ref: '#/definitions/Reference'
+      details:
+        $ref: '#/definitions/InsuredDetails'
   #
   SurveyResponse:
     type: object
@@ -161,3 +177,35 @@ definitions:
     enum:
       - SURVEY
       - DOCUMENT
+  #
+  InsuredDetails:
+    title: InsuredDetails
+    description: Insured details
+    type: object
+    required: 
+      - firstname
+      - surname
+      - mobile
+      - email
+    properties:
+      firstname:
+        description: Client's name
+        type: string
+      surname:
+        description: Client's surname
+        type: string
+      mobile:
+        description: Client's mobile
+        type: string
+      email:
+        description: Client's email
+        type: string
+      companyName:
+        description: Client's company name
+        type: string
+      tradingName:
+        description: Client's trading name
+        type: string
+      position:
+        description: Client's position
+        type: string

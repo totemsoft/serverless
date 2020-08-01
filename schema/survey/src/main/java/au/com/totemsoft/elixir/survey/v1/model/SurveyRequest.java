@@ -18,6 +18,9 @@ public class SurveyRequest   {
   @JsonProperty("reference")
   private UUID reference;
 
+  @JsonProperty("details")
+  private InsuredDetails details;
+
   public SurveyRequest reference(UUID reference) {
     this.reference = reference;
     return this;
@@ -40,6 +43,27 @@ public class SurveyRequest   {
     this.reference = reference;
   }
 
+  public SurveyRequest details(InsuredDetails details) {
+    this.details = details;
+    return this;
+  }
+
+  /**
+   * Get details
+   * @return details
+  */
+  @ApiModelProperty(value = "")
+
+  @Valid
+
+  public InsuredDetails getDetails() {
+    return details;
+  }
+
+  public void setDetails(InsuredDetails details) {
+    this.details = details;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -50,12 +74,13 @@ public class SurveyRequest   {
       return false;
     }
     SurveyRequest surveyRequest = (SurveyRequest) o;
-    return Objects.equals(this.reference, surveyRequest.reference);
+    return Objects.equals(this.reference, surveyRequest.reference) &&
+        Objects.equals(this.details, surveyRequest.details);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(reference);
+    return Objects.hash(reference, details);
   }
 
   @Override
@@ -64,6 +89,7 @@ public class SurveyRequest   {
     sb.append("class SurveyRequest {\n");
     
     sb.append("    reference: ").append(toIndentedString(reference)).append("\n");
+    sb.append("    details: ").append(toIndentedString(details)).append("\n");
     sb.append("}");
     return sb.toString();
   }
