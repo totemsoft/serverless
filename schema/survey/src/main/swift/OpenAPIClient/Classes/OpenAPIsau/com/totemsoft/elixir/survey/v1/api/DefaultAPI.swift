@@ -50,11 +50,11 @@ open class DefaultAPI {
     /**
      Get Survey
      
-     - parameter reference: (path) Reference of request. 
+     - parameter reference: (path) Reference (Survey Id) 
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func find(reference: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: SurveyResponse?,_ error: Error?) -> Void)) {
+    open class func find(reference: UUID, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: SurveyResponse?,_ error: Error?) -> Void)) {
         findWithRequestBuilder(reference: reference).execute(apiResponseQueue) { result -> Void in
             switch result {
             case let .success(response):
@@ -69,10 +69,10 @@ open class DefaultAPI {
      Get Survey
      - GET /survey/find/{reference}
      - Get Survey
-     - parameter reference: (path) Reference of request. 
+     - parameter reference: (path) Reference (Survey Id) 
      - returns: RequestBuilder<SurveyResponse> 
      */
-    open class func findWithRequestBuilder(reference: String) -> RequestBuilder<SurveyResponse> {
+    open class func findWithRequestBuilder(reference: UUID) -> RequestBuilder<SurveyResponse> {
         var path = "/survey/find/{reference}"
         let referencePreEscape = "\(APIHelper.mapValueToPathItem(reference))"
         let referencePostEscape = referencePreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -127,13 +127,13 @@ open class DefaultAPI {
     /**
      Uploads a file.
      
-     - parameter reference: (path) Reference of request. 
+     - parameter reference: (path) Reference (Survey Id) 
      - parameter fileUpload: (form) The file to upload. 
      - parameter fileNote: (form) Description of file content. (optional)
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func upload(reference: String, fileUpload: URL, fileNote: String? = nil, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: UploadResponse?,_ error: Error?) -> Void)) {
+    open class func upload(reference: UUID, fileUpload: URL, fileNote: String? = nil, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: UploadResponse?,_ error: Error?) -> Void)) {
         uploadWithRequestBuilder(reference: reference, fileUpload: fileUpload, fileNote: fileNote).execute(apiResponseQueue) { result -> Void in
             switch result {
             case let .success(response):
@@ -148,12 +148,12 @@ open class DefaultAPI {
      Uploads a file.
      - POST /survey/upload/{reference}
      - Uploads a file.
-     - parameter reference: (path) Reference of request. 
+     - parameter reference: (path) Reference (Survey Id) 
      - parameter fileUpload: (form) The file to upload. 
      - parameter fileNote: (form) Description of file content. (optional)
      - returns: RequestBuilder<UploadResponse> 
      */
-    open class func uploadWithRequestBuilder(reference: String, fileUpload: URL, fileNote: String? = nil) -> RequestBuilder<UploadResponse> {
+    open class func uploadWithRequestBuilder(reference: UUID, fileUpload: URL, fileNote: String? = nil) -> RequestBuilder<UploadResponse> {
         var path = "/survey/upload/{reference}"
         let referencePreEscape = "\(APIHelper.mapValueToPathItem(reference))"
         let referencePostEscape = referencePreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""

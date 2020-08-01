@@ -24,7 +24,7 @@ Create Survey
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
-let surveyRequest = SurveyRequest(reference: "reference_example") // SurveyRequest | Survey Request
+let surveyRequest = SurveyRequest(reference: 123) // SurveyRequest | Survey Request
 
 // Create Survey
 DefaultAPI.create(surveyRequest: surveyRequest) { (response, error) in
@@ -62,7 +62,7 @@ No authorization required
 
 # **find**
 ```swift
-    open class func find(reference: String, completion: @escaping (_ data: SurveyResponse?, _ error: Error?) -> Void)
+    open class func find(reference: UUID, completion: @escaping (_ data: SurveyResponse?, _ error: Error?) -> Void)
 ```
 
 Get Survey
@@ -74,7 +74,7 @@ Get Survey
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
-let reference = "reference_example" // String | Reference of request.
+let reference = 987 // UUID | Reference (Survey Id)
 
 // Get Survey
 DefaultAPI.find(reference: reference) { (response, error) in
@@ -93,7 +93,7 @@ DefaultAPI.find(reference: reference) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **reference** | **String** | Reference of request. | 
+ **reference** | **UUID** | Reference (Survey Id) | 
 
 ### Return type
 
@@ -124,7 +124,7 @@ Update Survey
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
-let surveyRequest = SurveyRequest(reference: "reference_example") // SurveyRequest | Survey Request
+let surveyRequest = SurveyRequest(reference: 123) // SurveyRequest | Survey Request
 
 // Update Survey
 DefaultAPI.update(surveyRequest: surveyRequest) { (response, error) in
@@ -162,7 +162,7 @@ No authorization required
 
 # **upload**
 ```swift
-    open class func upload(reference: String, fileUpload: URL, fileNote: String? = nil, completion: @escaping (_ data: UploadResponse?, _ error: Error?) -> Void)
+    open class func upload(reference: UUID, fileUpload: URL, fileNote: String? = nil, completion: @escaping (_ data: UploadResponse?, _ error: Error?) -> Void)
 ```
 
 Uploads a file.
@@ -174,7 +174,7 @@ Uploads a file.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
-let reference = "reference_example" // String | Reference of request.
+let reference = 987 // UUID | Reference (Survey Id)
 let fileUpload = URL(string: "https://example.com")! // URL | The file to upload.
 let fileNote = "fileNote_example" // String | Description of file content. (optional)
 
@@ -195,7 +195,7 @@ DefaultAPI.upload(reference: reference, fileUpload: fileUpload, fileNote: fileNo
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **reference** | **String** | Reference of request. | 
+ **reference** | **UUID** | Reference (Survey Id) | 
  **fileUpload** | **URL** | The file to upload. | 
  **fileNote** | **String** | Description of file content. | [optional] 
 

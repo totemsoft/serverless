@@ -12,10 +12,13 @@ public struct SurveyResponse: Codable {
 
 
     /** Reference (Survey Id) */
-    public var reference: String
+    public var reference: UUID
+    /** Message (could be error) */
+    public var message: String?
 
-    public init(reference: String) {
+    public init(reference: UUID, message: String?) {
         self.reference = reference
+        self.message = message
     }
 
 }
