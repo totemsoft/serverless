@@ -26,20 +26,18 @@ All URIs are relative to *https://$.execute-api.$.amazonaws.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*SurveyAPI* | [**survey**](docs/SurveyAPI.md#survey) | **POST** /survey | Get/Create Survey
-*SurveyAPI* | [**surveyQuestions**](docs/SurveyAPI.md#surveyquestions) | **POST** /survey/questions | Get Survey Questions
-*SurveyAPI* | [**surveyUpload**](docs/SurveyAPI.md#surveyupload) | **POST** /survey/upload | Uploads a file.
+*DefaultAPI* | [**create**](docs/DefaultAPI.md#create) | **POST** /survey/create | Create Survey
+*DefaultAPI* | [**find**](docs/DefaultAPI.md#find) | **GET** /survey/find/{reference} | Get Survey
+*DefaultAPI* | [**update**](docs/DefaultAPI.md#update) | **PUT** /survey/update | Update Survey
+*DefaultAPI* | [**upload**](docs/DefaultAPI.md#upload) | **POST** /survey/upload/{reference} | Uploads a file.
 
 
 ## Documentation For Models
 
- - [Answer](docs/Answer.md)
- - [Question](docs/Question.md)
- - [QuestionType](docs/QuestionType.md)
- - [RequestSurvey](docs/RequestSurvey.md)
- - [ResponseSurvey](docs/ResponseSurvey.md)
- - [ResponseSurveyQuestions](docs/ResponseSurveyQuestions.md)
- - [ResponseUpload](docs/ResponseUpload.md)
+ - [FileUploadType](docs/FileUploadType.md)
+ - [SurveyRequest](docs/SurveyRequest.md)
+ - [SurveyResponse](docs/SurveyResponse.md)
+ - [UploadResponse](docs/UploadResponse.md)
 
 
 ## Documentation For Authorization
