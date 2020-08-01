@@ -67,7 +67,7 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/SurveyResponse'
-  /survey/upload:
+  /survey/upload/{reference}:
     post:
       summary: Uploads a file.
       description: Uploads a file.

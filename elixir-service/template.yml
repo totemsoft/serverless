@@ -117,7 +117,7 @@ Resources:
         upload:
           Type: Api
           Properties:
-            Path: /survey/upload
+            Path: /survey/upload/{reference}
             Method: post
             RestApiId:
               Ref: ElixirApi
