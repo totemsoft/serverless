@@ -48,6 +48,51 @@ open class DefaultAPI {
     }
 
     /**
+     Download a file.
+     
+     - parameter reference: (path) Reference (Survey Id) 
+     - parameter filename: (query) File name 
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
+     */
+    open class func download(reference: UUID, filename: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: URL?,_ error: Error?) -> Void)) {
+        downloadWithRequestBuilder(reference: reference, filename: filename).execute(apiResponseQueue) { result -> Void in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
+    }
+
+    /**
+     Download a file.
+     - GET /survey/download/{reference}
+     - Download a file.
+     - parameter reference: (path) Reference (Survey Id) 
+     - parameter filename: (query) File name 
+     - returns: RequestBuilder<URL> 
+     */
+    open class func downloadWithRequestBuilder(reference: UUID, filename: String) -> RequestBuilder<URL> {
+        var path = "/survey/download/{reference}"
+        let referencePreEscape = "\(APIHelper.mapValueToPathItem(reference))"
+        let referencePostEscape = referencePreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        path = path.replacingOccurrences(of: "{reference}", with: referencePostEscape, options: .literal, range: nil)
+        let URLString = OpenAPIClientAPI.basePath + path
+        let parameters: [String:Any]? = nil
+        
+        var url = URLComponents(string: URLString)
+        url?.queryItems = APIHelper.mapValuesToQueryItems([
+            "filename": filename.encodeToJSON()
+        ])
+
+        let requestBuilder: RequestBuilder<URL>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+
+        return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
+    }
+
+    /**
      Get Survey
      
      - parameter reference: (path) Reference (Survey Id) 
@@ -125,7 +170,7 @@ open class DefaultAPI {
     }
 
     /**
-     Uploads a file.
+     Upload a file.
      
      - parameter reference: (path) Reference (Survey Id) 
      - parameter fileUpload: (form) The file to upload. 
@@ -145,7 +190,7 @@ open class DefaultAPI {
     }
 
     /**
-     Uploads a file.
+     Upload a file.
      - POST /survey/upload/{reference}
      - Uploads a file.
      - parameter reference: (path) Reference (Survey Id) 

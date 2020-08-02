@@ -13,11 +13,14 @@ public struct UploadResponse: Codable {
 
     /** Reference (Survey Id) */
     public var reference: UUID
+    /** Document Id */
+    public var documentId: String?
     /** Message (could be error) */
     public var message: String?
 
-    public init(reference: UUID, message: String?) {
+    public init(reference: UUID, documentId: String?, message: String?) {
         self.reference = reference
+        self.documentId = documentId
         self.message = message
     }
 
