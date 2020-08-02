@@ -18,6 +18,9 @@ public class SurveyRequest   {
   @JsonProperty("reference")
   private UUID reference;
 
+  @JsonProperty("folderId")
+  private String folderId;
+
   @JsonProperty("details")
   private InsuredDetails details;
 
@@ -41,6 +44,26 @@ public class SurveyRequest   {
 
   public void setReference(UUID reference) {
     this.reference = reference;
+  }
+
+  public SurveyRequest folderId(String folderId) {
+    this.folderId = folderId;
+    return this;
+  }
+
+  /**
+   * Folder Id
+   * @return folderId
+  */
+  @ApiModelProperty(value = "Folder Id")
+
+
+  public String getFolderId() {
+    return folderId;
+  }
+
+  public void setFolderId(String folderId) {
+    this.folderId = folderId;
   }
 
   public SurveyRequest details(InsuredDetails details) {
@@ -75,12 +98,13 @@ public class SurveyRequest   {
     }
     SurveyRequest surveyRequest = (SurveyRequest) o;
     return Objects.equals(this.reference, surveyRequest.reference) &&
+        Objects.equals(this.folderId, surveyRequest.folderId) &&
         Objects.equals(this.details, surveyRequest.details);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(reference, details);
+    return Objects.hash(reference, folderId, details);
   }
 
   @Override
@@ -89,6 +113,7 @@ public class SurveyRequest   {
     sb.append("class SurveyRequest {\n");
     
     sb.append("    reference: ").append(toIndentedString(reference)).append("\n");
+    sb.append("    folderId: ").append(toIndentedString(folderId)).append("\n");
     sb.append("    details: ").append(toIndentedString(details)).append("\n");
     sb.append("}");
     return sb.toString();

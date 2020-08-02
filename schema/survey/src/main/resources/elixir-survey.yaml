@@ -99,14 +99,19 @@ paths:
     get:
       summary: Download a file.
       description: Download a file.
+      produces:
+        - 'application/*'
       operationId: download
       parameters:
         - $ref: '#/parameters/Reference'
+        - $ref: '#/parameters/Filename'
       responses:
         200:
           description: Success
           schema:
-            type: file
+            type: string
+            format: binary
+            #format: base64
         404:
           description: Survey not found
 #
@@ -127,6 +132,12 @@ parameters:
     required: true
     schema:
       $ref: '#/definitions/SurveyRequest'
+  Filename:
+    in: query
+    name: filename
+    description: File name
+    type: string
+    required: true
 #
 # definitions
 #
@@ -136,6 +147,14 @@ definitions:
     description: Reference (Survey Id)
     type: string
     format: UUID
+  #
+  FolderId:
+    description: Folder Id
+    type: string
+  #
+  DocumentId:
+    description: Document Id
+    type: string
   #
   Message:
     description: Message (could be error)
@@ -148,6 +167,8 @@ definitions:
     properties:
       reference:
         $ref: '#/definitions/Reference'
+      folderId:
+        $ref: '#/definitions/FolderId'
       details:
         $ref: '#/definitions/InsuredDetails'
   #
@@ -158,6 +179,8 @@ definitions:
     properties:
       reference:
         $ref: '#/definitions/Reference'
+      folderId:
+        $ref: '#/definitions/FolderId'
       message:
         $ref: '#/definitions/Message'
   # 
@@ -168,12 +191,14 @@ definitions:
     properties:
       reference:
         $ref: '#/definitions/Reference'
+      documentId:
+        $ref: '#/definitions/DocumentId'
       message:
         $ref: '#/definitions/Message'
   #
-  FileUploadType:
+  FileType:
     type: string
-    description: File Upload Types
+    description: File Type
     enum:
       - SURVEY
       - DOCUMENT

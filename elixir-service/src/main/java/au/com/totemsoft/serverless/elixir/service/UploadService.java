@@ -19,15 +19,15 @@ public interface UploadService {
 
     /**
      * Translate reference to folderId (could be different, eg for AWS WorkDocs)
-     * @param reference
-     * @return folderId
+     * @param reference - directory to create
+     * @return directory created
      * @throws IOException
      */
     String mkdir(String reference) throws IOException;
 
     /**
      * 
-     * @param reference
+     * @param reference - directory to store document
      * @param resource
      * @param metadata
      * @return
@@ -37,10 +37,11 @@ public interface UploadService {
 
     /**
      * 
-     * @param reference
+     * @param reference - directory to get document from
+     * @param name - file name
      * @param target
      * @throws IOException
      */
-    public void download(String reference, OutputStream target) throws IOException;
+    public void download(String reference, String name, OutputStream target) throws IOException;
 
 }

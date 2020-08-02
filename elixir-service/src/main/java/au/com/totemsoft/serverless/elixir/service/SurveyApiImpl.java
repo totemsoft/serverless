@@ -53,14 +53,15 @@ public class SurveyApiImpl implements SurveyApi {
             //
             // check if this is new insured (Elixir file) - create folder to store documents
             surveyRequest.setReference(reference);
-            /*String folderId = */uploadService.mkdir(refName);
+            final String folderId = uploadService.mkdir(refName);
             //
             // send message via JMS (AWS SQS) - Elixir instance pickup and do job
             // get/create file with insured file reference (UUID)
             messageService.sendMessage(surveyRequest);
             //
             SurveyResponse result = new SurveyResponse()
-                .reference(reference);
+                .reference(reference)
+                .folderId(folderId);
             //
             return entity(result, null);
         } catch (Exception e) {
@@ -123,19 +124,20 @@ public class SurveyApiImpl implements SurveyApi {
         @Valid MultipartFile fileUpload, String fileNote) {
         final String refName = reference.toString();
         try {
-            String fileInfo = String.format("reference: %s, name: %s, size: %d",
-                reference, fileUpload.getOriginalFilename(), fileUpload.getSize());
+            String fileInfo = String.format("name: %s, size: %d",
+                fileUpload.getOriginalFilename(), fileUpload.getSize());
             // save to document store
             Resource resource = fileUpload.getResource();
             Map<String, Object> metadata = new TreeMap<>();
             metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
             metadata.put(UploadService.CONTENT_TYPE, fileUpload.getContentType());
             metadata.put(UploadService.FILE_NOTE, fileNote);
-            String uploadResult = uploadService.upload(refName, resource, metadata);
+            String documentId = uploadService.upload(refName, resource, metadata);
             // result
             UploadResponse result = new UploadResponse()
                 .reference(reference)
-                .message(uploadResult + ": [" + reference + "]" + fileNote + " - " + fileInfo);
+                .documentId(documentId)
+                .message("[" + reference + "] " + fileInfo + " - " + fileNote);
             return entity(result, null);
         } catch (Exception e) {
             UploadResponse error = new UploadResponse()
@@ -146,17 +148,17 @@ public class SurveyApiImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<Resource> download(UUID reference) {
+    public ResponseEntity<Resource> download(UUID reference, String filename) {
         final String refName = reference.toString();
         try {
             // get from document store
             ByteArrayOutputStream target = new ByteArrayOutputStream();
-            uploadService.download(refName, target);
+            uploadService.download(refName, filename, target);
             // result
-            Resource result = new ByteArrayResource(target.toByteArray(), refName);
+            Resource result = new ByteArrayResource(target.toByteArray(), filename);
             return entity(result, null);
         } catch (Exception e) {
-            Resource error = new ByteArrayResource(error(e).getBytes(), refName);
+            Resource error = new ByteArrayResource(error(e).getBytes(), filename);
             return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

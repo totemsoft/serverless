@@ -18,6 +18,9 @@ public class UploadResponse   {
   @JsonProperty("reference")
   private UUID reference;
 
+  @JsonProperty("documentId")
+  private String documentId;
+
   @JsonProperty("message")
   private String message;
 
@@ -41,6 +44,26 @@ public class UploadResponse   {
 
   public void setReference(UUID reference) {
     this.reference = reference;
+  }
+
+  public UploadResponse documentId(String documentId) {
+    this.documentId = documentId;
+    return this;
+  }
+
+  /**
+   * Document Id
+   * @return documentId
+  */
+  @ApiModelProperty(value = "Document Id")
+
+
+  public String getDocumentId() {
+    return documentId;
+  }
+
+  public void setDocumentId(String documentId) {
+    this.documentId = documentId;
   }
 
   public UploadResponse message(String message) {
@@ -74,12 +97,13 @@ public class UploadResponse   {
     }
     UploadResponse uploadResponse = (UploadResponse) o;
     return Objects.equals(this.reference, uploadResponse.reference) &&
+        Objects.equals(this.documentId, uploadResponse.documentId) &&
         Objects.equals(this.message, uploadResponse.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(reference, message);
+    return Objects.hash(reference, documentId, message);
   }
 
   @Override
@@ -88,6 +112,7 @@ public class UploadResponse   {
     sb.append("class UploadResponse {\n");
     
     sb.append("    reference: ").append(toIndentedString(reference)).append("\n");
+    sb.append("    documentId: ").append(toIndentedString(documentId)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();

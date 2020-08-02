@@ -74,7 +74,7 @@ public class AwsS3ServiceImpl implements UploadService {
     }
 
     @Override
-    public void download(String reference, OutputStream target) throws IOException {
+    public void download(String reference, String name, OutputStream target) throws IOException {
         // TODO Auto-generated method stub
         throw new IllegalArgumentException("Not implememnted yet.");
     }

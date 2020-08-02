@@ -8,6 +8,7 @@ package au.com.totemsoft.elixir.survey.v1.api;
 import java.util.UUID;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -58,6 +60,7 @@ public interface SurveyApi {
      * Download a file.
      *
      * @param reference Reference (Survey Id) (required)
+     * @param filename File name (required)
      * @return Success (status code 200)
      *         or Survey not found (status code 404)
      */
@@ -66,10 +69,10 @@ public interface SurveyApi {
         @ApiResponse(code = 200, message = "Success", response = Resource.class),
         @ApiResponse(code = 404, message = "Survey not found") })
     @RequestMapping(value = "/survey/download/{reference}",
-        produces = { "application/json" }, 
+        produces = { "application/_*" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<Resource> download(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference) {
-        return getDelegate().download(reference);
+    default ResponseEntity<Resource> download(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@NotNull @ApiParam(value = "File name", required = true) @Valid @RequestParam(value = "filename", required = true) String filename) {
+        return getDelegate().download(reference, filename);
     }
 
 

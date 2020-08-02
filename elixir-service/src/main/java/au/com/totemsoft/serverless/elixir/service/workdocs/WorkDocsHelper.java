@@ -103,11 +103,13 @@ public class WorkDocsHelper {
             CreateFolderResult result = client.createFolder(request);
             return result.getMetadata().getId();
         } catch (EntityAlreadyExistsException e) {
+            // TODO: very inefficient
             return getFolderId(client, folderId, name);
         }
     }
 
     /**
+     * TODO: very inefficient
      * @param client
      * @param baseFolderId
      * @param name
