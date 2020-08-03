@@ -181,21 +181,6 @@ public class SurveyApiImpl implements SurveyApi {
         }
     }
 
-    @Override
-    public ResponseEntity<Resource> download(UUID reference, String filename) {
-        try {
-            // get from document store
-            final ByteArrayOutputStream file = new ByteArrayOutputStream();
-            uploadService.download(reference.toString(), filename, file);
-            // result
-            Resource result = new InMemoryResource(file.toByteArray(), filename);
-            return entity(result, null);
-        } catch (Exception e) {
-            Resource error = new ByteArrayResource(error(e).getBytes(), filename);
-            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     /**
      * Upload Survey JSON document (optional).
      * @param surveyRequest
@@ -212,6 +197,21 @@ public class SurveyApiImpl implements SurveyApi {
         metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
         metadata.put(UploadService.CONTENT_TYPE, MediaType.APPLICATION_JSON);
         uploadService.upload(surveyRequest.getFolderId(), survey, metadata);
+    }
+
+    @Override
+    public ResponseEntity<Resource> download(UUID reference, String filename) {
+        try {
+            // get from document store
+            final ByteArrayOutputStream file = new ByteArrayOutputStream();
+            uploadService.download(reference.toString(), filename, file);
+            // result
+            Resource result = new InMemoryResource(file.toByteArray(), filename);
+            return entity(result, null);
+        } catch (Exception e) {
+            Resource error = new ByteArrayResource(error(e).getBytes(), filename);
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private <T> ResponseEntity<T> entity(T body, HttpStatus status) {
