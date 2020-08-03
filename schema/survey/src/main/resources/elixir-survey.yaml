@@ -43,6 +43,18 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/SurveyResponse'
+  /survey/find:
+    get:
+      summary: Find all Surveys for user
+      description: Find all Surveys for user
+      operationId: findAll
+      responses:
+        200:
+          description: An array of SurveyResponse(s)
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SurveyResponse'
   /survey/find/{reference}:
     get:
       summary: Get Survey
@@ -162,15 +174,15 @@ definitions:
   #
   SurveyRequest:
     type: object
-    required:
-      - reference
     properties:
       reference:
         $ref: '#/definitions/Reference'
       folderId:
         $ref: '#/definitions/FolderId'
-      details:
+      insured:
         $ref: '#/definitions/InsuredDetails'
+      survey:
+        $ref: '#/definitions/SurveyDocument'
   #
   SurveyResponse:
     type: object
@@ -181,6 +193,10 @@ definitions:
         $ref: '#/definitions/Reference'
       folderId:
         $ref: '#/definitions/FolderId'
+      insured:
+        $ref: '#/definitions/InsuredDetails'
+      survey:
+        $ref: '#/definitions/SurveyDocument'
       message:
         $ref: '#/definitions/Message'
   # 
@@ -201,7 +217,11 @@ definitions:
     description: File Type
     enum:
       - SURVEY
-      - DOCUMENT
+      - FILE
+  #
+  SurveyDocument:
+    type: string
+    description: Survey JSON Document
   #
   InsuredDetails:
     title: InsuredDetails

@@ -13,6 +13,7 @@ dependencies {
     'org.springframework:spring-webmvc:5.2.7.RELEASE',
     'org.springframework:spring-context:5.2.7.RELEASE',
     'org.springframework:spring-context-indexer:5.2.7.RELEASE',
+    'org.springframework.security:spring-security-core:5.3.3.RELEASE',
     'org.springframework.mobile:spring-mobile-device:1.1.5.RELEASE',
     'com.amazonaws.serverless:aws-serverless-java-container-spring:[1.5,)',
     'org.apache.logging.log4j:log4j-core:2.13.3',

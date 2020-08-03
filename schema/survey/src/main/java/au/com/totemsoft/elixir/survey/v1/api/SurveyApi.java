@@ -5,6 +5,7 @@
  */
 package au.com.totemsoft.elixir.survey.v1.api;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -91,6 +92,23 @@ public interface SurveyApi {
         method = RequestMethod.GET)
     default ResponseEntity<SurveyResponse> find(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference) {
         return getDelegate().find(reference);
+    }
+
+
+    /**
+     * GET /survey/find : Find all Surveys for user
+     * Find all Surveys for user
+     *
+     * @return An array of SurveyResponse(s) (status code 200)
+     */
+    @ApiOperation(value = "Find all Surveys for user", nickname = "findAll", notes = "Find all Surveys for user", response = SurveyResponse.class, responseContainer = "List", tags={  })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "An array of SurveyResponse(s)", response = SurveyResponse.class, responseContainer = "List") })
+    @RequestMapping(value = "/survey/find",
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
+    default ResponseEntity<List<SurveyResponse>> findAll() {
+        return getDelegate().findAll();
     }
 
 

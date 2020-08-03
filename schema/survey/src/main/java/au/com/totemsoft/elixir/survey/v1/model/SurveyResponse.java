@@ -21,6 +21,12 @@ public class SurveyResponse   {
   @JsonProperty("folderId")
   private String folderId;
 
+  @JsonProperty("insured")
+  private InsuredDetails insured;
+
+  @JsonProperty("survey")
+  private String survey;
+
   @JsonProperty("message")
   private String message;
 
@@ -66,6 +72,47 @@ public class SurveyResponse   {
     this.folderId = folderId;
   }
 
+  public SurveyResponse insured(InsuredDetails insured) {
+    this.insured = insured;
+    return this;
+  }
+
+  /**
+   * Get insured
+   * @return insured
+  */
+  @ApiModelProperty(value = "")
+
+  @Valid
+
+  public InsuredDetails getInsured() {
+    return insured;
+  }
+
+  public void setInsured(InsuredDetails insured) {
+    this.insured = insured;
+  }
+
+  public SurveyResponse survey(String survey) {
+    this.survey = survey;
+    return this;
+  }
+
+  /**
+   * Survey JSON Document
+   * @return survey
+  */
+  @ApiModelProperty(value = "Survey JSON Document")
+
+
+  public String getSurvey() {
+    return survey;
+  }
+
+  public void setSurvey(String survey) {
+    this.survey = survey;
+  }
+
   public SurveyResponse message(String message) {
     this.message = message;
     return this;
@@ -98,12 +145,14 @@ public class SurveyResponse   {
     SurveyResponse surveyResponse = (SurveyResponse) o;
     return Objects.equals(this.reference, surveyResponse.reference) &&
         Objects.equals(this.folderId, surveyResponse.folderId) &&
+        Objects.equals(this.insured, surveyResponse.insured) &&
+        Objects.equals(this.survey, surveyResponse.survey) &&
         Objects.equals(this.message, surveyResponse.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(reference, folderId, message);
+    return Objects.hash(reference, folderId, insured, survey, message);
   }
 
   @Override
@@ -113,6 +162,8 @@ public class SurveyResponse   {
     
     sb.append("    reference: ").append(toIndentedString(reference)).append("\n");
     sb.append("    folderId: ").append(toIndentedString(folderId)).append("\n");
+    sb.append("    insured: ").append(toIndentedString(insured)).append("\n");
+    sb.append("    survey: ").append(toIndentedString(survey)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();

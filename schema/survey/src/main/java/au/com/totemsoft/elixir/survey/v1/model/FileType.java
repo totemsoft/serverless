@@ -10,7 +10,7 @@ public enum FileType {
   
   SURVEY("SURVEY"),
   
-  DOCUMENT("DOCUMENT");
+  FILE("FILE");
 
   private String value;
 

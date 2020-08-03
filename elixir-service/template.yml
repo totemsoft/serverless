@@ -100,6 +100,13 @@ Resources:
             Method: post
             RestApiId:
               Ref: ElixirApi
+        findAll:
+          Type: Api
+          Properties:
+            Path: /survey/find
+            Method: get
+            RestApiId:
+              Ref: ElixirApi
         find:
           Type: Api
           Properties:

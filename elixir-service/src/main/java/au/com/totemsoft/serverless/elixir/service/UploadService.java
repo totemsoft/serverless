@@ -3,6 +3,7 @@ package au.com.totemsoft.serverless.elixir.service;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.core.io.Resource;
@@ -16,6 +17,10 @@ public interface UploadService {
     String CONTENT_TYPE = "contentType";
 
     String FILE_NOTE = "fileNote";
+
+    List<String> list();
+
+    List<String> list(String reference);
 
     /**
      * Translate reference to folderId (could be different, eg for AWS WorkDocs)

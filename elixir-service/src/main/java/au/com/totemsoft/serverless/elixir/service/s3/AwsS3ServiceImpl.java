@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -44,6 +45,16 @@ public class AwsS3ServiceImpl implements UploadService {
     }
 
     @Override
+    public List<String> list() {
+        throw new IllegalArgumentException("Not implememnted yet.");
+    }
+
+    @Override
+    public List<String> list(String reference) {
+        throw new IllegalArgumentException("Not implememnted yet.");
+    }
+
+    @Override
     public String mkdir(String reference) throws IOException {
         return reference;
     }
@@ -75,7 +86,6 @@ public class AwsS3ServiceImpl implements UploadService {
 
     @Override
     public void download(String reference, String name, OutputStream target) throws IOException {
-        // TODO Auto-generated method stub
         throw new IllegalArgumentException("Not implememnted yet.");
     }
 

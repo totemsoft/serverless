@@ -1,13 +1,18 @@
 package au.com.totemsoft.serverless.elixir.service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,7 +21,9 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.util.InMemoryResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,10 +57,12 @@ public class SurveyApiImpl implements SurveyApi {
         final UUID reference = UUID.randomUUID();
         final String refName = reference.toString();
         try {
-            //
-            // check if this is new insured (Elixir file) - create folder to store documents
             surveyRequest.setReference(reference);
+            //
+            // this is new insured (Elixir file) - create folder to store documents
             final String folderId = uploadService.mkdir(refName);
+            //
+            uploadSurvey(surveyRequest, folderId);
             //
             // send message via JMS (AWS SQS) - Elixir instance pickup and do job
             // get/create file with insured file reference (UUID)
@@ -73,16 +82,40 @@ public class SurveyApiImpl implements SurveyApi {
     }
 
     @Override
+    public ResponseEntity<List<SurveyResponse>> findAll() {
+        try {
+            //
+            // find all references
+            List<String> references = uploadService.list();
+            //
+            List<SurveyResponse> result = new ArrayList<>();
+            for (String reference : references) {
+                result.add(new SurveyResponse()
+                    .reference(UUID.fromString(reference))
+                );
+            }
+            //
+            return entity(result, null);
+        } catch (Exception e) {
+            List<SurveyResponse> error = Arrays.asList(
+                new SurveyResponse().message(error(e)));
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
     public ResponseEntity<SurveyResponse> find(UUID reference) {
         final String refName = reference.toString();
         try {
             //
-            // check if this is new insured (Elixir file) - create folder to store documents
-            //String folderId = uploadService.mkdir(refName);
-            //
+            final ByteArrayOutputStream survey = new ByteArrayOutputStream();
+            uploadService.download(refName, refName, survey);
             //
             SurveyResponse result = new SurveyResponse()
-                .reference(reference);
+                .reference(reference)
+                //.folderId(folderId)
+                //.insured(insured)
+                .survey(survey.toString());
             //
             return entity(result, null);
         } catch (Exception e) {
@@ -96,12 +129,10 @@ public class SurveyApiImpl implements SurveyApi {
     @Override
     public ResponseEntity<SurveyResponse> update(@Valid SurveyRequest surveyRequest) {
         final UUID reference = surveyRequest.getReference();
-        final String refName = reference.toString();
         try {
             //
-            // check if this is new insured (Elixir file) - create folder to store documents
-            //UUID reference = surveyRequest.getReference();
-            /*String folderId = */uploadService.mkdir(refName);
+            String folderId = surveyRequest.getFolderId();
+            uploadSurvey(surveyRequest, folderId);
             //
             // send message via JMS (AWS SQS) - Elixir instance pickup and do job
             // get/create file with insured file reference (UUID)
@@ -152,15 +183,35 @@ public class SurveyApiImpl implements SurveyApi {
         final String refName = reference.toString();
         try {
             // get from document store
-            ByteArrayOutputStream target = new ByteArrayOutputStream();
-            uploadService.download(refName, filename, target);
+            final ByteArrayOutputStream file = new ByteArrayOutputStream();
+            uploadService.download(refName, filename, file);
             // result
-            Resource result = new ByteArrayResource(target.toByteArray(), filename);
+            Resource result = new InMemoryResource(file.toByteArray(), filename);
             return entity(result, null);
         } catch (Exception e) {
             Resource error = new ByteArrayResource(error(e).getBytes(), filename);
             return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * Upload Survey JSON document (optional).
+     * @param surveyRequest
+     * @param folderId
+     * @throws IOException
+     */
+    private void uploadSurvey(SurveyRequest surveyRequest, String folderId) throws IOException {
+        if (StringUtils.isBlank(surveyRequest.getSurvey())) {
+            return;
+        }
+        final UUID reference = surveyRequest.getReference();
+        final String refName = reference.toString();
+        // upload Survey JSON document
+        Resource survey = new InMemoryResource(surveyRequest.getSurvey().getBytes(), refName);
+        Map<String, Object> metadata = new TreeMap<>();
+        metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
+        metadata.put(UploadService.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+        uploadService.upload(folderId, survey, metadata);
     }
 
     private <T> ResponseEntity<T> entity(T body, HttpStatus status) {

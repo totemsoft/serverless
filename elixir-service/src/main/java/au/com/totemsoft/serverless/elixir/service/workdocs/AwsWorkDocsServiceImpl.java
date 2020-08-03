@@ -3,6 +3,8 @@ package au.com.totemsoft.serverless.elixir.service.workdocs;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +15,7 @@ import com.amazonaws.SdkClientException;
 import com.amazonaws.services.workdocs.AmazonWorkDocs;
 import com.amazonaws.services.workdocs.AmazonWorkDocsClientBuilder;
 import com.amazonaws.services.workdocs.model.DocumentMetadata;
+import com.amazonaws.services.workdocs.model.FolderMetadata;
 
 import au.com.totemsoft.serverless.elixir.service.UploadService;
 
@@ -45,6 +48,35 @@ public class AwsWorkDocsServiceImpl implements UploadService {
     }
 
     @Override
+    public List<String> list() {
+        final AmazonWorkDocs client = client();
+        try {
+            List<String> result = new ArrayList<>();
+            for (FolderMetadata folder : WorkDocsHelper.getFolders(client, documentFolderId)) {
+                result.add(folder.getName());
+            }
+            return result;
+        } finally {
+            client.shutdown();
+        }
+    }
+
+    @Override
+    public List<String> list(String reference) {
+        final AmazonWorkDocs client = client();
+        try {
+            List<String> result = new ArrayList<>();
+            final String folderId = WorkDocsHelper.getFolderId(client, documentFolderId, reference);
+            for (FolderMetadata folder : WorkDocsHelper.getFolders(client, folderId)) {
+                result.add(folder.getName());
+            }
+            return result;
+        } finally {
+            client.shutdown();
+        }
+    }
+
+    @Override
     public String mkdir(String reference) throws IOException {
         final AmazonWorkDocs client = client();
         try {
@@ -60,7 +92,7 @@ public class AwsWorkDocsServiceImpl implements UploadService {
         final AmazonWorkDocs client = client();
         try {
             final String folderId = WorkDocsHelper.getFolderId(client, documentFolderId, reference);
-            final String name = resource.getFilename();
+            final String name = resource.getFilename() != null ? resource.getFilename() : resource.getDescription();
             String contentType = metadata.get(CONTENT_TYPE).toString();
             Map<String, String> map = WorkDocsHelper.documentUploadMetadata(client, folderId, name, contentType);
             String documentId = map.get("doc_id");

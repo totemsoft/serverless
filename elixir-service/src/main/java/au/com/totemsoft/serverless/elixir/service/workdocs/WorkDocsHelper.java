@@ -108,6 +108,22 @@ public class WorkDocsHelper {
         }
     }
 
+    public static List<FolderMetadata> getFolders(AmazonWorkDocs client, String folderId) {
+        DescribeFolderContentsRequest request = new DescribeFolderContentsRequest();
+        request.setFolderId(folderId);
+        String marker = null;
+        List<FolderMetadata> folders = new ArrayList<>();
+        do {
+            request.setMarker(marker);
+            DescribeFolderContentsResult result = client.describeFolderContents(request);
+            for (FolderMetadata folder: result.getFolders()) {
+                folders.add(folder);
+            }
+            marker = result.getMarker();
+        } while (marker != null);
+        return folders;
+    }
+
     /**
      * TODO: very inefficient
      * @param client
