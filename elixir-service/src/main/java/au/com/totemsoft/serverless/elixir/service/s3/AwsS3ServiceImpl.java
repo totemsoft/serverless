@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -45,12 +46,12 @@ public class AwsS3ServiceImpl implements UploadService {
     }
 
     @Override
-    public List<String> list() {
+    public List<ImmutablePair<String, String>> list() {
         throw new IllegalArgumentException("Not implememnted yet.");
     }
 
     @Override
-    public List<String> list(String reference) {
+    public List<ImmutablePair<String, String>> list(String reference) {
         throw new IllegalArgumentException("Not implememnted yet.");
     }
 
@@ -60,7 +61,7 @@ public class AwsS3ServiceImpl implements UploadService {
     }
 
     @Override
-    public String upload(String reference, Resource resource, Map<String, Object> metadata) throws IOException {
+    public String upload(String folderId, Resource resource, Map<String, Object> metadata) throws IOException {
         final AmazonS3 client = client();
         // store in pathname folder
         final ObjectMetadata om = new ObjectMetadata();
@@ -78,14 +79,14 @@ public class AwsS3ServiceImpl implements UploadService {
         }
         final String name = resource.getFilename();
         PutObjectResult result = client.putObject(new PutObjectRequest(bucket,
-            reference + '/' + name,
+            folderId + '/' + name,
             resource.getInputStream(),
             om));
         return result.getETag();
     }
 
     @Override
-    public void download(String reference, String name, OutputStream target) throws IOException {
+    public void download(String folderId, String name, OutputStream target) throws IOException {
         throw new IllegalArgumentException("Not implememnted yet.");
     }
 

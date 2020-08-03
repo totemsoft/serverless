@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.core.io.Resource;
 
 public interface UploadService {
@@ -18,35 +19,35 @@ public interface UploadService {
 
     String FILE_NOTE = "fileNote";
 
-    List<String> list();
+    List<ImmutablePair<String, String>> list();
 
-    List<String> list(String reference);
+    List<ImmutablePair<String, String>> list(String reference);
 
     /**
      * Translate reference to folderId (could be different, eg for AWS WorkDocs)
-     * @param reference - directory to create
-     * @return directory created
+     * @param reference - directory name
+     * @return folderId
      * @throws IOException
      */
     String mkdir(String reference) throws IOException;
 
     /**
      * 
-     * @param reference - directory to store document
+     * @param folderId - directory to store document
      * @param resource
      * @param metadata
      * @return
      * @throws IOException
      */
-    String upload(String reference, Resource resource, Map<String, Object> metadata) throws IOException;
+    String upload(String folderId, Resource resource, Map<String, Object> metadata) throws IOException;
 
     /**
      * 
-     * @param reference - directory to get document from
+     * @param folderId - directory to get document from
      * @param name - file name
      * @param target
      * @throws IOException
      */
-    public void download(String reference, String name, OutputStream target) throws IOException;
+    public void download(String folderId, String name, OutputStream target) throws IOException;
 
 }

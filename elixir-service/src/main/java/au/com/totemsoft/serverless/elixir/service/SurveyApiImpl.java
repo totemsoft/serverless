@@ -14,6 +14,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,14 +56,14 @@ public class SurveyApiImpl implements SurveyApi {
     @Override
     public ResponseEntity<SurveyResponse> create(@Valid SurveyRequest surveyRequest) {
         final UUID reference = UUID.randomUUID();
-        final String refName = reference.toString();
+        surveyRequest.setReference(reference);
         try {
-            surveyRequest.setReference(reference);
             //
             // this is new insured (Elixir file) - create folder to store documents
-            final String folderId = uploadService.mkdir(refName);
+            final String folderId = uploadService.mkdir(reference.toString());
+            surveyRequest.setFolderId(folderId);
             //
-            uploadSurvey(surveyRequest, folderId);
+            uploadSurvey(surveyRequest);
             //
             // send message via JMS (AWS SQS) - Elixir instance pickup and do job
             // get/create file with insured file reference (UUID)
@@ -86,34 +87,37 @@ public class SurveyApiImpl implements SurveyApi {
         try {
             //
             // find all references
-            List<String> references = uploadService.list();
+            List<ImmutablePair<String, String>> folders = uploadService.list();
             //
             List<SurveyResponse> result = new ArrayList<>();
-            for (String reference : references) {
+            for (ImmutablePair<String, String> folder : folders) {
+                final String reference = folder.getKey();
                 result.add(new SurveyResponse()
                     .reference(UUID.fromString(reference))
+                    .folderId(folder.getValue())
                 );
             }
             //
             return entity(result, null);
         } catch (Exception e) {
             List<SurveyResponse> error = Arrays.asList(
-                new SurveyResponse().message(error(e)));
+                new SurveyResponse()
+                    .message(error(e)));
             return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
     public ResponseEntity<SurveyResponse> find(UUID reference) {
-        final String refName = reference.toString();
         try {
             //
+            final String folderId = uploadService.mkdir(reference.toString());
             final ByteArrayOutputStream survey = new ByteArrayOutputStream();
-            uploadService.download(refName, refName, survey);
+            uploadService.download(folderId, reference.toString(), survey);
             //
             SurveyResponse result = new SurveyResponse()
                 .reference(reference)
-                //.folderId(folderId)
+                .folderId(folderId)
                 //.insured(insured)
                 .survey(survey.toString());
             //
@@ -131,15 +135,15 @@ public class SurveyApiImpl implements SurveyApi {
         final UUID reference = surveyRequest.getReference();
         try {
             //
-            String folderId = surveyRequest.getFolderId();
-            uploadSurvey(surveyRequest, folderId);
+            uploadSurvey(surveyRequest);
             //
             // send message via JMS (AWS SQS) - Elixir instance pickup and do job
             // get/create file with insured file reference (UUID)
             messageService.sendMessage(surveyRequest);
             //
             SurveyResponse result = new SurveyResponse()
-                .reference(reference);
+                .reference(reference)
+                .folderId(surveyRequest.getFolderId());
             //
             return entity(result, null);
         } catch (Exception e) {
@@ -153,7 +157,6 @@ public class SurveyApiImpl implements SurveyApi {
     @Override
     public ResponseEntity<UploadResponse> upload(UUID reference,
         @Valid MultipartFile fileUpload, String fileNote) {
-        final String refName = reference.toString();
         try {
             String fileInfo = String.format("name: %s, size: %d",
                 fileUpload.getOriginalFilename(), fileUpload.getSize());
@@ -163,7 +166,7 @@ public class SurveyApiImpl implements SurveyApi {
             metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
             metadata.put(UploadService.CONTENT_TYPE, fileUpload.getContentType());
             metadata.put(UploadService.FILE_NOTE, fileNote);
-            String documentId = uploadService.upload(refName, resource, metadata);
+            String documentId = uploadService.upload(reference.toString(), resource, metadata);
             // result
             UploadResponse result = new UploadResponse()
                 .reference(reference)
@@ -180,11 +183,10 @@ public class SurveyApiImpl implements SurveyApi {
 
     @Override
     public ResponseEntity<Resource> download(UUID reference, String filename) {
-        final String refName = reference.toString();
         try {
             // get from document store
             final ByteArrayOutputStream file = new ByteArrayOutputStream();
-            uploadService.download(refName, filename, file);
+            uploadService.download(reference.toString(), filename, file);
             // result
             Resource result = new InMemoryResource(file.toByteArray(), filename);
             return entity(result, null);
@@ -197,21 +199,19 @@ public class SurveyApiImpl implements SurveyApi {
     /**
      * Upload Survey JSON document (optional).
      * @param surveyRequest
-     * @param folderId
      * @throws IOException
      */
-    private void uploadSurvey(SurveyRequest surveyRequest, String folderId) throws IOException {
+    private void uploadSurvey(SurveyRequest surveyRequest) throws IOException {
         if (StringUtils.isBlank(surveyRequest.getSurvey())) {
             return;
         }
         final UUID reference = surveyRequest.getReference();
-        final String refName = reference.toString();
         // upload Survey JSON document
-        Resource survey = new InMemoryResource(surveyRequest.getSurvey().getBytes(), refName);
+        Resource survey = new InMemoryResource(surveyRequest.getSurvey().getBytes(), reference.toString());
         Map<String, Object> metadata = new TreeMap<>();
         metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
         metadata.put(UploadService.CONTENT_TYPE, MediaType.APPLICATION_JSON);
-        uploadService.upload(folderId, survey, metadata);
+        uploadService.upload(surveyRequest.getFolderId(), survey, metadata);
     }
 
     private <T> ResponseEntity<T> entity(T body, HttpStatus status) {

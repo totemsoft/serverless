@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -48,12 +49,12 @@ public class AwsWorkDocsServiceImpl implements UploadService {
     }
 
     @Override
-    public List<String> list() {
+    public List<ImmutablePair<String, String>> list() {
         final AmazonWorkDocs client = client();
         try {
-            List<String> result = new ArrayList<>();
+            List<ImmutablePair<String, String>> result = new ArrayList<>();
             for (FolderMetadata folder : WorkDocsHelper.getFolders(client, documentFolderId)) {
-                result.add(folder.getName());
+                result.add(new ImmutablePair<>(folder.getName(), folder.getId()));
             }
             return result;
         } finally {
@@ -62,13 +63,13 @@ public class AwsWorkDocsServiceImpl implements UploadService {
     }
 
     @Override
-    public List<String> list(String reference) {
+    public List<ImmutablePair<String, String>> list(String reference) {
         final AmazonWorkDocs client = client();
         try {
-            List<String> result = new ArrayList<>();
+            List<ImmutablePair<String, String>> result = new ArrayList<>();
             final String folderId = WorkDocsHelper.getFolderId(client, documentFolderId, reference);
             for (FolderMetadata folder : WorkDocsHelper.getFolders(client, folderId)) {
-                result.add(folder.getName());
+                result.add(new ImmutablePair<>(folder.getName(), folder.getId()));
             }
             return result;
         } finally {
@@ -88,10 +89,9 @@ public class AwsWorkDocsServiceImpl implements UploadService {
     }
 
     @Override
-    public String upload(String reference, Resource resource, Map<String, Object> metadata) throws IOException {
+    public String upload(String folderId, Resource resource, Map<String, Object> metadata) throws IOException {
         final AmazonWorkDocs client = client();
         try {
-            final String folderId = WorkDocsHelper.getFolderId(client, documentFolderId, reference);
             final String name = resource.getFilename() != null ? resource.getFilename() : resource.getDescription();
             String contentType = metadata.get(CONTENT_TYPE).toString();
             Map<String, String> map = WorkDocsHelper.documentUploadMetadata(client, folderId, name, contentType);
@@ -110,10 +110,9 @@ public class AwsWorkDocsServiceImpl implements UploadService {
     }
 
     @Override
-    public void download(String reference, String name, OutputStream target) throws IOException {
+    public void download(String folderId, String name, OutputStream target) throws IOException {
         final AmazonWorkDocs client = client();
         try {
-            final String folderId = WorkDocsHelper.getFolderId(client, documentFolderId, reference);
             DocumentMetadata document = WorkDocsHelper.documentMetadata(client, folderId, name);
             if (document == null) {
                 throw new IOException("No document found: " + name);

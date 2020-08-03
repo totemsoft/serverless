@@ -4,7 +4,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -39,8 +38,7 @@ public class SurveyResponse   {
    * Reference (Survey Id)
    * @return reference
   */
-  @ApiModelProperty(required = true, value = "Reference (Survey Id)")
-  @NotNull
+  @ApiModelProperty(value = "Reference (Survey Id)")
 
   @Valid
 

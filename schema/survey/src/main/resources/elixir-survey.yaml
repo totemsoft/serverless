@@ -186,8 +186,6 @@ definitions:
   #
   SurveyResponse:
     type: object
-    required:
-      - reference
     properties:
       reference:
         $ref: '#/definitions/Reference'
