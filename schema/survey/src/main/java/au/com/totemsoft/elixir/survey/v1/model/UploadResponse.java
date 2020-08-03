@@ -55,7 +55,8 @@ public class UploadResponse   {
    * Document Id
    * @return documentId
   */
-  @ApiModelProperty(value = "Document Id")
+  @ApiModelProperty(required = true, value = "Document Id")
+  @NotNull
 
 
   public String getDocumentId() {

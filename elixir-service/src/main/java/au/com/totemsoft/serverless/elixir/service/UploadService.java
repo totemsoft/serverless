@@ -33,21 +33,25 @@ public interface UploadService {
 
     /**
      * 
-     * @param folderId - directory to store document
+     * @param reference - directory to store document
+     * @param folderId
      * @param resource
      * @param metadata
      * @return
      * @throws IOException
      */
-    String upload(String folderId, Resource resource, Map<String, Object> metadata) throws IOException;
+    String upload(String reference, String folderId,
+        Resource resource, Map<String, Object> metadata) throws IOException;
 
     /**
      * 
-     * @param folderId - directory to get document from
+     * @param reference - directory to get document from
+     * @param folderId
      * @param name - file name
      * @param target
      * @throws IOException
      */
-    public void download(String folderId, String name, OutputStream target) throws IOException;
+    public void download(String reference, String folderId,
+        String name, OutputStream target) throws IOException;
 
 }

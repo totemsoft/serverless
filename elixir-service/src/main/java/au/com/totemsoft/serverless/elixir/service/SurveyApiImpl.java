@@ -113,7 +113,8 @@ public class SurveyApiImpl implements SurveyApi {
             //
             final String folderId = uploadService.mkdir(reference.toString());
             final ByteArrayOutputStream survey = new ByteArrayOutputStream();
-            uploadService.download(folderId, reference.toString(), survey);
+            uploadService.download(reference.toString(), folderId,
+                reference.toString(), survey);
             //
             SurveyResponse result = new SurveyResponse()
                 .reference(reference)
@@ -155,8 +156,9 @@ public class SurveyApiImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<UploadResponse> upload(UUID reference,
-        @Valid MultipartFile fileUpload, String fileNote) {
+    public ResponseEntity<UploadResponse> upload(UUID reference, String folderId,
+        @Valid MultipartFile fileUpload,
+        String fileNote) {
         try {
             String fileInfo = String.format("name: %s, size: %d",
                 fileUpload.getOriginalFilename(), fileUpload.getSize());
@@ -166,7 +168,8 @@ public class SurveyApiImpl implements SurveyApi {
             metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
             metadata.put(UploadService.CONTENT_TYPE, fileUpload.getContentType());
             metadata.put(UploadService.FILE_NOTE, fileNote);
-            String documentId = uploadService.upload(reference.toString(), resource, metadata);
+            String documentId = uploadService.upload(reference.toString(), folderId,
+                resource, metadata);
             // result
             UploadResponse result = new UploadResponse()
                 .reference(reference)
@@ -196,15 +199,18 @@ public class SurveyApiImpl implements SurveyApi {
         Map<String, Object> metadata = new TreeMap<>();
         metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
         metadata.put(UploadService.CONTENT_TYPE, MediaType.APPLICATION_JSON);
-        uploadService.upload(surveyRequest.getFolderId(), survey, metadata);
+        uploadService.upload(reference.toString(), surveyRequest.getFolderId(),
+            survey, metadata);
     }
 
     @Override
-    public ResponseEntity<Resource> download(UUID reference, String filename) {
+    public ResponseEntity<Resource> download(UUID reference, String folderId,
+        String filename) {
         try {
             // get from document store
             final ByteArrayOutputStream file = new ByteArrayOutputStream();
-            uploadService.download(reference.toString(), filename, file);
+            uploadService.download(reference.toString(), folderId,
+                filename, file);
             // result
             Resource result = new InMemoryResource(file.toByteArray(), filename);
             return entity(result, null);

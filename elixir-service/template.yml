@@ -124,14 +124,14 @@ Resources:
         upload:
           Type: Api
           Properties:
-            Path: /survey/upload/{reference}
+            Path: /survey/upload/{reference}/{folderId}
             Method: post
             RestApiId:
               Ref: ElixirApi
         download:
           Type: Api
           Properties:
-            Path: /survey/download/{reference}
+            Path: /survey/download/{reference}/{folderId}
             Method: get
             RestApiId:
               Ref: ElixirApi

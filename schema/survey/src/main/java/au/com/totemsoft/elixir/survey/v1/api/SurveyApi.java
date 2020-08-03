@@ -57,10 +57,11 @@ public interface SurveyApi {
 
 
     /**
-     * GET /survey/download/{reference} : Download a file.
+     * GET /survey/download/{reference}/{folderId} : Download a file.
      * Download a file.
      *
      * @param reference Reference (Survey Id) (required)
+     * @param folderId Folder Id (required)
      * @param filename File name (required)
      * @return Success (status code 200)
      *         or Survey not found (status code 404)
@@ -69,11 +70,11 @@ public interface SurveyApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = Resource.class),
         @ApiResponse(code = 404, message = "Survey not found") })
-    @RequestMapping(value = "/survey/download/{reference}",
+    @RequestMapping(value = "/survey/download/{reference}/{folderId}",
         produces = { "application/_*" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<Resource> download(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@NotNull @ApiParam(value = "File name", required = true) @Valid @RequestParam(value = "filename", required = true) String filename) {
-        return getDelegate().download(reference, filename);
+    default ResponseEntity<Resource> download(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "Folder Id",required=true) @PathVariable("folderId") String folderId,@NotNull @ApiParam(value = "File name", required = true) @Valid @RequestParam(value = "filename", required = true) String filename) {
+        return getDelegate().download(reference, folderId, filename);
     }
 
 
@@ -132,10 +133,11 @@ public interface SurveyApi {
 
 
     /**
-     * POST /survey/upload/{reference} : Upload a file.
+     * POST /survey/upload/{reference}/{folderId} : Upload a file.
      * Uploads a file.
      *
      * @param reference Reference (Survey Id) (required)
+     * @param folderId Folder Id (required)
      * @param fileUpload The file to upload. (required)
      * @param fileNote Description of file content. (optional)
      * @return Success (status code 200)
@@ -147,12 +149,12 @@ public interface SurveyApi {
         @ApiResponse(code = 200, message = "Success", response = UploadResponse.class),
         @ApiResponse(code = 401, message = "Not authenticated"),
         @ApiResponse(code = 403, message = "Access token does not have the required scope") })
-    @RequestMapping(value = "/survey/upload/{reference}",
+    @RequestMapping(value = "/survey/upload/{reference}/{folderId}",
         produces = { "application/json" }, 
         consumes = { "multipart/form-data" },
         method = RequestMethod.POST)
-    default ResponseEntity<UploadResponse> upload(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "The file to upload.") @Valid @RequestPart(value = "fileUpload") MultipartFile fileUpload,@ApiParam(value = "Description of file content.") @RequestPart(value="fileNote", required=false)  String fileNote) {
-        return getDelegate().upload(reference, fileUpload, fileNote);
+    default ResponseEntity<UploadResponse> upload(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "Folder Id",required=true) @PathVariable("folderId") String folderId,@ApiParam(value = "The file to upload.") @Valid @RequestPart(value = "fileUpload") MultipartFile fileUpload,@ApiParam(value = "Description of file content.") @RequestPart(value="fileNote", required=false)  String fileNote) {
+        return getDelegate().upload(reference, folderId, fileUpload, fileNote);
     }
 
 }

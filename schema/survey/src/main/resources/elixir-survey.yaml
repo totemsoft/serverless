@@ -79,7 +79,7 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/SurveyResponse'
-  /survey/upload/{reference}:
+  /survey/upload/{reference}/{folderId}:
     post:
       summary: Upload a file.
       description: Uploads a file.
@@ -88,6 +88,7 @@ paths:
         - multipart/form-data
       parameters:
         - $ref: '#/parameters/Reference'
+        - $ref: '#/parameters/FolderId'
         - in: formData
           name: fileUpload
           type: file
@@ -107,7 +108,7 @@ paths:
           description: Not authenticated
         403:
           description: Access token does not have the required scope
-  /survey/download/{reference}:
+  /survey/download/{reference}/{folderId}:
     get:
       summary: Download a file.
       description: Download a file.
@@ -116,6 +117,7 @@ paths:
       operationId: download
       parameters:
         - $ref: '#/parameters/Reference'
+        - $ref: '#/parameters/FolderId'
         - $ref: '#/parameters/Filename'
       responses:
         200:
@@ -136,6 +138,12 @@ parameters:
     description: Reference (Survey Id)
     type: string
     format: UUID
+    required: true
+  FolderId:
+    in: path
+    name: folderId
+    description: Folder Id
+    type: string
     required: true
   SurveyRequest:
     name: surveyRequest
@@ -202,6 +210,7 @@ definitions:
     type: object
     required:
       - reference
+      - documentId
     properties:
       reference:
         $ref: '#/definitions/Reference'

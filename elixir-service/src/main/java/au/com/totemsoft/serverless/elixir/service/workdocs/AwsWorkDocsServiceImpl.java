@@ -89,7 +89,8 @@ public class AwsWorkDocsServiceImpl implements UploadService {
     }
 
     @Override
-    public String upload(String folderId, Resource resource, Map<String, Object> metadata) throws IOException {
+    public String upload(String reference, String folderId,
+        Resource resource, Map<String, Object> metadata) throws IOException {
         final AmazonWorkDocs client = client();
         try {
             final String name = resource.getFilename() != null ? resource.getFilename() : resource.getDescription();
@@ -110,7 +111,8 @@ public class AwsWorkDocsServiceImpl implements UploadService {
     }
 
     @Override
-    public void download(String folderId, String name, OutputStream target) throws IOException {
+    public void download(String reference, String folderId,
+        String name, OutputStream target) throws IOException {
         final AmazonWorkDocs client = client();
         try {
             DocumentMetadata document = WorkDocsHelper.documentMetadata(client, folderId, name);
