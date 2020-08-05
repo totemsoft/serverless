@@ -21,7 +21,7 @@ public interface UploadService {
 
     List<ImmutablePair<String, String>> list();
 
-    List<ImmutablePair<String, String>> list(String reference);
+    ImmutablePair<String, String> find(String reference);
 
     /**
      * Translate reference to folderId (could be different, eg for AWS WorkDocs)

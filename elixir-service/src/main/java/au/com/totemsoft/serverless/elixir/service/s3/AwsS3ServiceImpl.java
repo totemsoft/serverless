@@ -51,7 +51,7 @@ public class AwsS3ServiceImpl implements UploadService {
     }
 
     @Override
-    public List<ImmutablePair<String, String>> list(String reference) {
+    public ImmutablePair<String, String> find(String reference) {
         throw new IllegalArgumentException("Not implememnted yet.");
     }
 

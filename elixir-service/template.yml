@@ -110,7 +110,7 @@ Resources:
         find:
           Type: Api
           Properties:
-            Path: /survey/find/{reference}
+            Path: /survey/find/{reference}/{folderId}
             Method: get
             RestApiId:
               Ref: ElixirApi

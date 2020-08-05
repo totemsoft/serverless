@@ -55,13 +55,14 @@ paths:
             type: array
             items:
               $ref: '#/definitions/SurveyResponse'
-  /survey/find/{reference}:
+  /survey/find/{reference}/{folderId}:
     get:
       summary: Get Survey
       description: Get Survey
       operationId: find
       parameters:
         - $ref: '#/parameters/Reference'
+        - $ref: '#/parameters/FolderId'
       responses:
         200:
           description: Success

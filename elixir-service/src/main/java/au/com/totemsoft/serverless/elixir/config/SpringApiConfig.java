@@ -13,6 +13,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
+
 import au.com.totemsoft.serverless.elixir.controller.SurveyController;
 import au.com.totemsoft.serverless.elixir.service.SurveyApiImpl;
 import au.com.totemsoft.serverless.elixir.service.s3.AwsS3ServiceImpl;
@@ -28,6 +33,16 @@ import au.com.totemsoft.serverless.elixir.service.workdocs.AwsWorkDocsServiceImp
     AwsS3ServiceImpl.class,
 })
 public class SpringApiConfig {
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+        mapper.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, false);
+        //mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm a z"));
+        mapper.registerModule(new AfterburnerModule());
+        return mapper;
+    }
 
     /*
      * Create required HandlerMapping, to avoid several default HandlerMapping instances being created

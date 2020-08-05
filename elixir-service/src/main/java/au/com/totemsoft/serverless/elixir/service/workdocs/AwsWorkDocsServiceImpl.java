@@ -63,15 +63,14 @@ public class AwsWorkDocsServiceImpl implements UploadService {
     }
 
     @Override
-    public List<ImmutablePair<String, String>> list(String reference) {
+    public ImmutablePair<String, String> find(String reference) {
         final AmazonWorkDocs client = client();
         try {
-            List<ImmutablePair<String, String>> result = new ArrayList<>();
             final String folderId = WorkDocsHelper.getFolderId(client, documentFolderId, reference);
             for (FolderMetadata folder : WorkDocsHelper.getFolders(client, folderId)) {
-                result.add(new ImmutablePair<>(folder.getName(), folder.getId()));
+                return new ImmutablePair<>(folder.getName(), folder.getId());
             }
-            return result;
+            return null;
         } finally {
             client.shutdown();
         }
@@ -93,6 +92,9 @@ public class AwsWorkDocsServiceImpl implements UploadService {
         Resource resource, Map<String, Object> metadata) throws IOException {
         final AmazonWorkDocs client = client();
         try {
+            // TODO: check that reference points to folderId
+            
+            //
             final String name = resource.getFilename() != null ? resource.getFilename() : resource.getDescription();
             String contentType = metadata.get(CONTENT_TYPE).toString();
             Map<String, String> map = WorkDocsHelper.documentUploadMetadata(client, folderId, name, contentType);
@@ -115,6 +117,9 @@ public class AwsWorkDocsServiceImpl implements UploadService {
         String name, OutputStream target) throws IOException {
         final AmazonWorkDocs client = client();
         try {
+            // TODO: check that reference points to folderId
+            
+            //
             DocumentMetadata document = WorkDocsHelper.documentMetadata(client, folderId, name);
             if (document == null) {
                 throw new IOException("No document found: " + name);

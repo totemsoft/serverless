@@ -79,20 +79,21 @@ public interface SurveyApi {
 
 
     /**
-     * GET /survey/find/{reference} : Get Survey
+     * GET /survey/find/{reference}/{folderId} : Get Survey
      * Get Survey
      *
      * @param reference Reference (Survey Id) (required)
+     * @param folderId Folder Id (required)
      * @return Success (status code 200)
      */
     @ApiOperation(value = "Get Survey", nickname = "find", notes = "Get Survey", response = SurveyResponse.class, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = SurveyResponse.class) })
-    @RequestMapping(value = "/survey/find/{reference}",
+    @RequestMapping(value = "/survey/find/{reference}/{folderId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<SurveyResponse> find(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference) {
-        return getDelegate().find(reference);
+    default ResponseEntity<SurveyResponse> find(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "Folder Id",required=true) @PathVariable("folderId") String folderId) {
+        return getDelegate().find(reference, folderId);
     }
 
 
