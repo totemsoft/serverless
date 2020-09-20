@@ -26,7 +26,7 @@ Create Survey
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
-let surveyRequest = SurveyRequest(reference: 123, folderId: "folderId_example", insured: InsuredDetails(firstname: "firstname_example", surname: "surname_example", mobile: "mobile_example", email: "email_example", companyName: "companyName_example", tradingName: "tradingName_example", position: "position_example"), survey: "survey_example", broker: BrokerDetails(id: "id_example", client: "client_example")) // SurveyRequest | Survey Request
+let surveyRequest = SurveyRequest(reference: 123, folderId: "folderId_example", broker: BrokerDetails(id: "id_example", client: "client_example"), insured: InsuredDetails(firstname: "firstname_example", surname: "surname_example", mobile: "mobile_example", email: "email_example", companyName: "companyName_example", tradingName: "tradingName_example", position: "position_example"), survey: "survey_example") // SurveyRequest | Survey Request
 
 // Create Survey
 DefaultAPI.create(surveyRequest: surveyRequest) { (response, error) in
@@ -228,7 +228,7 @@ Update Survey
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
-let surveyRequest = SurveyRequest(reference: 123, folderId: "folderId_example", insured: InsuredDetails(firstname: "firstname_example", surname: "surname_example", mobile: "mobile_example", email: "email_example", companyName: "companyName_example", tradingName: "tradingName_example", position: "position_example"), survey: "survey_example", broker: BrokerDetails(id: "id_example", client: "client_example")) // SurveyRequest | Survey Request
+let surveyRequest = SurveyRequest(reference: 123, folderId: "folderId_example", broker: BrokerDetails(id: "id_example", client: "client_example"), insured: InsuredDetails(firstname: "firstname_example", surname: "surname_example", mobile: "mobile_example", email: "email_example", companyName: "companyName_example", tradingName: "tradingName_example", position: "position_example"), survey: "survey_example") // SurveyRequest | Survey Request
 
 // Update Survey
 DefaultAPI.update(surveyRequest: surveyRequest) { (response, error) in
