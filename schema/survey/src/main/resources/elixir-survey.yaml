@@ -192,6 +192,8 @@ definitions:
         $ref: '#/definitions/InsuredDetails'
       survey:
         $ref: '#/definitions/SurveyDocument'
+      broker:
+        $ref: '#/definitions/BrokerDetails'
   #
   SurveyResponse:
     type: object
@@ -258,4 +260,18 @@ definitions:
         type: string
       position:
         description: Client's position
+        type: string
+  #
+  BrokerDetails:
+    title: BrokerDetails
+    description: Broker details
+    type: object
+    required: 
+      - client
+    properties:
+      id:
+        description: Broker Id
+        type: string
+      client:
+        description: Broker Client
         type: string

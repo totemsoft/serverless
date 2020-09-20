@@ -26,6 +26,9 @@ public class SurveyRequest   {
   @JsonProperty("survey")
   private String survey;
 
+  @JsonProperty("broker")
+  private BrokerDetails broker;
+
   public SurveyRequest reference(UUID reference) {
     this.reference = reference;
     return this;
@@ -108,6 +111,27 @@ public class SurveyRequest   {
     this.survey = survey;
   }
 
+  public SurveyRequest broker(BrokerDetails broker) {
+    this.broker = broker;
+    return this;
+  }
+
+  /**
+   * Get broker
+   * @return broker
+  */
+  @ApiModelProperty(value = "")
+
+  @Valid
+
+  public BrokerDetails getBroker() {
+    return broker;
+  }
+
+  public void setBroker(BrokerDetails broker) {
+    this.broker = broker;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -121,12 +145,13 @@ public class SurveyRequest   {
     return Objects.equals(this.reference, surveyRequest.reference) &&
         Objects.equals(this.folderId, surveyRequest.folderId) &&
         Objects.equals(this.insured, surveyRequest.insured) &&
-        Objects.equals(this.survey, surveyRequest.survey);
+        Objects.equals(this.survey, surveyRequest.survey) &&
+        Objects.equals(this.broker, surveyRequest.broker);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(reference, folderId, insured, survey);
+    return Objects.hash(reference, folderId, insured, survey, broker);
   }
 
   @Override
@@ -138,6 +163,7 @@ public class SurveyRequest   {
     sb.append("    folderId: ").append(toIndentedString(folderId)).append("\n");
     sb.append("    insured: ").append(toIndentedString(insured)).append("\n");
     sb.append("    survey: ").append(toIndentedString(survey)).append("\n");
+    sb.append("    broker: ").append(toIndentedString(broker)).append("\n");
     sb.append("}");
     return sb.toString();
   }
