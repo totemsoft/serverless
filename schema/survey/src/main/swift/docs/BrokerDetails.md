@@ -1,11 +1,10 @@
-# UploadResponse
+# BrokerDetails
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**reference** | **UUID** | Reference (Survey Id) | 
-**documentId** | **String** | Document Id | 
-**message** | **String** | Message (could be error) | [optional] 
+**id** | **String** | Broker Id | [optional] 
+**client** | **String** | Broker Client | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

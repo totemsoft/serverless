@@ -10,5 +10,5 @@ import Foundation
 /** File Type */
 public enum FileType: String, Codable, CaseIterable {
     case survey = "SURVEY"
-    case document = "DOCUMENT"
+    case file = "FILE"
 }

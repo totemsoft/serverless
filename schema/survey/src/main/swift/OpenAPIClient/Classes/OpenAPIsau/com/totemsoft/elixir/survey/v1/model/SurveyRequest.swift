@@ -12,15 +12,20 @@ public struct SurveyRequest: Codable {
 
 
     /** Reference (Survey Id) */
-    public var reference: UUID
+    public var reference: UUID?
     /** Folder Id */
     public var folderId: String?
-    public var details: InsuredDetails?
+    public var insured: InsuredDetails?
+    /** Survey JSON Document */
+    public var survey: String?
+    public var broker: BrokerDetails?
 
-    public init(reference: UUID, folderId: String?, details: InsuredDetails?) {
+    public init(reference: UUID?, folderId: String?, insured: InsuredDetails?, survey: String?, broker: BrokerDetails?) {
         self.reference = reference
         self.folderId = folderId
-        self.details = details
+        self.insured = insured
+        self.survey = survey
+        self.broker = broker
     }
 
 }
