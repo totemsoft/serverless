@@ -27,14 +27,16 @@ All URIs are relative to *https://$.execute-api.$.amazonaws.com*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultAPI* | [**create**](docs/DefaultAPI.md#create) | **POST** /survey/create | Create Survey
-*DefaultAPI* | [**download**](docs/DefaultAPI.md#download) | **GET** /survey/download/{reference} | Download a file.
-*DefaultAPI* | [**find**](docs/DefaultAPI.md#find) | **GET** /survey/find/{reference} | Get Survey
+*DefaultAPI* | [**download**](docs/DefaultAPI.md#download) | **GET** /survey/download/{reference}/{folderId} | Download a file.
+*DefaultAPI* | [**find**](docs/DefaultAPI.md#find) | **GET** /survey/find/{reference}/{folderId} | Get Survey
+*DefaultAPI* | [**findAll**](docs/DefaultAPI.md#findall) | **GET** /survey/find | Find all Surveys for user
 *DefaultAPI* | [**update**](docs/DefaultAPI.md#update) | **PUT** /survey/update | Update Survey
-*DefaultAPI* | [**upload**](docs/DefaultAPI.md#upload) | **POST** /survey/upload/{reference} | Upload a file.
+*DefaultAPI* | [**upload**](docs/DefaultAPI.md#upload) | **POST** /survey/upload/{reference}/{folderId} | Upload a file.
 
 
 ## Documentation For Models
 
+ - [BrokerDetails](docs/BrokerDetails.md)
  - [FileType](docs/FileType.md)
  - [InsuredDetails](docs/InsuredDetails.md)
  - [SurveyRequest](docs/SurveyRequest.md)

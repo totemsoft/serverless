@@ -3,8 +3,8 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
 Description: >
-    Elixir Survey 
-     Lambda function using an SQS Queue as the trigger and SQS queues as destinations
+  Elixir Survey 
+    Lambda function using an SQS Queue as the trigger and SQS queues as destinations
 
 Globals:
   Api:

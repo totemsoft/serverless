@@ -20,6 +20,9 @@ public class SurveyResponse   {
   @JsonProperty("folderId")
   private String folderId;
 
+  @JsonProperty("broker")
+  private BrokerDetails broker;
+
   @JsonProperty("insured")
   private InsuredDetails insured;
 
@@ -68,6 +71,27 @@ public class SurveyResponse   {
 
   public void setFolderId(String folderId) {
     this.folderId = folderId;
+  }
+
+  public SurveyResponse broker(BrokerDetails broker) {
+    this.broker = broker;
+    return this;
+  }
+
+  /**
+   * Get broker
+   * @return broker
+  */
+  @ApiModelProperty(value = "")
+
+  @Valid
+
+  public BrokerDetails getBroker() {
+    return broker;
+  }
+
+  public void setBroker(BrokerDetails broker) {
+    this.broker = broker;
   }
 
   public SurveyResponse insured(InsuredDetails insured) {
@@ -143,6 +167,7 @@ public class SurveyResponse   {
     SurveyResponse surveyResponse = (SurveyResponse) o;
     return Objects.equals(this.reference, surveyResponse.reference) &&
         Objects.equals(this.folderId, surveyResponse.folderId) &&
+        Objects.equals(this.broker, surveyResponse.broker) &&
         Objects.equals(this.insured, surveyResponse.insured) &&
         Objects.equals(this.survey, surveyResponse.survey) &&
         Objects.equals(this.message, surveyResponse.message);
@@ -150,7 +175,7 @@ public class SurveyResponse   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(reference, folderId, insured, survey, message);
+    return Objects.hash(reference, folderId, broker, insured, survey, message);
   }
 
   @Override
@@ -160,6 +185,7 @@ public class SurveyResponse   {
     
     sb.append("    reference: ").append(toIndentedString(reference)).append("\n");
     sb.append("    folderId: ").append(toIndentedString(folderId)).append("\n");
+    sb.append("    broker: ").append(toIndentedString(broker)).append("\n");
     sb.append("    insured: ").append(toIndentedString(insured)).append("\n");
     sb.append("    survey: ").append(toIndentedString(survey)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");

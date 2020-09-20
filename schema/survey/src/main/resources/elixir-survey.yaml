@@ -188,12 +188,12 @@ definitions:
         $ref: '#/definitions/Reference'
       folderId:
         $ref: '#/definitions/FolderId'
+      broker:
+        $ref: '#/definitions/BrokerDetails'
       insured:
         $ref: '#/definitions/InsuredDetails'
       survey:
         $ref: '#/definitions/SurveyDocument'
-      broker:
-        $ref: '#/definitions/BrokerDetails'
   #
   SurveyResponse:
     type: object
@@ -202,6 +202,8 @@ definitions:
         $ref: '#/definitions/Reference'
       folderId:
         $ref: '#/definitions/FolderId'
+      broker:
+        $ref: '#/definitions/BrokerDetails'
       insured:
         $ref: '#/definitions/InsuredDetails'
       survey:

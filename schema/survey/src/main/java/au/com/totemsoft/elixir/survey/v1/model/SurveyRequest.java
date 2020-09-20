@@ -20,14 +20,14 @@ public class SurveyRequest   {
   @JsonProperty("folderId")
   private String folderId;
 
+  @JsonProperty("broker")
+  private BrokerDetails broker;
+
   @JsonProperty("insured")
   private InsuredDetails insured;
 
   @JsonProperty("survey")
   private String survey;
-
-  @JsonProperty("broker")
-  private BrokerDetails broker;
 
   public SurveyRequest reference(UUID reference) {
     this.reference = reference;
@@ -68,6 +68,27 @@ public class SurveyRequest   {
 
   public void setFolderId(String folderId) {
     this.folderId = folderId;
+  }
+
+  public SurveyRequest broker(BrokerDetails broker) {
+    this.broker = broker;
+    return this;
+  }
+
+  /**
+   * Get broker
+   * @return broker
+  */
+  @ApiModelProperty(value = "")
+
+  @Valid
+
+  public BrokerDetails getBroker() {
+    return broker;
+  }
+
+  public void setBroker(BrokerDetails broker) {
+    this.broker = broker;
   }
 
   public SurveyRequest insured(InsuredDetails insured) {
@@ -111,27 +132,6 @@ public class SurveyRequest   {
     this.survey = survey;
   }
 
-  public SurveyRequest broker(BrokerDetails broker) {
-    this.broker = broker;
-    return this;
-  }
-
-  /**
-   * Get broker
-   * @return broker
-  */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
-  public BrokerDetails getBroker() {
-    return broker;
-  }
-
-  public void setBroker(BrokerDetails broker) {
-    this.broker = broker;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -144,14 +144,14 @@ public class SurveyRequest   {
     SurveyRequest surveyRequest = (SurveyRequest) o;
     return Objects.equals(this.reference, surveyRequest.reference) &&
         Objects.equals(this.folderId, surveyRequest.folderId) &&
+        Objects.equals(this.broker, surveyRequest.broker) &&
         Objects.equals(this.insured, surveyRequest.insured) &&
-        Objects.equals(this.survey, surveyRequest.survey) &&
-        Objects.equals(this.broker, surveyRequest.broker);
+        Objects.equals(this.survey, surveyRequest.survey);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(reference, folderId, insured, survey, broker);
+    return Objects.hash(reference, folderId, broker, insured, survey);
   }
 
   @Override
@@ -161,9 +161,9 @@ public class SurveyRequest   {
     
     sb.append("    reference: ").append(toIndentedString(reference)).append("\n");
     sb.append("    folderId: ").append(toIndentedString(folderId)).append("\n");
+    sb.append("    broker: ").append(toIndentedString(broker)).append("\n");
     sb.append("    insured: ").append(toIndentedString(insured)).append("\n");
     sb.append("    survey: ").append(toIndentedString(survey)).append("\n");
-    sb.append("    broker: ").append(toIndentedString(broker)).append("\n");
     sb.append("}");
     return sb.toString();
   }
