@@ -80,7 +80,7 @@ Resources:
         Variables:
           DEBUG: true
           AWS_WORKDOCS_FOLDER: c41a559256c02428d916089d86487e66d64e205cd5125cd41ea75860c16b3316
-          AWS_BUCKET: elixir-survey
+          AWS_S3_BUCKET: elixir-survey
           PUBLISH_QUEUE_NAME: elixir-survey
           SUBSCRIBE_QUEUE_NAME: elixir-survey-subscribe
       Events:
