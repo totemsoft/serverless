@@ -58,6 +58,7 @@ Resources:
             AuthorizationScopes:
               - elixir/read
               - elixir/write
+              - aws.cognito.signin.user.admin
             Identity:
               Header: 'Authorization'
 
