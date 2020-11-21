@@ -99,9 +99,16 @@ public class SurveyApiImpl implements SurveyApi {
             //
             List<SurveyResponse> result = new ArrayList<>();
             for (ImmutablePair<String, String> folder : folders) {
-                final String reference = folder.getKey();
+                final String key = folder.getKey();
+                final UUID reference;
+                try {
+                    reference = UUID.fromString(key);
+                } catch (IllegalArgumentException ignore) {
+                    // key does not conform to the string representation of UUID
+                    continue;
+                }
                 result.add(new SurveyResponse()
-                    .reference(UUID.fromString(reference))
+                    .reference(reference)
                     .folderId(folder.getValue())
                 );
             }
