@@ -62,6 +62,10 @@ public class PluginConfiguration implements Plugin, PcvConstants {
     // LDAP_DATA_STORE
     private String ldapDatastore;
 
+    public PluginConfiguration() {
+        super(); // required by PF SDK
+    }
+
     public PluginConfiguration(GuiConfigDescriptor guiDescriptor, String type) {
         init(guiDescriptor);
 
