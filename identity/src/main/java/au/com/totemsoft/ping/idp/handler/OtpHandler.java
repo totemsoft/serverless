@@ -5,14 +5,13 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import lombok.Generated;
-
 import au.com.totemsoft.ping.UserService;
 import au.com.totemsoft.ping.domain.CustomerRequest;
 import au.com.totemsoft.ping.domain.OtpResponse;
 import au.com.totemsoft.ping.domain.SendOtpResponse;
 import au.com.totemsoft.ping.sdk.AbstractHandler;
 import au.com.totemsoft.ping.sdk.PluginConfiguration;
+import lombok.Generated;
 
 @Generated
 public class OtpHandler extends AbstractHandler<OtpResponse> {

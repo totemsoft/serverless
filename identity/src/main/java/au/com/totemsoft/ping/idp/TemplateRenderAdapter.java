@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +22,6 @@ import org.sourceid.saml20.adapter.gui.TextFieldDescriptor;
 import org.sourceid.saml20.adapter.gui.validation.impl.RequiredFieldValidator;
 import org.sourceid.saml20.adapter.idp.authn.AuthnPolicy;
 import org.sourceid.saml20.adapter.idp.authn.IdpAuthnAdapterDescriptor;
-import org.sourceid.websso.servlet.adapter.HandlerRegistry;
 
 import com.pingidentity.sdk.AuthnAdapterResponse;
 import com.pingidentity.sdk.AuthnAdapterResponse.AUTHN_STATUS;
@@ -35,14 +33,12 @@ import com.pingidentity.sdk.locale.LocaleUtil;
 import com.pingidentity.sdk.template.TemplateRendererUtil;
 import com.pingidentity.sdk.template.TemplateRendererUtilException;
 
-import lombok.Generated;
 import au.com.totemsoft.ping.PcvConstants;
 import au.com.totemsoft.ping.UserService;
 import au.com.totemsoft.ping.idp.api.StateSpec;
 import au.com.totemsoft.ping.idp.api.SubmitUserAttributes;
 import au.com.totemsoft.ping.sdk.PluginConfiguration;
 
-@Generated
 public class TemplateRenderAdapter implements IdpAuthenticationAdapterV2, AuthnApiPlugin, PcvConstants {
 
     private static final Logger LOG = LogManager.getLogger(TemplateRenderAdapter.class);
@@ -63,17 +59,17 @@ public class TemplateRenderAdapter implements IdpAuthenticationAdapterV2, AuthnA
 
     public TemplateRenderAdapter() {
         final AdapterConfigurationGuiDescriptor guiDescriptor = new AdapterConfigurationGuiDescriptor(TYPE);
-        this.config = new PluginConfiguration(guiDescriptor, TYPE);
+        this.config = new PluginConfiguration(this, TYPE, TYPE);
 
         // extra config field(s)
         TextFieldDescriptor formTemplate = new TextFieldDescriptor(FORM_TEMPLATE_NAME, FORM_TEMPLATE_NAME_DESC);
         formTemplate.addValidator(new RequiredFieldValidator());
-        //formTemplate.setDefaultValue("html.form.login.template.html");
+        formTemplate.setDefaultValue("html.form.login.template.html");
         guiDescriptor.addField(formTemplate);
         //
         TextFieldDescriptor ldapDatastoreDetails = new TextFieldDescriptor(LDAP_DATA_STORE, LDAP_DATA_STORE_DESC);
         ldapDatastoreDetails.addValidator(new RequiredFieldValidator());
-        //ldapDatastoreDetails.setDefaultValue("???");
+        ldapDatastoreDetails.setDefaultValue("DATASTORE_ID");
         guiDescriptor.addField(ldapDatastoreDetails);
 
         Set<String> contract = new HashSet<>();

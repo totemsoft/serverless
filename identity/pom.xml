@@ -12,21 +12,22 @@
         <changelist>-SNAPSHOT</changelist>
         <sha1/>
 
-        <version.commons-ldap>1.0.0-SNAPSHOT</version.commons-ldap>
-        <version.spring-ldap>2.3.3.RELEASE</version.spring-ldap>
+        <commons-ldap.version>1.0.0-SNAPSHOT</commons-ldap.version>
+        <spring-ldap.version>2.3.3.RELEASE</spring-ldap.version>
 
-        <version.pingfederate>10.0.0</version.pingfederate>
+        <pingfederate.version>10.2.0</pingfederate.version>
+        <pingfederate-sdk.version>1.0.0.54</pingfederate-sdk.version>
 
-        <version.commons-io>2.5</version.commons-io>
-        <version.commons-lang>2.6</version.commons-lang>
-        <version.httpcomponents>4.5.6</version.httpcomponents>
-        <version.xmlbeans>2.6.0</version.xmlbeans>
-        <version.jackson>2.9.10</version.jackson>
+        <commons-io.version>2.5</commons-io.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <httpcomponents.version>4.5.6</httpcomponents.version>
+        <xmlbeans.version>2.6.0</xmlbeans.version>
+        <jackson.version>2.9.10</jackson.version>
         <version.jose4j>0.7.0</version.jose4j>
-        <version.log4j>2.2</version.log4j>
-        <version.lombok>1.18.8</version.lombok>
+        <log4j.version>2.2</log4j.version>
+        <lombok.version>1.18.8</lombok.version>
 
-        <version.junit>4.12</version.junit>
+        <junit.version>4.12</junit.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -40,25 +41,25 @@
         <dependency>
             <groupId>org.springframework.ldap</groupId>
             <artifactId>spring-ldap-core</artifactId>
-            <version>${version.spring-ldap}</version>
+            <version>${spring-ldap.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>${version.log4j}</version>
+            <version>${log4j.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>${version.log4j}</version>
+            <version>${log4j.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-1.2-api</artifactId>
-            <version>${version.log4j}</version>
+            <version>${log4j.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -72,48 +73,42 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>${version.httpcomponents}</version>
+            <version>${httpcomponents.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.xmlbeans</groupId>
             <artifactId>xmlbeans</artifactId>
-            <version>${version.xmlbeans}</version>
+            <version>${xmlbeans.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>${version.commons-io}</version>
+            <version>${commons-io.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>${version.commons-lang}</version>
+            <version>${commons-lang.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${version.lombok}</version>
+            <version>${lombok.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${version.jackson}</version>
+            <version>${jackson.version}</version>
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>pingfederate</groupId>
-            <artifactId>pf-authn-api-sdk</artifactId>
-            <version>1.0.0.35</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
@@ -122,27 +117,40 @@
         </dependency>
 
         <dependency>
-            <groupId>com.pingidentity.pingfederate</groupId>
+            <groupId>pingfederate</groupId>
+            <artifactId>pf-authn-api-sdk</artifactId>
+            <version>${pingfederate-sdk.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>pingfederate</groupId>
             <artifactId>pf-protocolengine</artifactId>
-            <version>${version.pingfederate}</version>
+            <version>${pingfederate.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.pingidentity.pingfederate</groupId>
+            <groupId>products.plugins</groupId>
             <artifactId>pf-core-plugins</artifactId>
-            <version>${version.pingfederate}</version>
+            <version>${pingfederate.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.pingidentity.pingfederate</groupId>
+            <groupId>pingfederate</groupId>
             <artifactId>pf-commons</artifactId>
-            <version>${version.pingfederate}</version>
+            <version>${pingfederate.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.pingidentity.pingfederate</groupId>
+            <groupId>com.pingidentity.commonsvcs</groupId>
+            <artifactId>ping-common-api</artifactId>
+            <version>${pingfederate.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.pingidentity.commonsvcs</groupId>
             <artifactId>ping-common-mgmt</artifactId>
-            <version>${version.pingfederate}</version>
+            <version>${pingfederate.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -156,7 +164,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${version.junit}</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

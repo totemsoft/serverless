@@ -12,10 +12,10 @@ import org.sourceid.websso.servlet.adapter.Handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import lombok.Generated;
 import au.com.totemsoft.ping.PcvConstants;
 import au.com.totemsoft.ping.domain.AbstractResponse;
 import au.com.totemsoft.ping.domain.CustomerRequest;
+import lombok.Generated;
 
 @Generated
 public abstract class AbstractHandler<T extends AbstractResponse> implements Handler {

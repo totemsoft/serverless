@@ -16,20 +16,18 @@ import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sourceid.saml20.domain.datasource.info.LdapInfo;
-import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pingidentity.access.DataSourceAccessor;
 
-import lombok.Generated;
-
 import au.com.totemsoft.ping.domain.AbstractResponse;
 import au.com.totemsoft.ping.domain.SendOtpResponse;
-import au.com.totemsoft.ping.domain.ValidateUsernameResponse;
 import au.com.totemsoft.ping.domain.ValidateOtpResponse;
+import au.com.totemsoft.ping.domain.ValidateUsernameResponse;
 import au.com.totemsoft.ping.http.CloseableHttpClientBuilder;
 import au.com.totemsoft.ping.sdk.PluginConfiguration;
+import lombok.Generated;
 
 @Generated
 public class UserService {

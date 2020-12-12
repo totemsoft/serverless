@@ -14,8 +14,8 @@ import org.sourceid.saml20.adapter.gui.TextFieldDescriptor;
 import org.sourceid.saml20.adapter.gui.validation.impl.RequiredFieldValidator;
 import org.sourceid.saml20.adapter.gui.validation.impl.URLValidator;
 
+import com.pingidentity.sdk.ConfigurablePlugin;
 import com.pingidentity.sdk.GuiConfigDescriptor;
-import com.pingidentity.sdk.Plugin;
 import com.pingidentity.sdk.PluginDescriptor;
 import com.pingidentity.sdk.oauth20.AccessTokenIssuer;
 
@@ -27,7 +27,7 @@ import lombok.Setter;
  * A password credential validator containing a single username and password pair.
  */
 @Getter
-public class PluginConfiguration implements Plugin, PcvConstants {
+public class PluginConfiguration implements PcvConstants {
 
     private static final Logger LOG = LogManager.getLogger(PluginConfiguration.class);
 
@@ -62,28 +62,22 @@ public class PluginConfiguration implements Plugin, PcvConstants {
     // LDAP_DATA_STORE
     private String ldapDatastore;
 
-    public PluginConfiguration() {
-        super(); // required by PF SDK
-    }
-
-    public PluginConfiguration(GuiConfigDescriptor guiDescriptor, String type) {
-        init(guiDescriptor);
-
+    public PluginConfiguration(ConfigurablePlugin plugin, String type, String description) {
         Set<String> contract = new HashSet<>();
         contract.add(USERNAME_ATTRIBUTE);
         contract.add(CLIENT_ID_ATTRIBUTE);
 
         // Create an plugin descriptor 
-        this.pluginDescriptor = new PluginDescriptor(type, this, guiDescriptor);
+        this.pluginDescriptor = new PluginDescriptor(type, plugin, init(new GuiConfigDescriptor(description)));
         this.pluginDescriptor.setAttributeContractSet(contract);
         this.pluginDescriptor.setSupportsExtendedContract(true);
     }
 
-    private void init(GuiConfigDescriptor guiDescriptor) {
+    private GuiConfigDescriptor init(GuiConfigDescriptor guiDescriptor) {
         TextFieldDescriptor serviceDetails = new TextFieldDescriptor(SVC_URL, SVC_URL_DESC);
         serviceDetails.addValidator(new RequiredFieldValidator());
         serviceDetails.addValidator(new URLValidator(true));
-        //serviceDetails.setDefaultValue("https://???/");
+        //serviceDetails.setDefaultValue("https://localhost:8443/identity/");
         guiDescriptor.addField(serviceDetails);
 
         ClientCertKeypairFieldDescriptor clientKey = new ClientCertKeypairFieldDescriptor(CLIENT_CERT, CLIENT_CERT_DESC);
@@ -98,7 +92,10 @@ public class PluginConfiguration implements Plugin, PcvConstants {
 
         TextFieldDescriptor scopeDetails = new TextFieldDescriptor(SCOPE, SCOPE_DESC);
         scopeDetails.addValidator(new RequiredFieldValidator());
+        //scopeDetails.setDefaultValue("???");
         guiDescriptor.addField(scopeDetails);
+
+        return guiDescriptor;
     }
 
     /**
@@ -118,7 +115,6 @@ public class PluginConfiguration implements Plugin, PcvConstants {
      * @param configuration
      *     the Configuration object constructed from the values entered by the user via the GUI.
      */
-    @Override
     public void configure(Configuration configuration) {
         this.configuration = configuration;
         this.formTemplateName = configuration.getFieldValue(FORM_TEMPLATE_NAME);
