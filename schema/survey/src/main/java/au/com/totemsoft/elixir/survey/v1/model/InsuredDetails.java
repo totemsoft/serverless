@@ -42,10 +42,10 @@ public class InsuredDetails   {
   }
 
   /**
-   * Client's name
+   * Insured name
    * @return firstname
   */
-  @ApiModelProperty(value = "Client's name")
+  @ApiModelProperty(value = "Insured name")
 
 
   public String getFirstname() {
@@ -62,10 +62,10 @@ public class InsuredDetails   {
   }
 
   /**
-   * Client's surname
+   * Insured surname
    * @return surname
   */
-  @ApiModelProperty(value = "Client's surname")
+  @ApiModelProperty(value = "Insured surname")
 
 
   public String getSurname() {
@@ -82,10 +82,10 @@ public class InsuredDetails   {
   }
 
   /**
-   * Client's mobile
+   * Insured mobile
    * @return mobile
   */
-  @ApiModelProperty(value = "Client's mobile")
+  @ApiModelProperty(value = "Insured mobile")
 
 
   public String getMobile() {
@@ -102,10 +102,10 @@ public class InsuredDetails   {
   }
 
   /**
-   * Client's email
+   * Insured email
    * @return email
   */
-  @ApiModelProperty(required = true, value = "Client's email")
+  @ApiModelProperty(required = true, value = "Insured email")
   @NotNull
 
 
@@ -123,10 +123,10 @@ public class InsuredDetails   {
   }
 
   /**
-   * Client's company name
+   * Insured company name
    * @return companyName
   */
-  @ApiModelProperty(value = "Client's company name")
+  @ApiModelProperty(value = "Insured company name")
 
 
   public String getCompanyName() {
@@ -143,10 +143,10 @@ public class InsuredDetails   {
   }
 
   /**
-   * Client's trading name
+   * Insured trading name
    * @return tradingName
   */
-  @ApiModelProperty(value = "Client's trading name")
+  @ApiModelProperty(value = "Insured trading name")
 
 
   public String getTradingName() {
@@ -163,10 +163,10 @@ public class InsuredDetails   {
   }
 
   /**
-   * Client's position
+   * Insured position
    * @return position
   */
-  @ApiModelProperty(value = "Client's position")
+  @ApiModelProperty(value = "Insured position")
 
 
   public String getPosition() {

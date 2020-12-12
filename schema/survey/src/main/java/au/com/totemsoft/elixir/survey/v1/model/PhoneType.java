@@ -4,17 +4,19 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * File Type
+ * Phone types
  */
-public enum FileType {
+public enum PhoneType {
   
-  BUSINESS("BUSINESS"),
+  FAX("FAX"),
   
-  FARM("FARM");
+  MOBILE("MOBILE"),
+  
+  WORK("WORK");
 
   private String value;
 
-  FileType(String value) {
+  PhoneType(String value) {
     this.value = value;
   }
 
@@ -29,8 +31,8 @@ public enum FileType {
   }
 
   @JsonCreator
-  public static FileType fromValue(String value) {
-    for (FileType b : FileType.values()) {
+  public static PhoneType fromValue(String value) {
+    for (PhoneType b : PhoneType.values()) {
       if (b.value.equals(value)) {
         return b;
       }

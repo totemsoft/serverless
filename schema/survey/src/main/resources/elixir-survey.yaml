@@ -249,6 +249,7 @@ definitions:
     - FARM
   #
   AddressType:
+    type: string
     description: Address type
     enum:
     - STREET
@@ -280,6 +281,7 @@ definitions:
         type: string
   #
   PhoneType:
+    type: string
     description: Phone types
     enum:
     - FAX

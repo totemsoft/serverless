@@ -60,7 +60,7 @@ public class SurveyApiImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<SurveyResponse> create(@Valid SurveyRequest surveyRequest) {
+    public ResponseEntity<SurveyResponse> createSurvey(@Valid SurveyRequest surveyRequest) {
         final UUID reference = UUID.randomUUID();
         surveyRequest.setReference(reference);
         final String refName = reference.toString();
@@ -91,7 +91,7 @@ public class SurveyApiImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<List<SurveyResponse>> findAll() {
+    public ResponseEntity<List<SurveyResponse>> findSurveys() {
         try {
             //
             // find all references
@@ -123,7 +123,7 @@ public class SurveyApiImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<SurveyResponse> find(UUID reference, String folderId) {
+    public ResponseEntity<SurveyResponse> findSurvey(UUID reference, String folderId) {
         final String refName = reference.toString();
         try {
             //
@@ -162,7 +162,7 @@ public class SurveyApiImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<SurveyResponse> update(@Valid SurveyRequest surveyRequest) {
+    public ResponseEntity<SurveyResponse> updateSurvey(@Valid SurveyRequest surveyRequest) {
         final UUID reference = surveyRequest.getReference();
         try {
             //

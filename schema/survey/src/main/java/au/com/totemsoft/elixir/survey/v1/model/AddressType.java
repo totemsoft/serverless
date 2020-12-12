@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * File Type
+ * Address type
  */
-public enum FileType {
+public enum AddressType {
   
-  BUSINESS("BUSINESS"),
+  STREET("STREET"),
   
-  FARM("FARM");
+  POSTAL("POSTAL");
 
   private String value;
 
-  FileType(String value) {
+  AddressType(String value) {
     this.value = value;
   }
 
@@ -29,8 +29,8 @@ public enum FileType {
   }
 
   @JsonCreator
-  public static FileType fromValue(String value) {
-    for (FileType b : FileType.values()) {
+  public static AddressType fromValue(String value) {
+    for (AddressType b : AddressType.values()) {
       if (b.value.equals(value)) {
         return b;
       }

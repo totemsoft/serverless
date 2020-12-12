@@ -10,9 +10,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Broker details
+ * Broker details.
  */
-@ApiModel(description = "Broker details")
+@ApiModel(description = "Broker details.")
 
 public class BrokerDetails   {
   @JsonProperty("id")
@@ -27,10 +27,10 @@ public class BrokerDetails   {
   }
 
   /**
-   * Broker Id
+   * Broker Id (email)
    * @return id
   */
-  @ApiModelProperty(value = "Broker Id")
+  @ApiModelProperty(value = "Broker Id (email)")
 
 
   public String getId() {
@@ -47,10 +47,10 @@ public class BrokerDetails   {
   }
 
   /**
-   * Broker Client
+   * Broker's Client ( current selected)
    * @return client
   */
-  @ApiModelProperty(required = true, value = "Broker Client")
+  @ApiModelProperty(required = true, value = "Broker's Client ( current selected)")
   @NotNull
 
 

@@ -38,38 +38,38 @@ public interface SurveyApi {
     SurveyApi getDelegate();
 
     /**
-     * POST /survey/create : Create Survey
-     * Create Survey
+     * POST /survey/create : Create Survey.
+     * Create Survey for user (current selected client).
      *
      * @param surveyRequest Survey Request (required)
      * @return Success (status code 200)
      */
-    @ApiOperation(value = "Create Survey", nickname = "create", notes = "Create Survey", response = SurveyResponse.class, tags={  })
+    @ApiOperation(value = "Create Survey.", nickname = "createSurvey", notes = "Create Survey for user (current selected client).", response = SurveyResponse.class, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = SurveyResponse.class) })
     @RequestMapping(value = "/survey/create",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    default ResponseEntity<SurveyResponse> create(@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody SurveyRequest surveyRequest) {
-        return getDelegate().create(surveyRequest);
+    default ResponseEntity<SurveyResponse> createSurvey(@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody SurveyRequest surveyRequest) {
+        return getDelegate().createSurvey(surveyRequest);
     }
 
 
     /**
      * GET /survey/download/{reference}/{folderId} : Download a file.
-     * Download a file.
+     * Download a file (for Survey).
      *
      * @param reference Reference (Survey Id) (required)
      * @param folderId Folder Id (required)
      * @param filename File name (required)
      * @return Success (status code 200)
-     *         or Survey not found (status code 404)
+     *         or File not found (status code 404)
      */
-    @ApiOperation(value = "Download a file.", nickname = "download", notes = "Download a file.", response = Resource.class, tags={  })
+    @ApiOperation(value = "Download a file.", nickname = "download", notes = "Download a file (for Survey).", response = Resource.class, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = Resource.class),
-        @ApiResponse(code = 404, message = "Survey not found") })
+        @ApiResponse(code = 404, message = "File not found") })
     @RequestMapping(value = "/survey/download/{reference}/{folderId}",
         produces = { "application/_*" }, 
         method = RequestMethod.GET)
@@ -79,63 +79,63 @@ public interface SurveyApi {
 
 
     /**
-     * GET /survey/find/{reference}/{folderId} : Get Survey
-     * Get Survey
+     * GET /survey/find/{reference}/{folderId} : Get Survey.
+     * Get Survey (by reference).
      *
      * @param reference Reference (Survey Id) (required)
      * @param folderId Folder Id (required)
      * @return Success (status code 200)
      */
-    @ApiOperation(value = "Get Survey", nickname = "find", notes = "Get Survey", response = SurveyResponse.class, tags={  })
+    @ApiOperation(value = "Get Survey.", nickname = "findSurvey", notes = "Get Survey (by reference).", response = SurveyResponse.class, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = SurveyResponse.class) })
     @RequestMapping(value = "/survey/find/{reference}/{folderId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<SurveyResponse> find(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "Folder Id",required=true) @PathVariable("folderId") String folderId) {
-        return getDelegate().find(reference, folderId);
+    default ResponseEntity<SurveyResponse> findSurvey(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "Folder Id",required=true) @PathVariable("folderId") String folderId) {
+        return getDelegate().findSurvey(reference, folderId);
     }
 
 
     /**
-     * GET /survey/find : Find all Surveys for user
-     * Find all Surveys for user
+     * GET /survey/find : Find all Surveys for user.
+     * Find all Surveys for user (current selected client).
      *
      * @return An array of SurveyResponse(s) (status code 200)
      */
-    @ApiOperation(value = "Find all Surveys for user", nickname = "findAll", notes = "Find all Surveys for user", response = SurveyResponse.class, responseContainer = "List", tags={  })
+    @ApiOperation(value = "Find all Surveys for user.", nickname = "findSurveys", notes = "Find all Surveys for user (current selected client).", response = SurveyResponse.class, responseContainer = "List", tags={  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "An array of SurveyResponse(s)", response = SurveyResponse.class, responseContainer = "List") })
     @RequestMapping(value = "/survey/find",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<List<SurveyResponse>> findAll() {
-        return getDelegate().findAll();
+    default ResponseEntity<List<SurveyResponse>> findSurveys() {
+        return getDelegate().findSurveys();
     }
 
 
     /**
-     * PUT /survey/update : Update Survey
-     * Update Survey
+     * PUT /survey/update : Update Survey.
+     * Update Survey (for reference).
      *
      * @param surveyRequest Survey Request (required)
      * @return Success (status code 200)
      */
-    @ApiOperation(value = "Update Survey", nickname = "update", notes = "Update Survey", response = SurveyResponse.class, tags={  })
+    @ApiOperation(value = "Update Survey.", nickname = "updateSurvey", notes = "Update Survey (for reference).", response = SurveyResponse.class, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = SurveyResponse.class) })
     @RequestMapping(value = "/survey/update",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    default ResponseEntity<SurveyResponse> update(@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody SurveyRequest surveyRequest) {
-        return getDelegate().update(surveyRequest);
+    default ResponseEntity<SurveyResponse> updateSurvey(@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody SurveyRequest surveyRequest) {
+        return getDelegate().updateSurvey(surveyRequest);
     }
 
 
     /**
      * POST /survey/upload/{reference}/{folderId} : Upload a file.
-     * Uploads a file.
+     * Uploads a file (for Survey).
      *
      * @param reference Reference (Survey Id) (required)
      * @param folderId Folder Id (required)
@@ -145,7 +145,7 @@ public interface SurveyApi {
      *         or Not authenticated (status code 401)
      *         or Access token does not have the required scope (status code 403)
      */
-    @ApiOperation(value = "Upload a file.", nickname = "upload", notes = "Uploads a file.", response = UploadResponse.class, tags={  })
+    @ApiOperation(value = "Upload a file.", nickname = "upload", notes = "Uploads a file (for Survey).", response = UploadResponse.class, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = UploadResponse.class),
         @ApiResponse(code = 401, message = "Not authenticated"),
