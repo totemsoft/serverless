@@ -31,11 +31,23 @@ produces:
 #       write: Grants write access
 #       admin: Grants read and write access to administrative information
 paths:
+  /client/find:
+    get:
+      summary: Receives all clients.
+      description: Receives all clients for a user.
+      operationId: findClients
+      responses:
+        200:
+          description: An array of Client(s)
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ClientResponse'
   /survey/create:
     post:
-      summary: Create Survey
-      description: Create Survey
-      operationId: create
+      summary: Create Survey.
+      description: Create Survey for user (current selected client).
+      operationId: createSurvey
       parameters:
         - $ref: '#/parameters/SurveyRequest'
       responses:
@@ -45,9 +57,9 @@ paths:
             $ref: '#/definitions/SurveyResponse'
   /survey/find:
     get:
-      summary: Find all Surveys for user
-      description: Find all Surveys for user
-      operationId: findAll
+      summary: Find all Surveys for user.
+      description: Find all Surveys for user (current selected client).
+      operationId: findSurveys
       responses:
         200:
           description: An array of SurveyResponse(s)
@@ -57,9 +69,9 @@ paths:
               $ref: '#/definitions/SurveyResponse'
   /survey/find/{reference}/{folderId}:
     get:
-      summary: Get Survey
-      description: Get Survey
-      operationId: find
+      summary: Get Survey.
+      description: Get Survey (by reference).
+      operationId: findSurvey
       parameters:
         - $ref: '#/parameters/Reference'
         - $ref: '#/parameters/FolderId'
@@ -70,9 +82,9 @@ paths:
             $ref: '#/definitions/SurveyResponse'
   /survey/update:
     put:
-      summary: Update Survey
-      description: Update Survey
-      operationId: update
+      summary: Update Survey.
+      description: Update Survey (for reference).
+      operationId: updateSurvey
       parameters:
         - $ref: '#/parameters/SurveyRequest'
       responses:
@@ -83,7 +95,7 @@ paths:
   /survey/upload/{reference}/{folderId}:
     post:
       summary: Upload a file.
-      description: Uploads a file.
+      description: Uploads a file (for Survey).
       operationId: upload
       consumes:
         - multipart/form-data
@@ -112,7 +124,7 @@ paths:
   /survey/download/{reference}/{folderId}:
     get:
       summary: Download a file.
-      description: Download a file.
+      description: Download a file (for Survey).
       produces:
         - 'application/*'
       operationId: download
@@ -128,7 +140,7 @@ paths:
             format: binary
             #format: base64
         404:
-          description: Survey not found
+          description: File not found
 #
 # parameters
 #
@@ -196,6 +208,7 @@ definitions:
         $ref: '#/definitions/SurveyDocument'
   #
   SurveyResponse:
+    description: Survey details.
     type: object
     properties:
       reference:
@@ -224,56 +237,169 @@ definitions:
       message:
         $ref: '#/definitions/Message'
   #
+  SurveyDocument:
+    type: string
+    description: Survey JSON Document
+  #
   FileType:
     type: string
     description: File Type
     enum:
-      - SURVEY
-      - FILE
+    - BUSINESS
+    - FARM
   #
-  SurveyDocument:
-    type: string
-    description: Survey JSON Document
+  AddressType:
+    description: Address type
+    enum:
+    - STREET
+    - POSTAL
+  #
+  Address:
+    description: Address details
+    type: object
+    required:
+    - type
+    - addressLine1
+    properties:
+      type:
+        $ref: '#/definitions/AddressType'
+      addressLine1:
+        description: Address line
+        type: string
+      addressLine2:
+        description: Address line
+        type: string
+      suburb:
+        description: Suburb
+        type: string
+      state:
+        description: State
+        type: string
+      postCode:
+        description: Post code
+        type: string
+  #
+  PhoneType:
+    description: Phone types
+    enum:
+    - FAX
+    - MOBILE
+    - WORK
+  #
+  Phone:
+    title: Phone details
+    type: object
+    required:
+    - type
+    - number
+    properties:
+      type:
+        $ref: '#/definitions/PhoneType'
+      number:
+        type: string
+  #
+  Location:
+    title: Location.
+    description: Location.
+    type: object
+    required:
+    - name
+    - reference
+    properties:
+      reference:
+        $ref: '#/definitions/Reference'
+      name:
+        description: Location name
+        type: string
+      addresses:
+        description: Location addresses
+        type: array
+        items:
+          $ref: '#/definitions/Address'
+  #
+  ClientResponse:
+    title: Client
+    description: Client details
+    type: object
+    required:
+    - company
+    - firstName
+    - lastName
+    - email
+    properties:
+      company:
+        description: Client's company name (has to be unique)
+        type: string
+      tradingName:
+        description: Client's trading name
+        type: string
+      firstName:
+        description: Client's firstname
+        type: string
+      lastName:
+        description: Client's surname
+        type: string
+      email:
+        description: Client's email
+        type: string
+      position:
+        description: Client's position
+        type: string
+      phones:
+        description: Client's phones
+        type: array
+        items:
+          $ref: '#/definitions/Phone'
+      addresses:
+        description: Client's addresses
+        type: array
+        items:
+          $ref: '#/definitions/Address'
+      locations:
+        description: Client's locations
+        type: array
+        items:
+          $ref: '#/definitions/Location'
   #
   InsuredDetails:
     title: InsuredDetails
     description: Insured details
     type: object
     required: 
-      - email
+    - email
     properties:
       firstname:
-        description: Client's name
+        description: Insured name
         type: string
       surname:
-        description: Client's surname
+        description: Insured surname
         type: string
       mobile:
-        description: Client's mobile
+        description: Insured mobile
         type: string
       email:
-        description: Client's email
+        description: Insured email
         type: string
       companyName:
-        description: Client's company name
+        description: Insured company name
         type: string
       tradingName:
-        description: Client's trading name
+        description: Insured trading name
         type: string
       position:
-        description: Client's position
+        description: Insured position
         type: string
   #
   BrokerDetails:
-    title: BrokerDetails
-    description: Broker details
+    title: Broker Details.
+    description: Broker details.
     type: object
     required: 
-      - client
+    - client
     properties:
       id:
-        description: Broker Id
+        description: Broker Id (email)
         type: string
       client:
-        description: Broker Client
+        description: Broker's Client ( current selected)
         type: string
