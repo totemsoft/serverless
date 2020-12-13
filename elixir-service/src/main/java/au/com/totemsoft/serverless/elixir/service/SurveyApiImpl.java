@@ -39,6 +39,9 @@ import au.com.totemsoft.elixir.survey.v1.model.UploadResponse;
 @Service("surveyApi")
 public class SurveyApiImpl implements SurveyApi {
 
+    private final static String SURVEY_JSON  = ".survey.json";
+    private final static String INSURED_JSON = ".insured.json";
+
     @Value("#{environment.DEBUG ?: 'true'}")
     private boolean debug;
 
@@ -140,11 +143,11 @@ public class SurveyApiImpl implements SurveyApi {
             //
             final ByteArrayOutputStream surveyStream = new ByteArrayOutputStream();
             uploadService.download(refName, folderId,
-                refName, surveyStream);
+                refName + SURVEY_JSON, surveyStream);
             //
             final ByteArrayOutputStream insuredStream = new ByteArrayOutputStream();
             uploadService.download(refName, folderId,
-                refName + ".insured", insuredStream);
+                refName + INSURED_JSON, insuredStream);
             //
             SurveyResponse result = new SurveyResponse()
                 .reference(reference)
@@ -195,12 +198,9 @@ public class SurveyApiImpl implements SurveyApi {
                 fileUpload.getOriginalFilename(), fileUpload.getSize());
             // save to document store
             Resource resource = fileUpload.getResource();
-            Map<String, Object> metadata = new TreeMap<>();
-            metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
-            metadata.put(UploadService.CONTENT_TYPE, fileUpload.getContentType());
-            metadata.put(UploadService.FILE_NOTE, fileNote);
             String documentId = uploadService.upload(refName, folderId,
-                resource, metadata);
+                resource,
+                metadata(fileUpload.getContentType(), fileNote));
             // result
             UploadResponse result = new UploadResponse()
                 .reference(reference)
@@ -215,8 +215,16 @@ public class SurveyApiImpl implements SurveyApi {
         }
     }
 
+    private Map<String, Object> metadata(String contentType, String fileNote) {
+        Map<String, Object> metadata = new TreeMap<>();
+        metadata.put(UploadService.CONTENT_TYPE, contentType);
+        metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: not used
+        metadata.put(UploadService.FILE_NOTE, fileNote); // TODO: not used
+        return metadata;
+    }
+
     /**
-     * Upload Survey JSON document (optional).
+     * Upload Survey JSON document.
      * @param request
      * @throws IOException
      */
@@ -226,17 +234,16 @@ public class SurveyApiImpl implements SurveyApi {
             return; // TODO: throw ???
         }
         // upload Survey JSON document
-        final String name = reference.toString();
+        final String name = reference.toString() + SURVEY_JSON;
+        final String fileNote = "Survey JSON document";
         Resource resource = new InMemoryResource(request.getSurvey().getBytes(), name);
-        Map<String, Object> metadata = new TreeMap<>();
-        metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
-        metadata.put(UploadService.CONTENT_TYPE, MediaType.APPLICATION_JSON);
         /*String documentId = */uploadService.upload(name, request.getFolderId(),
-            resource, metadata);
+            resource,
+            metadata(MediaType.APPLICATION_JSON_VALUE, fileNote));
     }
 
     /**
-     * Upload Insured details JSON document (optional).
+     * Upload Insured details JSON document.
      * @param request
      * @throws IOException
      */
@@ -247,13 +254,12 @@ public class SurveyApiImpl implements SurveyApi {
             return; // TODO: throw ???
         }
         // upload Insured JSON document
-        final String name = reference.toString() + ".insured";
+        final String name = reference.toString() + INSURED_JSON;
+        final String fileNote = "Insured details JSON document";
         Resource resource = new InMemoryResource(objectMapper.writeValueAsBytes(insured), name);
-        Map<String, Object> metadata = new TreeMap<>();
-        metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: lastModifiedDate
-        metadata.put(UploadService.CONTENT_TYPE, MediaType.APPLICATION_JSON);
         /*String documentId = */uploadService.upload(name, request.getFolderId(),
-            resource, metadata);
+            resource,
+            metadata(MediaType.APPLICATION_JSON_VALUE, fileNote));
     }
 
     @Override
