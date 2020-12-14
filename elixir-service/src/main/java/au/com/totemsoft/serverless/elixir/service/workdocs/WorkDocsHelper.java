@@ -183,6 +183,15 @@ public class WorkDocsHelper {
     }
 
     public static Map<String, String> documentUploadMetadata(AmazonWorkDocs client, String folderId, String name, String contentType) {
+        if (StringUtils.isBlank(folderId)) {
+            throw new IllegalArgumentException("folderId is required");
+        }
+        if (StringUtils.isBlank(name)) {
+            throw new IllegalArgumentException("name is required");
+        }
+        if (StringUtils.isBlank(contentType)) {
+            throw new IllegalArgumentException("contentType is required");
+        }
         InitiateDocumentVersionUploadRequest request = new InitiateDocumentVersionUploadRequest();
         request.setParentFolderId(folderId);
         request.setName(name);

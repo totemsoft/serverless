@@ -193,14 +193,15 @@ public class SurveyApiImpl implements SurveyApi {
         @Valid MultipartFile fileUpload,
         String fileNote) {
         final String refName = reference.toString();
+        final String contentType = fileUpload.getContentType();
         try {
-            String fileInfo = String.format("name: %s, size: %d",
-                fileUpload.getOriginalFilename(), fileUpload.getSize());
+            String fileInfo = String.format("name: %s, originalFilename: %s, contentType: %s, size: %d",
+                fileUpload.getName(), fileUpload.getOriginalFilename(), contentType, fileUpload.getSize());
             // save to document store
             Resource resource = fileUpload.getResource();
             String documentId = uploadService.upload(refName, folderId,
                 resource,
-                metadata(fileUpload.getContentType(), fileNote));
+                metadata(contentType, fileNote));
             // result
             UploadResponse result = new UploadResponse()
                 .reference(reference)
