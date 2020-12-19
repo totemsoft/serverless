@@ -94,6 +94,13 @@ Resources:
               Ref: ElixirApi
             Auth:
               Authorizer: NONE
+        findClients:
+          Type: Api
+          Properties:
+            Path: /client/find
+            Method: get
+            RestApiId:
+              Ref: ElixirApi
         createSurvey:
           Type: Api
           Properties:

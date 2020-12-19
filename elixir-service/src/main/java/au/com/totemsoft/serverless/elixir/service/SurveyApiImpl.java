@@ -13,22 +13,17 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.util.InMemoryResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import au.com.totemsoft.elixir.survey.v1.api.SurveyApi;
 import au.com.totemsoft.elixir.survey.v1.model.InsuredDetails;
@@ -37,25 +32,15 @@ import au.com.totemsoft.elixir.survey.v1.model.SurveyResponse;
 import au.com.totemsoft.elixir.survey.v1.model.UploadResponse;
 
 @Service("surveyApi")
-public class SurveyApiImpl implements SurveyApi {
+public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
 
     private final static String SURVEY_JSON  = ".survey.json";
     private final static String INSURED_JSON = ".insured.json";
-
-    @Value("#{environment.DEBUG ?: 'true'}")
-    private boolean debug;
 
     @Autowired
     @Qualifier("workDocsUploadService")
     //@Qualifier("s3UploadService")
     private UploadService uploadService;
-
-    @Autowired
-    @Qualifier("sqsService")
-    private MessageService messageService;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Override
     public SurveyApi getDelegate() {
@@ -279,23 +264,6 @@ public class SurveyApiImpl implements SurveyApi {
             Resource error = new ByteArrayResource(error(e).getBytes(), filename);
             return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    private <T> ResponseEntity<T> entity(T body, HttpStatus status) {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        //responseHeaders.setLocation(location);
-        //responseHeaders.set("MyResponseHeader", "MyValue");
-        //
-        return new ResponseEntity<>(body, responseHeaders, status == null ? HttpStatus.OK : status);
-        //return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    private String error(Exception e) {
-        if (debug) {
-            e.printStackTrace();
-            return ExceptionUtils.getStackTrace(e);
-        }
-        return ExceptionUtils.getRootCauseMessage(e);
     }
 
 }
