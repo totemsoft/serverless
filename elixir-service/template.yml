@@ -97,7 +97,7 @@ Resources:
         findClients:
           Type: Api
           Properties:
-            Path: /client/find
+            Path: /client/find/{userId}
             Method: get
             RestApiId:
               Ref: ElixirApi

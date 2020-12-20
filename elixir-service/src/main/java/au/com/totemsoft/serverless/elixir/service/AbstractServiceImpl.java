@@ -1,5 +1,8 @@
 package au.com.totemsoft.serverless.elixir.service;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,6 +24,9 @@ public class AbstractServiceImpl {
 
     @Autowired
     protected ObjectMapper objectMapper;
+
+    @Resource
+    protected HttpServletRequest request;
 
     protected <T> ResponseEntity<T> entity(T body, HttpStatus status) {
         HttpHeaders responseHeaders = new HttpHeaders();
