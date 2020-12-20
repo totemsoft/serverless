@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.ws.rs.core.HttpHeaders;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,14 +47,13 @@ public class ClientApiImpl extends AbstractServiceImpl implements ClientApi {
     private List<ClientResponse> findClients(String userId) {
         // validation
         if (StringUtils.isBlank(userId)) {
-            String authHeader = httpServletRequest().getHeader(HttpHeaders.AUTHORIZATION);
-            throw new IllegalArgumentException("TODO: get userId from access token: " + authHeader);
+            userId = sub();
         }
         //
         List<ClientResponse> result = new ArrayList<>();
         //
         result.add(new ClientResponse()
-            .company("Totem Software P/L")
+            .company("Totem Software P/L :: " + userId)
             .firstName("Valeri")
             .lastName("Shibaev")
         );
