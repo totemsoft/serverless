@@ -31,11 +31,23 @@ produces:
 #       write: Grants write access
 #       admin: Grants read and write access to administrative information
 paths:
-  /client/find/{userId}:
+  /client/find:
     get:
       summary: Receives all clients.
       description: Receives all clients for a user.
       operationId: findClients
+      responses:
+        200:
+          description: An array of Client(s)
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ClientResponse'
+  /client/find/{userId}:
+    get:
+      summary: Receives all clients.
+      description: Receives all clients for a user.
+      operationId: findClientsByUser
       parameters:
         - $ref: '#/parameters/UserId'
       responses:

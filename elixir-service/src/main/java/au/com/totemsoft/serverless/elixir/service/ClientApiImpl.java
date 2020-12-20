@@ -23,29 +23,45 @@ public class ClientApiImpl extends AbstractServiceImpl implements ClientApi {
     }
 
     @Override
-    public ResponseEntity<List<ClientResponse>> findClients(String userId) {
+    public ResponseEntity<List<ClientResponse>> findClients() {
         try {
-            // validation
-            if (StringUtils.isBlank(userId)) {
-                String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-                throw new IllegalArgumentException("TODO: get userId from access token: " + authHeader);
-            }
-            //
-            List<ClientResponse> result = new ArrayList<>();
-            //
-            result.add(new ClientResponse()
-                .company("Totem Software P/L")
-                .firstName("Valeri")
-                .lastName("Shibaev")
-            );
-            //
-            return entity(result, null);
+            return entity(findClients(null), null);
         } catch (Exception e) {
             List<ClientResponse> error = Arrays.asList(
                 new ClientResponse()
                     .company(error(e)));
             return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public ResponseEntity<List<ClientResponse>> findClientsByUser(String userId) {
+        try {
+            return entity(findClients(userId), null);
+        } catch (Exception e) {
+            List<ClientResponse> error = Arrays.asList(
+                new ClientResponse()
+                    .company(error(e)));
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private List<ClientResponse> findClients(String userId) {
+        // validation
+        if (StringUtils.isBlank(userId)) {
+            String authHeader = httpServletRequest().getHeader(HttpHeaders.AUTHORIZATION);
+            throw new IllegalArgumentException("TODO: get userId from access token: " + authHeader);
+        }
+        //
+        List<ClientResponse> result = new ArrayList<>();
+        //
+        result.add(new ClientResponse()
+            .company("Totem Software P/L")
+            .firstName("Valeri")
+            .lastName("Shibaev")
+        );
+        //
+        return result;
     }
 
 }

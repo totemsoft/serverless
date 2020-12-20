@@ -26,7 +26,11 @@ public class AbstractServiceImpl {
     protected ObjectMapper objectMapper;
 
     @Resource
-    protected HttpServletRequest request;
+    private HttpServletRequest httpServletRequest;
+
+    protected HttpServletRequest httpServletRequest() {
+        return httpServletRequest;
+    }
 
     protected <T> ResponseEntity<T> entity(T body, HttpStatus status) {
         HttpHeaders responseHeaders = new HttpHeaders();

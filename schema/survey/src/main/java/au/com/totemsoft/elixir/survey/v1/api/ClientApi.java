@@ -27,20 +27,37 @@ public interface ClientApi {
     ClientApi getDelegate();
 
     /**
+     * GET /client/find : Receives all clients.
+     * Receives all clients for a user.
+     *
+     * @return An array of Client(s) (status code 200)
+     */
+    @ApiOperation(value = "Receives all clients.", nickname = "findClients", notes = "Receives all clients for a user.", response = ClientResponse.class, responseContainer = "List", tags={  })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "An array of Client(s)", response = ClientResponse.class, responseContainer = "List") })
+    @RequestMapping(value = "/client/find",
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
+    default ResponseEntity<List<ClientResponse>> findClients() {
+        return getDelegate().findClients();
+    }
+
+
+    /**
      * GET /client/find/{userId} : Receives all clients.
      * Receives all clients for a user.
      *
      * @param userId User Id (required)
      * @return An array of Client(s) (status code 200)
      */
-    @ApiOperation(value = "Receives all clients.", nickname = "findClients", notes = "Receives all clients for a user.", response = ClientResponse.class, responseContainer = "List", tags={  })
+    @ApiOperation(value = "Receives all clients.", nickname = "findClientsByUser", notes = "Receives all clients for a user.", response = ClientResponse.class, responseContainer = "List", tags={  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "An array of Client(s)", response = ClientResponse.class, responseContainer = "List") })
     @RequestMapping(value = "/client/find/{userId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<List<ClientResponse>> findClients(@ApiParam(value = "User Id",required=true) @PathVariable("userId") String userId) {
-        return getDelegate().findClients(userId);
+    default ResponseEntity<List<ClientResponse>> findClientsByUser(@ApiParam(value = "User Id",required=true) @PathVariable("userId") String userId) {
+        return getDelegate().findClientsByUser(userId);
     }
 
 }
