@@ -53,9 +53,10 @@ public class ClientApiImpl extends AbstractServiceImpl implements ClientApi {
         List<ClientResponse> result = new ArrayList<>();
         //
         result.add(new ClientResponse()
-            .company("Totem Software P/L :: " + userId)
+            .company("Totem Software P/L")
             .firstName("Valeri")
             .lastName("Shibaev")
+            .requestedBy(userId)
         );
         //
         return result;
