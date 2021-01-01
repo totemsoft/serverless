@@ -41,6 +41,10 @@ public class AbstractServiceImpl {
         return httpServletRequest;
     }
 
+    /**
+     * Current userId - derived from JWT.
+     * @return
+     */
     protected String sub() {
         final Base64.Decoder decoder = Base64.getUrlDecoder();
         String authHeader = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
