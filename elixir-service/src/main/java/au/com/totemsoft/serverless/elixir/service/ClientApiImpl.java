@@ -1,6 +1,5 @@
 package au.com.totemsoft.serverless.elixir.service;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -29,24 +28,24 @@ public class ClientApiImpl extends AbstractServiceImpl implements ClientApi {
     @Override
     public ResponseEntity<List<ClientResponse>> findClients() {
         try {
-            return entity(findClients(null), null);
+            return entity(findClients(null), null, null);
         } catch (Exception e) {
             List<ClientResponse> error = Arrays.asList(
                 new ClientResponse()
                     .company(error(e)));
-            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR, null);
         }
     }
 
     @Override
     public ResponseEntity<List<ClientResponse>> findClientsByUser(String userId) {
         try {
-            return entity(findClients(userId), null);
+            return entity(findClients(userId), null, null);
         } catch (Exception e) {
             List<ClientResponse> error = Arrays.asList(
                 new ClientResponse()
                     .company(error(e)));
-            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR, null);
         }
     }
 
@@ -59,9 +58,7 @@ public class ClientApiImpl extends AbstractServiceImpl implements ClientApi {
             }
         }
         //
-        final ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        uploadService.download(userId, usersFolderId, userId, stream);
-        ClientResponse[] result = objectMapper.readValue(stream.toByteArray(), ClientResponse[].class);
+        ClientResponse[] result = readValue(usersFolderId, userId, ClientResponse[].class);
         //
         return Arrays.asList(result);
     }

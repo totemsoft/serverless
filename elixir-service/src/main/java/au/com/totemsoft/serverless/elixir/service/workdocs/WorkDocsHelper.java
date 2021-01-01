@@ -217,11 +217,12 @@ public class WorkDocsHelper {
         // Content-Type supplied here should match with the Content-Type set in the InitiateDocumentVersionUpload request.
         connection.setRequestProperty("Content-Type", contentType);
         connection.setRequestProperty("x-amz-server-side-encryption", "AES256");
-        InputStream inputStream = resource.getInputStream();
-        OutputStream outputStream = connection.getOutputStream();
-        IOUtils.copy(inputStream, outputStream);
-        IOUtils.closeQuietly(inputStream);
-        IOUtils.closeQuietly(outputStream);
+        try (
+            InputStream inputStream = resource.getInputStream();
+            OutputStream outputStream = connection.getOutputStream();)
+        {
+            IOUtils.copy(inputStream, outputStream);
+        }
         // Very misleading. Getting a 200 only means the call succeeded, not that the copy worked.
         return connection.getResponseCode();  // int where 200 == success
     }

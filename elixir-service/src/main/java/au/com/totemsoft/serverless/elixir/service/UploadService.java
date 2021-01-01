@@ -11,6 +11,8 @@ import org.springframework.core.io.Resource;
 
 public interface UploadService {
 
+    String NAME = "name";
+
     /** lastModified */
     String LAST_MODIFIED = "lastModified";
     SimpleDateFormat LAST_MODIFIED_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HHmmss.SSS");
@@ -33,25 +35,21 @@ public interface UploadService {
 
     /**
      * 
-     * @param reference - directory to store document
-     * @param folderId
+     * @param folderId - directory to get document from, reference => folderId
      * @param resource
      * @param metadata
      * @return
      * @throws IOException
      */
-    String upload(String reference, String folderId,
-        Resource resource, Map<String, Object> metadata) throws IOException;
+    String upload(String folderId, Resource resource, Map<String, Object> metadata) throws IOException;
 
     /**
      * 
-     * @param reference - directory to get document from
-     * @param folderId
+     * @param folderId - directory to get document from, reference => folderId
      * @param name - file name
      * @param target
      * @throws IOException
      */
-    public void download(String reference, String folderId,
-        String name, OutputStream target) throws IOException;
+    void download(String folderId, String name, OutputStream target) throws IOException;
 
 }

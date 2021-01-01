@@ -48,9 +48,6 @@ public class ClientResponse   {
   @Valid
   private List<Location> locations = null;
 
-  @JsonProperty("requestedBy")
-  private String requestedBy;
-
   public ClientResponse company(String company) {
     this.company = company;
     return this;
@@ -262,26 +259,6 @@ public class ClientResponse   {
     this.locations = locations;
   }
 
-  public ClientResponse requestedBy(String requestedBy) {
-    this.requestedBy = requestedBy;
-    return this;
-  }
-
-  /**
-   * Requested by (usually JWT Payload sub)
-   * @return requestedBy
-  */
-  @ApiModelProperty(value = "Requested by (usually JWT Payload sub)")
-
-
-  public String getRequestedBy() {
-    return requestedBy;
-  }
-
-  public void setRequestedBy(String requestedBy) {
-    this.requestedBy = requestedBy;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -300,13 +277,12 @@ public class ClientResponse   {
         Objects.equals(this.position, clientResponse.position) &&
         Objects.equals(this.phones, clientResponse.phones) &&
         Objects.equals(this.addresses, clientResponse.addresses) &&
-        Objects.equals(this.locations, clientResponse.locations) &&
-        Objects.equals(this.requestedBy, clientResponse.requestedBy);
+        Objects.equals(this.locations, clientResponse.locations);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(company, tradingName, firstName, lastName, email, position, phones, addresses, locations, requestedBy);
+    return Objects.hash(company, tradingName, firstName, lastName, email, position, phones, addresses, locations);
   }
 
   @Override
@@ -323,7 +299,6 @@ public class ClientResponse   {
     sb.append("    phones: ").append(toIndentedString(phones)).append("\n");
     sb.append("    addresses: ").append(toIndentedString(addresses)).append("\n");
     sb.append("    locations: ").append(toIndentedString(locations)).append("\n");
-    sb.append("    requestedBy: ").append(toIndentedString(requestedBy)).append("\n");
     sb.append("}");
     return sb.toString();
   }

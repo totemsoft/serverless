@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
-import javax.validation.Valid;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.core.io.ByteArrayResource;
@@ -32,8 +30,8 @@ import au.com.totemsoft.elixir.survey.v1.model.UploadResponse;
 @Service("surveyApi")
 public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
 
-    private final static String SURVEY_JSON  = ".survey.json";
-    private final static String INSURED_JSON = ".insured.json";
+    private final static String SURVEY_JSON  = "-survey.json";
+    private final static String INSURED_JSON = "-insured.json";
 
     @Override
     public SurveyApi getDelegate() {
@@ -41,7 +39,7 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<SurveyResponse> createSurvey(@Valid SurveyRequest surveyRequest) {
+    public ResponseEntity<SurveyResponse> createSurvey(SurveyRequest surveyRequest) {
         final UUID reference = UUID.randomUUID();
         surveyRequest.setReference(reference);
         final String refName = reference.toString();
@@ -62,12 +60,12 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
                 .reference(reference)
                 .folderId(folderId);
             //
-            return entity(result, null);
+            return entity(result, null, null);
         } catch (Exception e) {
             SurveyResponse error = new SurveyResponse()
                 .reference(reference)
                 .message(error(e));
-            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR, null);
         }
     }
 
@@ -94,12 +92,12 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
                 );
             }
             //
-            return entity(result, null);
+            return entity(result, null, null);
         } catch (Exception e) {
             List<SurveyResponse> error = Arrays.asList(
                 new SurveyResponse()
                     .message(error(e)));
-            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR, null);
         }
     }
 
@@ -114,36 +112,31 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
                     SurveyResponse error = new SurveyResponse()
                         .reference(reference)
                         .message("No folder found.");
-                    return entity(error, HttpStatus.PRECONDITION_FAILED);
+                    return entity(error, HttpStatus.PRECONDITION_FAILED, null);
                 }
                 folderId = folder.getValue();
             }
             //
-            final ByteArrayOutputStream surveyStream = new ByteArrayOutputStream();
-            uploadService.download(refName, folderId,
-                refName + SURVEY_JSON, surveyStream);
-            //
-            final ByteArrayOutputStream insuredStream = new ByteArrayOutputStream();
-            uploadService.download(refName, folderId,
-                refName + INSURED_JSON, insuredStream);
+            InsuredDetails insured = readValue(folderId, refName + INSURED_JSON, InsuredDetails.class);
+            String survey = readValue(folderId, refName + SURVEY_JSON, String.class);
             //
             SurveyResponse result = new SurveyResponse()
                 .reference(reference)
                 .folderId(folderId)
-                .insured(objectMapper.readValue(insuredStream.toByteArray(), InsuredDetails.class))
-                .survey(surveyStream.toString());
+                .insured(insured)
+                .survey(survey);
             //
-            return entity(result, null);
+            return entity(result, null, null);
         } catch (Exception e) {
             SurveyResponse error = new SurveyResponse()
                 .reference(reference)
                 .message(error(e));
-            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR, null);
         }
     }
 
     @Override
-    public ResponseEntity<SurveyResponse> updateSurvey(@Valid SurveyRequest surveyRequest) {
+    public ResponseEntity<SurveyResponse> updateSurvey(SurveyRequest surveyRequest) {
         final UUID reference = surveyRequest.getReference();
         try {
             //
@@ -157,45 +150,49 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
                 .reference(reference)
                 .folderId(surveyRequest.getFolderId());
             //
-            return entity(result, null);
+            return entity(result, null, null);
         } catch (Exception e) {
             SurveyResponse error = new SurveyResponse()
                 .reference(reference)
                 .message(error(e));
-            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR, null);
         }
     }
 
     @Override
     public ResponseEntity<UploadResponse> upload(UUID reference, String folderId,
-        @Valid MultipartFile fileUpload,
+        MultipartFile fileUpload,
         String fileNote) {
         final String refName = reference.toString();
+        final String name = fileUpload.getOriginalFilename();
         final String contentType = fileUpload.getContentType();
         try {
-            String fileInfo = String.format("name: %s, originalFilename: %s, contentType: %s, size: %d",
-                fileUpload.getName(), fileUpload.getOriginalFilename(), contentType, fileUpload.getSize());
+            String fileInfo = String.format("name: %s, contentType: %s, size: %d",
+                name, contentType, fileUpload.getSize());
+            log.info("upload: " + fileInfo);
             // save to document store
             Resource resource = fileUpload.getResource();
-            String documentId = uploadService.upload(refName, folderId,
-                resource,
-                metadata(contentType, fileNote));
+            String documentId = uploadService.upload(folderId, resource,
+                metadata(name, contentType, fileNote));
+            log.info("documentId: " + documentId);
             // result
             UploadResponse result = new UploadResponse()
                 .reference(reference)
                 .documentId(documentId)
-                .message("[" + reference + "] " + fileInfo + " - " + fileNote);
-            return entity(result, null);
+                .message("[" + refName + "] " + fileInfo + " - " + fileNote);
+            log.info("result: " + result);
+            return entity(result, null, null);
         } catch (Exception e) {
             UploadResponse error = new UploadResponse()
                 .reference(reference)
                 .message(error(e));
-            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR, null);
         }
     }
 
-    private Map<String, Object> metadata(String contentType, String fileNote) {
+    private Map<String, Object> metadata(String name, String contentType, String fileNote) {
         Map<String, Object> metadata = new TreeMap<>();
+        metadata.put(UploadService.NAME, name);
         metadata.put(UploadService.CONTENT_TYPE, contentType);
         metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: not used
         metadata.put(UploadService.FILE_NOTE, fileNote); // TODO: not used
@@ -209,16 +206,16 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
      */
     private void uploadSurvey(SurveyRequest request) throws IOException {
         final UUID reference = request.getReference();
+        final String refName = reference.toString();
         if (StringUtils.isBlank(request.getSurvey())) {
             return; // TODO: throw ???
         }
         // upload Survey JSON document
-        final String name = reference.toString() + SURVEY_JSON;
+        final String name = refName + SURVEY_JSON;
         final String fileNote = "Survey JSON document";
-        Resource resource = new InMemoryResource(request.getSurvey().getBytes(), name);
-        /*String documentId = */uploadService.upload(name, request.getFolderId(),
-            resource,
-            metadata(MediaType.APPLICATION_JSON_VALUE, fileNote));
+        Resource resource = new ByteArrayResource(request.getSurvey().getBytes());
+        /*String documentId = */uploadService.upload(request.getFolderId(), resource,
+            metadata(name, MediaType.APPLICATION_JSON_VALUE, fileNote));
     }
 
     /**
@@ -228,34 +225,33 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
      */
     private void uploadInsured(SurveyRequest request) throws IOException {
         final UUID reference = request.getReference();
+        final String refName = reference.toString();
         final InsuredDetails insured = request.getInsured();
         if (insured == null) {
             return; // TODO: throw ???
         }
         // upload Insured JSON document
-        final String name = reference.toString() + INSURED_JSON;
+        final String name = refName + INSURED_JSON;
         final String fileNote = "Insured details JSON document";
-        Resource resource = new InMemoryResource(objectMapper.writeValueAsBytes(insured), name);
-        /*String documentId = */uploadService.upload(name, request.getFolderId(),
-            resource,
-            metadata(MediaType.APPLICATION_JSON_VALUE, fileNote));
+        Resource resource = new ByteArrayResource(objectMapper.writeValueAsBytes(insured));
+        /*String documentId = */uploadService.upload(request.getFolderId(), resource,
+            metadata(name, MediaType.APPLICATION_JSON_VALUE, fileNote));
     }
 
     @Override
-    public ResponseEntity<Resource> download(UUID reference, String folderId,
-        String filename) {
+    public ResponseEntity<Resource> download(UUID reference, String folderId, String filename) {
         final String refName = reference.toString();
         try {
             // get from document store
-            final ByteArrayOutputStream file = new ByteArrayOutputStream();
-            uploadService.download(refName, folderId,
-                filename, file);
+            final ByteArrayOutputStream content = new ByteArrayOutputStream();
+            uploadService.download(folderId, filename, content);
+            log.info("download '" + filename);
             // result
-            Resource result = new InMemoryResource(file.toByteArray(), filename);
-            return entity(result, null);
+            Resource result = new InMemoryResource(content.toByteArray(), filename);
+            return entity(result, null, null);
         } catch (Exception e) {
             Resource error = new ByteArrayResource(error(e).getBytes(), filename);
-            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR, null);
         }
     }
 

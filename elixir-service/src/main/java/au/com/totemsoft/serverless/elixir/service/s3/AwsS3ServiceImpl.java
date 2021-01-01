@@ -61,8 +61,7 @@ public class AwsS3ServiceImpl implements UploadService {
     }
 
     @Override
-    public String upload(String reference, String folderId,
-        Resource resource, Map<String, Object> metadata) throws IOException {
+    public String upload(String folderId, Resource resource, Map<String, Object> metadata) throws IOException {
         final AmazonS3 client = client();
         // store in pathname folder
         final ObjectMetadata om = new ObjectMetadata();
@@ -87,8 +86,7 @@ public class AwsS3ServiceImpl implements UploadService {
     }
 
     @Override
-    public void download(String reference, String folderId,
-        String name, OutputStream target) throws IOException {
+    public void download(String folderId, String name, OutputStream target) throws IOException {
         throw new IllegalArgumentException("Not implememnted yet.");
     }
 

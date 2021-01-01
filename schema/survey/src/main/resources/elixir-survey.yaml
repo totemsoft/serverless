@@ -141,6 +141,7 @@ paths:
       description: Download a file (for Survey).
       produces:
         - 'application/*'
+        - 'image/*'
       operationId: download
       parameters:
         - $ref: '#/parameters/Reference'
@@ -382,9 +383,6 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Location'
-      requestedBy:
-        description: Requested by (usually JWT Payload sub)
-        type: string
   #
   InsuredDetails:
     title: InsuredDetails

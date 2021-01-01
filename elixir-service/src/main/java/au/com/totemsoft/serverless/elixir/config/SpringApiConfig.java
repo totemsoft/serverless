@@ -5,12 +5,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.HandlerAdapter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.HandlerMapping;
@@ -25,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import au.com.totemsoft.serverless.elixir.controller.ClientController;
 import au.com.totemsoft.serverless.elixir.controller.SurveyController;
@@ -47,7 +46,7 @@ public class SpringApiConfig implements WebMvcConfigurer {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(new MappingJackson2HttpMessageConverter(objectMapper()));
+        //converters.add(new MappingJackson2HttpMessageConverter(objectMapper()));
     }
 
     @Bean
@@ -55,16 +54,18 @@ public class SpringApiConfig implements WebMvcConfigurer {
         return SpringLambdaContainerHandler.getObjectMapper()
             .setSerializationInclusion(Include.NON_NULL)
             .disable(MapperFeature.DEFAULT_VIEW_INCLUSION)
+            .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
             .enable (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .enable (DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
             //.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm a z"))
+            //.registerModule(new AfterburnerModule())
             ;
     }
 
-    @Bean
-    public HttpMessageConverter<?> jsonMessageConverter(@Autowired ObjectMapper objectMapper) {
-        return new MappingJackson2HttpMessageConverter(objectMapper);
-    }
+//    @Bean
+//    public HttpMessageConverter<?> jsonMessageConverter(@Autowired ObjectMapper objectMapper) {
+//        return new MappingJackson2HttpMessageConverter(objectMapper);
+//    }
 
     /*
      * Create required HandlerMapping, to avoid several default HandlerMapping instances being created

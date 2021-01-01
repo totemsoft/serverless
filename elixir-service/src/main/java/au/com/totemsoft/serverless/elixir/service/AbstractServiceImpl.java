@@ -1,5 +1,7 @@
 package au.com.totemsoft.serverless.elixir.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
 
@@ -7,17 +9,22 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class AbstractServiceImpl {
+
+    protected final Logger log = LogManager.getLogger();
 
     @Value("#{environment.DEBUG ?: 'true'}")
     private boolean debug;
@@ -48,6 +55,9 @@ public class AbstractServiceImpl {
     protected String sub() {
         final Base64.Decoder decoder = Base64.getUrlDecoder();
         String authHeader = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+        if (authHeader == null) {
+            throw new RuntimeException("No HTTP Authorization header found.");
+        }
         String jwtToken = authHeader.split(" ")[1]; // "Bearer jwtToken"
         String[] parts = jwtToken.split("\\.");
         //String headerJson = new String(decoder.decode(parts[0]));
@@ -65,8 +75,21 @@ public class AbstractServiceImpl {
         }
     }
 
-    protected <T> ResponseEntity<T> entity(T body, HttpStatus status) {
+    @SuppressWarnings("unchecked")
+    protected <T> T readValue(String folderId, String name, Class<T> valueType) throws IOException {
+        final ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        uploadService.download(folderId, name, stream);
+        if (String.class.equals(valueType)) {
+            return (T) stream.toString();
+        }
+        return objectMapper.readValue(stream.toByteArray(), valueType);
+    }
+
+    protected <T> ResponseEntity<T> entity(T body, HttpStatus status, MediaType contentType) {
         HttpHeaders responseHeaders = new HttpHeaders();
+        if (contentType != null) {
+            responseHeaders.setContentType(contentType);
+        }
         //responseHeaders.setLocation(location);
         //responseHeaders.set("MyResponseHeader", "MyValue");
         //

@@ -71,7 +71,7 @@ public interface SurveyApi {
         @ApiResponse(code = 200, message = "Success", response = Resource.class),
         @ApiResponse(code = 404, message = "File not found") })
     @RequestMapping(value = "/survey/download/{reference}/{folderId}",
-        produces = { "application/_*" }, 
+        produces = { "application/_*", "image/_*" }, 
         method = RequestMethod.GET)
     default ResponseEntity<Resource> download(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "Folder Id",required=true) @PathVariable("folderId") String folderId,@NotNull @ApiParam(value = "File name", required = true) @Valid @RequestParam(value = "filename", required = true) String filename) {
         return getDelegate().download(reference, folderId, filename);

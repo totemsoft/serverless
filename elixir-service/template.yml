@@ -4,7 +4,8 @@ Transform: AWS::Serverless-2016-10-31
 
 Description: >
   Elixir Survey 
-    Lambda function using an SQS Queue as the trigger and SQS queues as destinations
+    Lambda function using an SQS Queue as the trigger and SQS queues as destinations. 
+    AWS Serverless Spring API - au.com.totemsoft.serverless.elixir::elixir-service
 
 Globals:
   Api:
@@ -13,21 +14,19 @@ Globals:
   Function:
     Timeout: 15
 
-Description: AWS Serverless Spring API - au.com.totemsoft.serverless.elixir::elixir-service
-
 Parameters:
-  HostedZodeId:
-    Type: String
-    Description: Hosted zone where record set needs to be created
-    Default: 'Z1MM5FRLAHJAIW'
-  DomainName:
-    Type: String
-    Description: Custom domain name
-    Default: 'survey-api'
-  TruststoreKey:
-    Type: String
-    Description: Key for trust store file
-    Default: 'truststore.pem'
+#   HostedZodeId:
+#     Type: String
+#     Description: Hosted zone where record set needs to be created
+#     Default: 'Z1MM5FRLAHJAIW'
+#   DomainName:
+#     Type: String
+#     Description: Custom domain name
+#     Default: 'survey-api'
+#   TruststoreKey:
+#     Type: String
+#     Description: Key for trust store file
+#     Default: 'truststore.pem'
   ServerlessRestApi:
     Type: String
     Default: '8cyv1loyhf'
