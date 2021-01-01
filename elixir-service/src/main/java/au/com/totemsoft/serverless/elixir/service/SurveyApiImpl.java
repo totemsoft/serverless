@@ -14,8 +14,6 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -36,11 +34,6 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
 
     private final static String SURVEY_JSON  = ".survey.json";
     private final static String INSURED_JSON = ".insured.json";
-
-    @Autowired
-    @Qualifier("workDocsUploadService")
-    //@Qualifier("s3UploadService")
-    private UploadService uploadService;
 
     @Override
     public SurveyApi getDelegate() {

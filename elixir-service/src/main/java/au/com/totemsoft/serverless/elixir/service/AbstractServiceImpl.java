@@ -27,6 +27,11 @@ public class AbstractServiceImpl {
     protected MessageService messageService;
 
     @Autowired
+    @Qualifier("workDocsUploadService")
+    //@Qualifier("s3UploadService")
+    protected UploadService uploadService;
+
+    @Autowired
     protected ObjectMapper objectMapper;
 
     @Resource
