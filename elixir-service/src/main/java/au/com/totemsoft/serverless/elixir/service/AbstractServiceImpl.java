@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,6 +50,16 @@ public class AbstractServiceImpl {
     }
 
     /**
+     * Current client - derived from JWT (or HTTP Headers).
+     * @return
+     */
+    protected String client() {
+        // TODO:
+        log.warn("TODO: hardcoded client 'AIG' used.");
+        return "AIG";
+    }
+
+    /**
      * Current userId - derived from JWT.
      * @return
      */
@@ -63,7 +74,11 @@ public class AbstractServiceImpl {
         //String headerJson = new String(decoder.decode(parts[0]));
         String payloadJson = new String(decoder.decode(parts[1]));
         //String signatureJson = new String(decoder.decode(parts[2]));
-        return jsonMap(payloadJson).get("sub");
+        final String sub = jsonMap(payloadJson).get("sub");
+        if (StringUtils.isBlank(sub)) {
+            throw new IllegalArgumentException("No 'sub' found in JWT.");
+        }
+        return sub;
     }
 
     protected Map<String, String> jsonMap(String json) {

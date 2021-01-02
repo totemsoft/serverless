@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 
+import au.com.totemsoft.elixir.survey.v1.model.BrokerDetails;
 import au.com.totemsoft.serverless.elixir.service.UploadService;
 
 @Service("s3UploadService")
@@ -46,12 +48,12 @@ public class AwsS3ServiceImpl implements UploadService {
     }
 
     @Override
-    public List<ImmutablePair<String, String>> list() {
+    public List<ImmutablePair<UUID, String>> findByBroker(BrokerDetails broker) {
         throw new IllegalArgumentException("Not implememnted yet.");
     }
 
     @Override
-    public ImmutablePair<String, String> find(String reference) {
+    public ImmutablePair<UUID, String> findByReference(BrokerDetails broker, String reference) {
         throw new IllegalArgumentException("Not implememnted yet.");
     }
 

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import au.com.totemsoft.elixir.survey.v1.api.SurveyApi;
+import au.com.totemsoft.elixir.survey.v1.model.BrokerDetails;
 import au.com.totemsoft.elixir.survey.v1.model.InsuredDetails;
 import au.com.totemsoft.elixir.survey.v1.model.SurveyRequest;
 import au.com.totemsoft.elixir.survey.v1.model.SurveyResponse;
@@ -29,9 +30,6 @@ import au.com.totemsoft.elixir.survey.v1.model.UploadResponse;
 
 @Service("surveyApi")
 public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
-
-    private final static String SURVEY_JSON  = ".survey.json";
-    private final static String INSURED_JSON = ".insured.json";
 
     @Override
     public SurveyApi getDelegate() {
@@ -71,22 +69,18 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
     @Override
     public ResponseEntity<List<SurveyResponse>> findSurveys() {
         try {
-            //
             // find all references
-            List<ImmutablePair<String, String>> folders = uploadService.list();
+            final String userId = sub();
+            final String client = client();
+            final BrokerDetails broker = new BrokerDetails()
+                .id(userId)
+                .client(client);
+            List<ImmutablePair<UUID, String>> folders = uploadService.findByBroker(broker);
             //
             List<SurveyResponse> result = new ArrayList<>();
-            for (ImmutablePair<String, String> folder : folders) {
-                final String key = folder.getKey();
-                final UUID reference;
-                try {
-                    reference = UUID.fromString(key);
-                } catch (IllegalArgumentException ignore) {
-                    // key does not conform to the string representation of UUID
-                    continue;
-                }
+            for (ImmutablePair<UUID, String> folder : folders) {
                 result.add(new SurveyResponse()
-                    .reference(reference)
+                    .reference(folder.getKey())
                     .folderId(folder.getValue())
                 );
             }
@@ -104,9 +98,13 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
     public ResponseEntity<SurveyResponse> findSurvey(UUID reference, String folderId) {
         final String refName = reference.toString();
         try {
-            //
             if (StringUtils.isBlank(folderId)) {
-                ImmutablePair<String, String> folder = uploadService.find(refName);
+                final String userId = sub();
+                final String client = client();
+                final BrokerDetails broker = new BrokerDetails()
+                    .id(userId)
+                    .client(client);
+                ImmutablePair<UUID, String> folder = uploadService.findByReference(broker, refName);
                 if (folder == null) {
                     SurveyResponse error = new SurveyResponse()
                         .reference(reference)
@@ -116,8 +114,8 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
                 folderId = folder.getValue();
             }
             //
-            InsuredDetails insured = readValue(folderId, refName + INSURED_JSON, InsuredDetails.class);
-            String survey = readValue(folderId, refName + SURVEY_JSON, String.class);
+            InsuredDetails insured = readValue(folderId, refName + UploadService.INSURED_JSON, InsuredDetails.class);
+            String survey = readValue(folderId, refName + UploadService.SURVEY_JSON, String.class);
             //
             SurveyResponse result = new SurveyResponse()
                 .reference(reference)
@@ -204,8 +202,27 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
      * @throws IOException
      */
     private void upload(SurveyRequest request) throws IOException {
+        uploadBroker(request);
         uploadSurvey(request);
         uploadInsured(request);
+    }
+
+    /**
+     * Upload Broker details JSON document.
+     * @param request
+     * @throws IOException
+     */
+    private void uploadBroker(SurveyRequest request) throws IOException {
+        final BrokerDetails broker = request.getBroker();
+        if (broker == null) {
+            return;
+        }
+        // upload Broker JSON document
+        final String name = request.getReference() + UploadService.BROKER_JSON;
+        final String fileNote = "Broker details JSON document";
+        final Resource resource = new ByteArrayResource(objectMapper.writeValueAsBytes(broker));
+        /*String documentId = */uploadService.upload(request.getFolderId(), resource,
+            metadata(name, MediaType.APPLICATION_JSON_VALUE, fileNote));
     }
 
     /**
@@ -214,15 +231,14 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
      * @throws IOException
      */
     private void uploadSurvey(SurveyRequest request) throws IOException {
-        final UUID reference = request.getReference();
-        final String refName = reference.toString();
-        if (StringUtils.isBlank(request.getSurvey())) {
-            return; // TODO: throw ???
+        final String survey = request.getSurvey();
+        if (StringUtils.isBlank(survey)) {
+            return;
         }
         // upload Survey JSON document
-        final String name = refName + SURVEY_JSON;
+        final String name = request.getReference() + UploadService.SURVEY_JSON;
         final String fileNote = "Survey JSON document";
-        Resource resource = new ByteArrayResource(request.getSurvey().getBytes());
+        final Resource resource = new ByteArrayResource(survey.getBytes());
         /*String documentId = */uploadService.upload(request.getFolderId(), resource,
             metadata(name, MediaType.APPLICATION_JSON_VALUE, fileNote));
     }
@@ -233,23 +249,20 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
      * @throws IOException
      */
     private void uploadInsured(SurveyRequest request) throws IOException {
-        final UUID reference = request.getReference();
-        final String refName = reference.toString();
         final InsuredDetails insured = request.getInsured();
         if (insured == null) {
-            return; // TODO: throw ???
+            return;
         }
         // upload Insured JSON document
-        final String name = refName + INSURED_JSON;
+        final String name = request.getReference() + UploadService.INSURED_JSON;
         final String fileNote = "Insured details JSON document";
-        Resource resource = new ByteArrayResource(objectMapper.writeValueAsBytes(insured));
+        final Resource resource = new ByteArrayResource(objectMapper.writeValueAsBytes(insured));
         /*String documentId = */uploadService.upload(request.getFolderId(), resource,
             metadata(name, MediaType.APPLICATION_JSON_VALUE, fileNote));
     }
 
     @Override
     public ResponseEntity<Resource> download(UUID reference, String folderId, String filename) {
-        final String refName = reference.toString();
         try {
             // get from document store
             final ByteArrayOutputStream content = new ByteArrayOutputStream();

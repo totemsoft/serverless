@@ -53,9 +53,6 @@ public class ClientApiImpl extends AbstractServiceImpl implements ClientApi {
         // retrieve subject from token
         if (StringUtils.isBlank(userId)) {
             userId = sub();
-            if (StringUtils.isBlank(userId)) {
-                throw new IllegalArgumentException("No 'sub' found in JWT.");
-            }
         }
         //
         ClientResponse[] result = readValue(usersFolderId, userId, ClientResponse[].class);
