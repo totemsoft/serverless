@@ -13,6 +13,8 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.Resource;
 
 import com.amazonaws.SdkClientException;
@@ -42,6 +44,8 @@ import com.amazonaws.services.workdocs.model.UploadMetadata;
 import com.amazonaws.services.workdocs.model.User;
 
 public class WorkDocsHelper {
+
+    private static final Logger LOG = LogManager.getLogger();
 
     public static List<User> describeUsers(AmazonWorkDocs client, String organizationId, String userName) {
         DescribeUsersRequest request = new DescribeUsersRequest();
@@ -221,7 +225,8 @@ public class WorkDocsHelper {
             InputStream inputStream = resource.getInputStream();
             OutputStream outputStream = connection.getOutputStream();)
         {
-            IOUtils.copy(inputStream, outputStream);
+            int bytesCopied = IOUtils.copy(inputStream, outputStream);
+            LOG.info("bytesCopied=" + bytesCopied);
         }
         // Very misleading. Getting a 200 only means the call succeeded, not that the copy worked.
         return connection.getResponseCode();  // int where 200 == success

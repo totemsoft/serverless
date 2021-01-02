@@ -30,8 +30,8 @@ import au.com.totemsoft.elixir.survey.v1.model.UploadResponse;
 @Service("surveyApi")
 public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
 
-    private final static String SURVEY_JSON  = "-survey.json";
-    private final static String INSURED_JSON = "-insured.json";
+    private final static String SURVEY_JSON  = ".survey.json";
+    private final static String INSURED_JSON = ".insured.json";
 
     @Override
     public SurveyApi getDelegate() {
@@ -49,8 +49,7 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
             final String folderId = uploadService.mkdir(refName);
             surveyRequest.setFolderId(folderId);
             //
-            uploadSurvey(surveyRequest);
-            uploadInsured(surveyRequest);
+            upload(surveyRequest);
             //
             // send message via JMS (AWS SQS) - Elixir instance pickup and do job
             // get/create file with insured file reference (UUID)
@@ -140,7 +139,7 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
         final UUID reference = surveyRequest.getReference();
         try {
             //
-            uploadSurvey(surveyRequest);
+            upload(surveyRequest);
             //
             // send message via JMS (AWS SQS) - Elixir instance pickup and do job
             // get/create file with insured file reference (UUID)
@@ -197,6 +196,16 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
         metadata.put(UploadService.LAST_MODIFIED, new Date()); // TODO: not used
         metadata.put(UploadService.FILE_NOTE, fileNote); // TODO: not used
         return metadata;
+    }
+
+    /**
+     * Upload JSON documents.
+     * @param request
+     * @throws IOException
+     */
+    private void upload(SurveyRequest request) throws IOException {
+        uploadSurvey(request);
+        uploadInsured(request);
     }
 
     /**
