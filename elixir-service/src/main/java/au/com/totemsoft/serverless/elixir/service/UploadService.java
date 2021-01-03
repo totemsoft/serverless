@@ -14,10 +14,6 @@ import au.com.totemsoft.elixir.survey.v1.model.BrokerDetails;
 
 public interface UploadService {
 
-    String BROKER_JSON  = ".broker.json";
-    String SURVEY_JSON  = ".survey.json";
-    String INSURED_JSON = ".insured.json";
-
     String NAME = "name";
 
     String LAST_MODIFIED = "lastModified";
@@ -26,6 +22,10 @@ public interface UploadService {
     String CONTENT_TYPE = "contentType";
 
     String FILE_NOTE = "fileNote";
+
+    default String brokerFile(UUID reference) { return ".broker.json"; }
+    default String insuredFile(UUID reference) { return ".insured.json"; }
+    default String surveyFile(UUID reference) { return ".survey.json"; }
 
     List<ImmutablePair<UUID, String>> findByBroker(BrokerDetails broker) throws IOException;
 

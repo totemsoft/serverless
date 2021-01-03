@@ -114,8 +114,8 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
                 folderId = folder.getValue();
             }
             //
-            InsuredDetails insured = readValue(folderId, refName + UploadService.INSURED_JSON, InsuredDetails.class);
-            String survey = readValue(folderId, refName + UploadService.SURVEY_JSON, String.class);
+            InsuredDetails insured = readValue(folderId, uploadService.insuredFile(reference), InsuredDetails.class);
+            String survey = readValue(folderId, uploadService.surveyFile(reference), String.class);
             //
             SurveyResponse result = new SurveyResponse()
                 .reference(reference)
@@ -218,7 +218,7 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
             return;
         }
         // upload Broker JSON document
-        final String name = request.getReference() + UploadService.BROKER_JSON;
+        final String name = uploadService.brokerFile(request.getReference());
         final String fileNote = "Broker details JSON document";
         final Resource resource = new ByteArrayResource(objectMapper.writeValueAsBytes(broker));
         /*String documentId = */uploadService.upload(request.getFolderId(), resource,
@@ -236,7 +236,7 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
             return;
         }
         // upload Survey JSON document
-        final String name = request.getReference() + UploadService.SURVEY_JSON;
+        final String name = uploadService.surveyFile(request.getReference());
         final String fileNote = "Survey JSON document";
         final Resource resource = new ByteArrayResource(survey.getBytes());
         /*String documentId = */uploadService.upload(request.getFolderId(), resource,
@@ -254,7 +254,7 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
             return;
         }
         // upload Insured JSON document
-        final String name = request.getReference() + UploadService.INSURED_JSON;
+        final String name = uploadService.insuredFile(request.getReference());
         final String fileNote = "Insured details JSON document";
         final Resource resource = new ByteArrayResource(objectMapper.writeValueAsBytes(insured));
         /*String documentId = */uploadService.upload(request.getFolderId(), resource,

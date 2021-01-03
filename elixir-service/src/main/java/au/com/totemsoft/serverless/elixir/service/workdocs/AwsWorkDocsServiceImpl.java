@@ -25,7 +25,6 @@ import com.amazonaws.services.workdocs.model.FolderMetadata;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import au.com.totemsoft.elixir.survey.v1.model.BrokerDetails;
-import au.com.totemsoft.elixir.survey.v1.model.InsuredDetails;
 import au.com.totemsoft.serverless.elixir.service.UploadService;
 
 @Service("workDocsUploadService")
@@ -83,7 +82,7 @@ public class AwsWorkDocsServiceImpl implements UploadService {
                 }
                 final String folderId = folder.getId();
                 // filter by broker's client
-                BrokerDetails thisBroker = readValue(folderId, refName + BROKER_JSON, BrokerDetails.class);
+                BrokerDetails thisBroker = readValue(folderId, brokerFile(ref), BrokerDetails.class);
                 if (thisBroker != null && thisBroker.getClient().equals(broker.getClient())) {
                     result.add(new ImmutablePair<>(ref, folderId));
                 }
@@ -109,7 +108,7 @@ public class AwsWorkDocsServiceImpl implements UploadService {
                     continue;
                 }
                 // filter by broker's client
-                BrokerDetails thisBroker = readValue(folder.getId(), refName + BROKER_JSON, BrokerDetails.class);
+                BrokerDetails thisBroker = readValue(folder.getId(), brokerFile(ref), BrokerDetails.class);
                 if (thisBroker == null) {
                     throw new IllegalArgumentException("No broker found for " + reference);
                 }
