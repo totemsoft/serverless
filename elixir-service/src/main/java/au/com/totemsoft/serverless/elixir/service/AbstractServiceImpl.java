@@ -50,16 +50,6 @@ public class AbstractServiceImpl {
     }
 
     /**
-     * Current client - derived from JWT (or HTTP Headers).
-     * @return
-     */
-    protected String client() {
-        // TODO:
-        log.warn("TODO: hardcoded client 'AIG' used.");
-        return "AIG";
-    }
-
-    /**
      * Current userId - derived from JWT.
      * @return
      */

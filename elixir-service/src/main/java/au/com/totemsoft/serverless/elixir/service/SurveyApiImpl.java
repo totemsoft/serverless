@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<SurveyResponse> createSurvey(SurveyRequest surveyRequest) {
+    public ResponseEntity<SurveyResponse> createSurvey(String client, SurveyRequest surveyRequest, Optional<String> location) {
         final UUID reference = UUID.randomUUID();
         surveyRequest.setReference(reference);
         final String refName = reference.toString();
@@ -67,14 +68,13 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<List<SurveyResponse>> findSurveys() {
+    public ResponseEntity<List<SurveyResponse>> findSurveys(String client, Optional<String> location) {
         try {
             // find all references
             final String userId = sub();
-            final String client = client();
             final BrokerDetails broker = new BrokerDetails()
                 .id(userId)
-                .client(client);
+                .client(location.orElse(client));
             List<ImmutablePair<UUID, String>> folders = uploadService.findByBroker(broker);
             //
             List<SurveyResponse> result = new ArrayList<>();
@@ -95,15 +95,14 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<SurveyResponse> findSurvey(UUID reference, String folderId) {
+    public ResponseEntity<SurveyResponse> findSurvey(String client, UUID reference, String folderId, Optional<String> location) {
         final String refName = reference.toString();
         try {
             if (StringUtils.isBlank(folderId)) {
                 final String userId = sub();
-                final String client = client();
                 final BrokerDetails broker = new BrokerDetails()
                     .id(userId)
-                    .client(client);
+                    .client(location.orElse(client));
                 ImmutablePair<UUID, String> folder = uploadService.findByReference(broker, refName);
                 if (folder == null) {
                     SurveyResponse error = new SurveyResponse()
@@ -121,6 +120,7 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
                 .reference(reference)
                 .folderId(folderId)
                 .insured(insured)
+                .broker(broker)
                 .survey(survey);
             //
             return entity(result, null, null);
@@ -133,7 +133,7 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<SurveyResponse> updateSurvey(SurveyRequest surveyRequest) {
+    public ResponseEntity<SurveyResponse> updateSurvey(String client, SurveyRequest surveyRequest, Optional<String> location) {
         final UUID reference = surveyRequest.getReference();
         try {
             //

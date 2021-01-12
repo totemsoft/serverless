@@ -60,9 +60,11 @@ paths:
   /survey/create:
     post:
       summary: Create Survey.
-      description: Create Survey for user (current selected client).
+      description: Create Survey for user (current selected client/location).
       operationId: createSurvey
       parameters:
+        - $ref: '#/parameters/RequestHeader_Client'
+        - $ref: '#/parameters/RequestHeader_Location'
         - $ref: '#/parameters/SurveyRequest'
       responses:
         200:
@@ -72,8 +74,11 @@ paths:
   /survey/find:
     get:
       summary: Find all Surveys for user.
-      description: Find all Surveys for user (current selected client).
+      description: Find all Surveys for user (current selected client/location).
       operationId: findSurveys
+      parameters:
+        - $ref: '#/parameters/RequestHeader_Client'
+        - $ref: '#/parameters/RequestHeader_Location'
       responses:
         200:
           description: An array of SurveyResponse(s)
@@ -87,6 +92,8 @@ paths:
       description: Get Survey (by reference).
       operationId: findSurvey
       parameters:
+        - $ref: '#/parameters/RequestHeader_Client'
+        - $ref: '#/parameters/RequestHeader_Location'
         - $ref: '#/parameters/Reference'
         - $ref: '#/parameters/FolderId'
       responses:
@@ -100,6 +107,8 @@ paths:
       description: Update Survey (for reference).
       operationId: updateSurvey
       parameters:
+        - $ref: '#/parameters/RequestHeader_Client'
+        - $ref: '#/parameters/RequestHeader_Location'
         - $ref: '#/parameters/SurveyRequest'
       responses:
         200:
@@ -160,6 +169,18 @@ paths:
 # parameters
 #
 parameters:
+  RequestHeader_Client:
+    in: header
+    name: client
+    description: Client Name
+    type: string
+    required: true
+  RequestHeader_Location:
+    in: header
+    name: location
+    description: Location Name
+    type: string
+    #required: false
   UserId:
     in: path
     name: userId
