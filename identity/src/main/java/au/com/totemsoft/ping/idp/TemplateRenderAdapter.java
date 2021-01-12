@@ -45,6 +45,8 @@ public class TemplateRenderAdapter implements IdpAuthenticationAdapterV2, AuthnA
 
     public static final String TYPE = "" + TemplateRenderAdapter.class.getSimpleName();
 
+    private static final String DESCRIPTION = "HTML Template Render Adapter";
+
     private PluginConfiguration config;
 
     private IdpAuthnAdapterDescriptor descriptor;
@@ -58,8 +60,11 @@ public class TemplateRenderAdapter implements IdpAuthenticationAdapterV2, AuthnA
     }
 
     public TemplateRenderAdapter() {
-        final AdapterConfigurationGuiDescriptor guiDescriptor = new AdapterConfigurationGuiDescriptor(TYPE);
-        this.config = new PluginConfiguration(this, TYPE, TYPE);
+        final AdapterConfigurationGuiDescriptor guiDescriptor = new AdapterConfigurationGuiDescriptor(DESCRIPTION);
+        this.config = new PluginConfiguration(this, TYPE, DESCRIPTION);
+
+        // config field(s)
+        this.config.getFields().forEach(f -> guiDescriptor.addField(f));
 
         // extra config field(s)
         TextFieldDescriptor formTemplate = new TextFieldDescriptor(FORM_TEMPLATE_NAME, FORM_TEMPLATE_NAME_DESC);

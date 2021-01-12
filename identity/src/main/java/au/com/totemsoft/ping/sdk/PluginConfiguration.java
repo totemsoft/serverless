@@ -2,6 +2,7 @@ package au.com.totemsoft.ping.sdk;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sourceid.saml20.adapter.conf.Configuration;
 import org.sourceid.saml20.adapter.gui.ClientCertKeypairFieldDescriptor;
+import org.sourceid.saml20.adapter.gui.FieldDescriptor;
 import org.sourceid.saml20.adapter.gui.TextFieldDescriptor;
 import org.sourceid.saml20.adapter.gui.validation.impl.RequiredFieldValidator;
 import org.sourceid.saml20.adapter.gui.validation.impl.URLValidator;
@@ -96,6 +98,12 @@ public class PluginConfiguration implements PcvConstants {
         guiDescriptor.addField(scopeDetails);
 
         return guiDescriptor;
+    }
+
+    public List<FieldDescriptor> getFields() {
+        return pluginDescriptor.getGuiConfigDescriptorBuilder()
+            .buildNewGuiDescriptor()
+            .getFields();
     }
 
     /**
