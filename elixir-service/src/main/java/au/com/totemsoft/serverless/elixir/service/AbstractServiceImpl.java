@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,8 @@ import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import au.com.totemsoft.elixir.survey.v1.model.BrokerDetails;
 
 public class AbstractServiceImpl {
 
@@ -47,6 +50,13 @@ public class AbstractServiceImpl {
 
     protected HttpServletRequest httpServletRequest() {
         return httpServletRequest;
+    }
+
+    protected BrokerDetails broker(String client, Optional<String> location) {
+        final String userId = sub();
+        return new BrokerDetails()
+            .id(userId)
+            .client(location.orElse(client));
     }
 
     /**
