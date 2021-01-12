@@ -30,6 +30,8 @@
         <amazonaws.version>1.11.847</amazonaws.version>
         <amazonaws-sqs.version>1.0.8</amazonaws-sqs.version>
 
+        <quarkus.version>1.9.2.Final</quarkus.version>
+
         <spring-mobile.version>1.1.5.RELEASE</spring-mobile.version>
         <spring-cloud.version>2.2.2.RELEASE</spring-cloud.version>
         <log4j.version>2.13.3</log4j.version>
@@ -43,6 +45,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <!--dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-bom</artifactId>
+                <version>${quarkus.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement-->
+
     <dependencies>
         <dependency>
             <groupId>au.com.totemsoft.serverless.schema</groupId>
@@ -53,6 +67,11 @@
         <dependency>
             <groupId>com.amazonaws.serverless</groupId>
             <artifactId>aws-serverless-java-container-spring</artifactId>
+            <version>${aws-serverless}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws.serverless</groupId>
+            <artifactId>aws-serverless-java-container-core</artifactId>
             <version>${aws-serverless}</version>
         </dependency>
 
@@ -83,6 +102,23 @@
             <artifactId>aws-java-sdk-s3</artifactId>
             <version>${amazonaws.version}</version>
         </dependency>
+
+        <!--dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-amazon-lambda</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-spring-di</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-amazon-lambda-http</artifactId>
+        </dependency-->
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -168,6 +204,26 @@
             <version>${log4j.version}</version>
         </dependency-->
     </dependencies>
+
+    <!--build>
+        <plugins>
+            <plugin>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-maven-plugin</artifactId>
+                <version>${quarkus.version}</version>
+                <configuration>
+                    <uberJar>true</uberJar>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build-->
 
     <profiles>
         <profile>

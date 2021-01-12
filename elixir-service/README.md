@@ -86,6 +86,8 @@ Asynchronous invocation
 aws lambda invoke --function-name elixir-service-ElixirServiceFunction-17O69M1FYNDJI --invocation-type Event\
   --payload '{ "path": "/health" }'\
   response.json
+
+aws lambda invoke  --function-name findClients outfile=findClients.txt
 ```
 
 Copy the `OutputValue` into a browser or use curl to test your first request:
