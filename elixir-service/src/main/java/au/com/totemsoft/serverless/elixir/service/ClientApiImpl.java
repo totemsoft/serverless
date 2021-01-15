@@ -52,7 +52,7 @@ public class ClientApiImpl extends AbstractServiceImpl implements ClientApi {
     private List<ClientResponse> findClients(String userId) throws IOException {
         // retrieve subject from token
         if (StringUtils.isBlank(userId)) {
-            userId = sub();
+            userId = userId();
         }
         //
         ClientResponse[] result = readValue(usersFolderId, userId, ClientResponse[].class);

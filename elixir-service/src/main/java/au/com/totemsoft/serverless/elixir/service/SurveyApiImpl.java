@@ -59,7 +59,9 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
             //
             SurveyResponse result = new SurveyResponse()
                 .reference(reference)
-                .folderId(folderId);
+                .folderId(folderId)
+                .broker(broker)
+                ;
             //
             return entity(result, null, null);
         } catch (Exception e) {

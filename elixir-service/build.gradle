@@ -25,6 +25,8 @@ dependencies {
     'com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8',
     'com.amazonaws:aws-java-sdk-workdocs:1.11.847',
     'com.amazonaws:aws-java-sdk-s3:1.11.847',
+    'io.quarkus:quarkus-amazon-lambda:1.9.2.Final',
+    'io.quarkus:quarkus-spring-di:1.9.2.Final',
     'au.com.totemsoft.serverless.schema:survey:1.0.0-SNAPSHOT',
   )
 

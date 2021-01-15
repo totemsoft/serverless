@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +54,7 @@ public class AbstractServiceImpl {
     }
 
     protected BrokerDetails broker(String client, Optional<String> location) {
-        final String userId = sub();
+        final String userId = userId();
         return new BrokerDetails()
             .id(userId)
             .client(location.orElse(client));
@@ -63,7 +64,7 @@ public class AbstractServiceImpl {
      * Current userId - derived from JWT.
      * @return
      */
-    protected String sub() {
+    protected String userId() {
         final Base64.Decoder decoder = Base64.getUrlDecoder();
         String authHeader = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         if (authHeader == null) {
@@ -74,11 +75,30 @@ public class AbstractServiceImpl {
         //String headerJson = new String(decoder.decode(parts[0]));
         String payloadJson = new String(decoder.decode(parts[1]));
         //String signatureJson = new String(decoder.decode(parts[2]));
-        final String sub = jsonMap(payloadJson).get("sub");
-        if (StringUtils.isBlank(sub)) {
-            throw new IllegalArgumentException("No 'sub' found in JWT.");
+        //
+        log.info(payloadJson);
+        // username
+        final String username = jsonMap(payloadJson).get("username");
+        if (StringUtils.isNotBlank(username)) {
+            return username;
         }
-        return sub;
+        // cognito:username
+        final String cognitoUsername = jsonMap(payloadJson).get("cognito:username");
+        if (StringUtils.isNotBlank(cognitoUsername)) {
+            return cognitoUsername;
+        }
+        // sub
+        final String sub = jsonMap(payloadJson).get("sub");
+        if (StringUtils.isNotBlank(sub)) {
+            try {
+                UUID.fromString(sub);
+            } catch (IllegalArgumentException ignore) {
+                // key does not conform to the string representation of UUID
+                return sub;
+            }
+        }
+        //
+        throw new IllegalArgumentException("No userId mapping found in JWT.");
     }
 
     protected Map<String, String> jsonMap(String json) {
