@@ -3,7 +3,6 @@ package au.com.totemsoft.elixir.survey.v1.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -19,8 +18,8 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(description = "Location.")
 
 public class Location   {
-  @JsonProperty("reference")
-  private UUID reference;
+  @JsonProperty("id")
+  private Integer id;
 
   @JsonProperty("name")
   private String name;
@@ -29,26 +28,25 @@ public class Location   {
   @Valid
   private List<Address> addresses = null;
 
-  public Location reference(UUID reference) {
-    this.reference = reference;
+  public Location id(Integer id) {
+    this.id = id;
     return this;
   }
 
   /**
-   * Reference (Survey Id)
-   * @return reference
+   * Entity Id (primary key)
+   * @return id
   */
-  @ApiModelProperty(required = true, value = "Reference (Survey Id)")
+  @ApiModelProperty(required = true, value = "Entity Id (primary key)")
   @NotNull
 
-  @Valid
 
-  public UUID getReference() {
-    return reference;
+  public Integer getId() {
+    return id;
   }
 
-  public void setReference(UUID reference) {
-    this.reference = reference;
+  public void setId(Integer id) {
+    this.id = id;
   }
 
   public Location name(String name) {
@@ -111,14 +109,14 @@ public class Location   {
       return false;
     }
     Location location = (Location) o;
-    return Objects.equals(this.reference, location.reference) &&
+    return Objects.equals(this.id, location.id) &&
         Objects.equals(this.name, location.name) &&
         Objects.equals(this.addresses, location.addresses);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(reference, name, addresses);
+    return Objects.hash(id, name, addresses);
   }
 
   @Override
@@ -126,7 +124,7 @@ public class Location   {
     StringBuilder sb = new StringBuilder();
     sb.append("class Location {\n");
     
-    sb.append("    reference: ").append(toIndentedString(reference)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    addresses: ").append(toIndentedString(addresses)).append("\n");
     sb.append("}");

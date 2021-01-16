@@ -223,6 +223,10 @@ definitions:
     type: string
     format: UUID
   #
+  Id:
+    description: Entity Id (primary key)
+    type: integer
+  #
   FolderId:
     description: Folder Id
     type: string
@@ -301,9 +305,12 @@ definitions:
     description: Address details
     type: object
     required:
+    - id
     - type
     - addressLine1
     properties:
+      id:
+        $ref: '#/definitions/Id'
       type:
         $ref: '#/definitions/AddressType'
       addressLine1:
@@ -347,11 +354,11 @@ definitions:
     description: Location.
     type: object
     required:
+    - id
     - name
-    - reference
     properties:
-      reference:
-        $ref: '#/definitions/Reference'
+      id:
+        $ref: '#/definitions/Id'
       name:
         description: Location name
         type: string

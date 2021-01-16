@@ -16,6 +16,9 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(description = "Address details")
 
 public class Address   {
+  @JsonProperty("id")
+  private Integer id;
+
   @JsonProperty("type")
   private AddressType type;
 
@@ -33,6 +36,27 @@ public class Address   {
 
   @JsonProperty("postCode")
   private String postCode;
+
+  public Address id(Integer id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Entity Id (primary key)
+   * @return id
+  */
+  @ApiModelProperty(required = true, value = "Entity Id (primary key)")
+  @NotNull
+
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
   public Address type(AddressType type) {
     this.type = type;
@@ -167,7 +191,8 @@ public class Address   {
       return false;
     }
     Address address = (Address) o;
-    return Objects.equals(this.type, address.type) &&
+    return Objects.equals(this.id, address.id) &&
+        Objects.equals(this.type, address.type) &&
         Objects.equals(this.addressLine1, address.addressLine1) &&
         Objects.equals(this.addressLine2, address.addressLine2) &&
         Objects.equals(this.suburb, address.suburb) &&
@@ -177,7 +202,7 @@ public class Address   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, addressLine1, addressLine2, suburb, state, postCode);
+    return Objects.hash(id, type, addressLine1, addressLine2, suburb, state, postCode);
   }
 
   @Override
@@ -185,6 +210,7 @@ public class Address   {
     StringBuilder sb = new StringBuilder();
     sb.append("class Address {\n");
     
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    addressLine1: ").append(toIndentedString(addressLine1)).append("\n");
     sb.append("    addressLine2: ").append(toIndentedString(addressLine2)).append("\n");
