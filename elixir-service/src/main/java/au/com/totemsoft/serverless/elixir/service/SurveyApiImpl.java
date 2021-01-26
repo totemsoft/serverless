@@ -27,6 +27,7 @@ import au.com.totemsoft.elixir.survey.v1.model.BrokerDetails;
 import au.com.totemsoft.elixir.survey.v1.model.InsuredDetails;
 import au.com.totemsoft.elixir.survey.v1.model.SurveyRequest;
 import au.com.totemsoft.elixir.survey.v1.model.SurveyResponse;
+import au.com.totemsoft.elixir.survey.v1.model.SurveySummaryResponse;
 import au.com.totemsoft.elixir.survey.v1.model.UploadResponse;
 
 @Service("surveyApi")
@@ -38,7 +39,7 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<SurveyResponse> createSurvey(String client, SurveyRequest surveyRequest, Optional<String> location) {
+    public ResponseEntity<SurveySummaryResponse> createSurvey(String client, SurveyRequest surveyRequest, Optional<String> location) {
         final BrokerDetails broker = broker(client, location);
         surveyRequest.setBroker(broker);
         //
@@ -57,15 +58,14 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
             // get/create file with insured file reference (UUID)
             messageService.sendMessage(surveyRequest);
             //
-            SurveyResponse result = new SurveyResponse()
+            SurveySummaryResponse result = new SurveySummaryResponse()
                 .reference(reference)
                 .folderId(folderId)
-                .broker(broker)
                 ;
             //
             return entity(result, null, null);
         } catch (Exception e) {
-            SurveyResponse error = new SurveyResponse()
+            SurveySummaryResponse error = new SurveySummaryResponse()
                 .reference(reference)
                 .message(error(e));
             return entity(error, HttpStatus.INTERNAL_SERVER_ERROR, null);
@@ -73,25 +73,24 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<List<SurveyResponse>> findSurveys(String client, Optional<String> location) {
+    public ResponseEntity<List<SurveySummaryResponse>> findSurveys(String client, Optional<String> location) {
         final BrokerDetails broker = broker(client, location);
         //
         try {
             // find all references
             List<ImmutablePair<UUID, String>> folders = uploadService.findByBroker(broker);
-            List<SurveyResponse> result = new ArrayList<>();
+            List<SurveySummaryResponse> result = new ArrayList<>();
             for (ImmutablePair<UUID, String> folder : folders) {
-                result.add(new SurveyResponse()
+                result.add(new SurveySummaryResponse()
                     .reference(folder.getKey())
                     .folderId(folder.getValue())
-                    .broker(broker)
                 );
             }
             //
             return entity(result, null, null);
         } catch (Exception e) {
-            List<SurveyResponse> error = Arrays.asList(
-                new SurveyResponse()
+            List<SurveySummaryResponse> error = Arrays.asList(
+                new SurveySummaryResponse()
                     .message(error(e)));
             return entity(error, HttpStatus.INTERNAL_SERVER_ERROR, null);
         }

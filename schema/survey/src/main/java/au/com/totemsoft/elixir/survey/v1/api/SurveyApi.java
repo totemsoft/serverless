@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import au.com.totemsoft.elixir.survey.v1.model.SurveyRequest;
 import au.com.totemsoft.elixir.survey.v1.model.SurveyResponse;
+import au.com.totemsoft.elixir.survey.v1.model.SurveySummaryResponse;
 import au.com.totemsoft.elixir.survey.v1.model.UploadResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -48,14 +49,14 @@ public interface SurveyApi {
      * @param location Location Name (optional)
      * @return Success (status code 200)
      */
-    @ApiOperation(value = "Create Survey.", nickname = "createSurvey", notes = "Create Survey for user (current selected client/location).", response = SurveyResponse.class, tags={  })
+    @ApiOperation(value = "Create Survey.", nickname = "createSurvey", notes = "Create Survey for user (current selected client/location).", response = SurveySummaryResponse.class, tags={  })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Success", response = SurveyResponse.class) })
+        @ApiResponse(code = 200, message = "Success", response = SurveySummaryResponse.class) })
     @RequestMapping(value = "/survey/create",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    default ResponseEntity<SurveyResponse> createSurvey(@ApiParam(value = "Client Name" ,required=true) @RequestHeader(value="client", required=true) String client,@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody SurveyRequest surveyRequest,@ApiParam(value = "Location Name" ) @RequestHeader(value="location", required=false) Optional<String> location) {
+    default ResponseEntity<SurveySummaryResponse> createSurvey(@ApiParam(value = "Client Name" ,required=true) @RequestHeader(value="client", required=true) String client,@ApiParam(value = "Survey Request" ,required=true )  @Valid @RequestBody SurveyRequest surveyRequest,@ApiParam(value = "Location Name" ) @RequestHeader(value="location", required=false) Optional<String> location) {
         return getDelegate().createSurvey(client, surveyRequest, location);
     }
 
@@ -111,13 +112,13 @@ public interface SurveyApi {
      * @param location Location Name (optional)
      * @return An array of SurveyResponse(s) (status code 200)
      */
-    @ApiOperation(value = "Find all Surveys for user.", nickname = "findSurveys", notes = "Find all Surveys for user (current selected client/location).", response = SurveyResponse.class, responseContainer = "List", tags={  })
+    @ApiOperation(value = "Find all Surveys for user.", nickname = "findSurveys", notes = "Find all Surveys for user (current selected client/location).", response = SurveySummaryResponse.class, responseContainer = "List", tags={  })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "An array of SurveyResponse(s)", response = SurveyResponse.class, responseContainer = "List") })
+        @ApiResponse(code = 200, message = "An array of SurveyResponse(s)", response = SurveySummaryResponse.class, responseContainer = "List") })
     @RequestMapping(value = "/survey/find",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<List<SurveyResponse>> findSurveys(@ApiParam(value = "Client Name" ,required=true) @RequestHeader(value="client", required=true) String client,@ApiParam(value = "Location Name" ) @RequestHeader(value="location", required=false) Optional<String> location) {
+    default ResponseEntity<List<SurveySummaryResponse>> findSurveys(@ApiParam(value = "Client Name" ,required=true) @RequestHeader(value="client", required=true) String client,@ApiParam(value = "Location Name" ) @RequestHeader(value="location", required=false) Optional<String> location) {
         return getDelegate().findSurveys(client, location);
     }
 

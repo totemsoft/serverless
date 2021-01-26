@@ -70,7 +70,7 @@ paths:
         200:
           description: Success
           schema:
-            $ref: '#/definitions/SurveyResponse'
+            $ref: '#/definitions/SurveySummaryResponse'
   /survey/find:
     get:
       summary: Find all Surveys for user.
@@ -85,7 +85,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/SurveyResponse'
+              $ref: '#/definitions/SurveySummaryResponse'
   /survey/find/{reference}/{folderId}:
     get:
       summary: Get Survey.
@@ -252,6 +252,17 @@ definitions:
         $ref: '#/definitions/InsuredDetails'
       survey:
         $ref: '#/definitions/SurveyDocument'
+  #
+  SurveySummaryResponse:
+    description: Survey Summary details.
+    type: object
+    properties:
+      reference:
+        $ref: '#/definitions/Reference'
+      folderId:
+        $ref: '#/definitions/FolderId'
+      message:
+        $ref: '#/definitions/Message'
   #
   SurveyResponse:
     description: Survey details.
