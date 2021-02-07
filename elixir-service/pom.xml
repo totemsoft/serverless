@@ -211,12 +211,13 @@
         </dependency-->
     </dependencies>
 
-    <!--build>
+    <build>
         <plugins>
             <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
                 <version>${quarkus.version}</version>
+                <extensions>true</extensions>
                 <configuration>
                     <uberJar>true</uberJar>
                 </configuration>
@@ -224,14 +225,22 @@
                     <execution>
                         <goals>
                             <goal>build</goal>
+                            <goal>generate-code</goal>
+                            <goal>generate-code-tests</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
-    </build-->
+    </build>
 
     <profiles>
+        <profile>
+            <id>native</id>
+            <properties>
+                <quarkus.package.type>native</quarkus.package.type>
+            </properties>
+        </profile>
         <profile>
             <id>shaded-jar</id>
             <build>
