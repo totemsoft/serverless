@@ -102,3 +102,14 @@ $ curl -s https://xxxxxxxxxx.execute-api.ap-southeast-2.amazonaws.com/Prod/surve
 ## AWS Cognito
 https://docs.aws.amazon.com/cognito/latest/developerguide/token-endpoint.html
 Access token url: https://elixir.auth.ap-southeast-2.amazoncognito.com/oauth2/token
+
+## [GraalVM](https://www.graalvm.org/docs/getting-started/)
+[releases](https://github.com/graalvm/graalvm-ce-builds/releases/tag/vm-20.3.1)
+
+
+## [Quarkus](https://quarkus.io/guides/maven-tooling)
+The list of the available Docker images can be found on [quay.io](https://quay.io/repository/quarkus/ubi-quarkus-native-image?tab=tags)
+
+    docker pull quay.io/quarkus/ubi-quarkus-native-image:20.3.1-java11
+    ./mvnw package -Dnative -Dquarkus.native.container-build=true
+

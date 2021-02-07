@@ -114,15 +114,35 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
                 folderId = folder.getValue();
             }
             //
-            InsuredDetails insured = readValue(folderId, uploadService.insuredFile(reference), InsuredDetails.class);
-            String survey = readValue(folderId, uploadService.surveyFile(reference), String.class);
+            String message = null;
+            //
+            InsuredDetails insured;
+            try {
+                insured = readValue(folderId, uploadService.insuredFile(reference), InsuredDetails.class);
+            } catch (IOException e) {
+                String msg = "No insured found: " + reference;
+                log.warn(msg);
+                message = msg;
+                insured = null;
+            }
+            //
+            String survey;
+            try {
+                survey = readValue(folderId, uploadService.surveyFile(reference), String.class);
+            } catch (IOException e) {
+                String msg = "No survey found: " + reference;
+                log.warn(msg);
+                message = message == null ? msg : message + "\n" + msg;
+                survey = null;
+            }
             //
             SurveyResponse result = new SurveyResponse()
                 .reference(reference)
                 .folderId(folderId)
                 .insured(insured)
                 .broker(broker)
-                .survey(survey);
+                .survey(survey)
+                .message(message);
             //
             return entity(result, null, null);
         } catch (Exception e) {

@@ -161,7 +161,7 @@ public class AwsWorkDocsServiceImpl implements UploadService {
         try {
             DocumentMetadata document = WorkDocsHelper.documentMetadata(client, folderId, name);
             if (document == null) {
-                throw new IOException("No document found: " + name);
+                throw new IOException("No document found: " + folderId + "/" + name);
             }
             String downloadUrl = WorkDocsHelper.documentUrl(client, document);
             WorkDocsHelper.documentDownload(downloadUrl, target);
