@@ -1,6 +1,7 @@
 package au.com.totemsoft.serverless.elixir.service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -191,8 +192,12 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
             String fileInfo = String.format("name: %s, contentType: %s, size: %d",
                 name, contentType, fileUpload.getSize());
             log.info("upload: " + fileInfo);
+            //File file = new File(name);
+            //FileUtils.writeByteArrayToFile(file, fileUpload.getBytes());
             // save to document store
-            Resource resource = fileUpload.getResource();
+            //Resource resource = fileUpload.getResource();
+            //fileUpload.transferTo(file);
+            Resource resource = new ByteArrayResource(fileUpload.getBytes());
             String documentId = uploadService.upload(folderId, resource,
                 metadata(name, contentType, null));
             log.info("documentId: " + documentId);
