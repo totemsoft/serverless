@@ -331,12 +331,11 @@ open class DefaultAPI {
      - parameter reference: (path) Reference (Survey Id) 
      - parameter folderId: (path) Folder Id 
      - parameter fileUpload: (form) The file to upload. 
-     - parameter fileNote: (form) Description of file content. (optional)
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func upload(reference: UUID, folderId: String, fileUpload: URL, fileNote: String? = nil, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: UploadResponse?,_ error: Error?) -> Void)) {
-        uploadWithRequestBuilder(reference: reference, folderId: folderId, fileUpload: fileUpload, fileNote: fileNote).execute(apiResponseQueue) { result -> Void in
+    open class func upload(reference: UUID, folderId: String, fileUpload: URL, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: UploadResponse?,_ error: Error?) -> Void)) {
+        uploadWithRequestBuilder(reference: reference, folderId: folderId, fileUpload: fileUpload).execute(apiResponseQueue) { result -> Void in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -353,10 +352,9 @@ open class DefaultAPI {
      - parameter reference: (path) Reference (Survey Id) 
      - parameter folderId: (path) Folder Id 
      - parameter fileUpload: (form) The file to upload. 
-     - parameter fileNote: (form) Description of file content. (optional)
      - returns: RequestBuilder<UploadResponse> 
      */
-    open class func uploadWithRequestBuilder(reference: UUID, folderId: String, fileUpload: URL, fileNote: String? = nil) -> RequestBuilder<UploadResponse> {
+    open class func uploadWithRequestBuilder(reference: UUID, folderId: String, fileUpload: URL) -> RequestBuilder<UploadResponse> {
         var path = "/survey/upload/{reference}/{folderId}"
         let referencePreEscape = "\(APIHelper.mapValueToPathItem(reference))"
         let referencePostEscape = referencePreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -366,8 +364,7 @@ open class DefaultAPI {
         path = path.replacingOccurrences(of: "{folderId}", with: folderIdPostEscape, options: .literal, range: nil)
         let URLString = OpenAPIClientAPI.basePath + path
         let formParams: [String:Any?] = [
-            "fileUpload": fileUpload.encodeToJSON(),
-            "fileNote": fileNote?.encodeToJSON()
+            "fileUpload": fileUpload.encodeToJSON()
         ]
 
         let nonNullParameters = APIHelper.rejectNil(formParams)

@@ -382,7 +382,7 @@ No authorization required
 
 # **upload**
 ```swift
-    open class func upload(reference: UUID, folderId: String, fileUpload: URL, fileNote: String? = nil, completion: @escaping (_ data: UploadResponse?, _ error: Error?) -> Void)
+    open class func upload(reference: UUID, folderId: String, fileUpload: URL, completion: @escaping (_ data: UploadResponse?, _ error: Error?) -> Void)
 ```
 
 Upload a file.
@@ -397,10 +397,9 @@ import OpenAPIClient
 let reference = 987 // UUID | Reference (Survey Id)
 let folderId = "folderId_example" // String | Folder Id
 let fileUpload = URL(string: "https://example.com")! // URL | The file to upload.
-let fileNote = "fileNote_example" // String | Description of file content. (optional)
 
 // Upload a file.
-DefaultAPI.upload(reference: reference, folderId: folderId, fileUpload: fileUpload, fileNote: fileNote) { (response, error) in
+DefaultAPI.upload(reference: reference, folderId: folderId, fileUpload: fileUpload) { (response, error) in
     guard error == nil else {
         print(error)
         return
@@ -419,7 +418,6 @@ Name | Type | Description  | Notes
  **reference** | **UUID** | Reference (Survey Id) | 
  **folderId** | **String** | Folder Id | 
  **fileUpload** | **URL** | The file to upload. | 
- **fileNote** | **String** | Description of file content. | [optional] 
 
 ### Return type
 
