@@ -151,7 +151,6 @@ public interface SurveyApi {
      * @param reference Reference (Survey Id) (required)
      * @param folderId Folder Id (required)
      * @param fileUpload The file to upload. (required)
-     * @param fileNote Description of file content. (optional)
      * @return Success (status code 200)
      *         or Not authenticated (status code 401)
      *         or Access token does not have the required scope (status code 403)
@@ -165,8 +164,8 @@ public interface SurveyApi {
         produces = { "application/json" }, 
         consumes = { "multipart/form-data" },
         method = RequestMethod.POST)
-    default ResponseEntity<UploadResponse> upload(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "Folder Id",required=true) @PathVariable("folderId") String folderId,@ApiParam(value = "The file to upload.") @Valid @RequestPart(value = "fileUpload") MultipartFile fileUpload,@ApiParam(value = "Description of file content.") @RequestPart(value="fileNote", required=false)  String fileNote) {
-        return getDelegate().upload(reference, folderId, fileUpload, fileNote);
+    default ResponseEntity<UploadResponse> upload(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "Folder Id",required=true) @PathVariable("folderId") String folderId,@ApiParam(value = "The file to upload.") @Valid @RequestPart(value = "fileUpload") MultipartFile fileUpload) {
+        return getDelegate().upload(reference, folderId, fileUpload);
     }
 
 }

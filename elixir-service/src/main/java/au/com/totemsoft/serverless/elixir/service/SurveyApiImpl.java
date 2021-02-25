@@ -183,8 +183,7 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
 
     @Override
     public ResponseEntity<UploadResponse> upload(UUID reference, String folderId,
-        MultipartFile fileUpload,
-        String fileNote) {
+        MultipartFile fileUpload) {
         final String refName = reference.toString();
         final String name = fileUpload.getOriginalFilename();
         final String contentType = fileUpload.getContentType();
@@ -195,13 +194,13 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
             // save to document store
             Resource resource = fileUpload.getResource();
             String documentId = uploadService.upload(folderId, resource,
-                metadata(name, contentType, fileNote));
+                metadata(name, contentType, null));
             log.info("documentId: " + documentId);
             // result
             UploadResponse result = new UploadResponse()
                 .reference(reference)
                 .documentId(documentId)
-                .message("[" + refName + "] " + fileInfo + " - " + fileNote);
+                .message("[" + refName + "] " + fileInfo);
             log.info("result: " + result);
             return entity(result, null, null);
         } catch (Exception e) {
