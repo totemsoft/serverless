@@ -7,7 +7,7 @@
 
 import Foundation
 
-
+/** Survey details. */
 public struct SurveyResponse: Codable { 
 
 

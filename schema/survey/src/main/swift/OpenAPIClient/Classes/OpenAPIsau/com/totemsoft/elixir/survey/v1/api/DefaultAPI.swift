@@ -11,14 +11,16 @@ import Foundation
 
 open class DefaultAPI {
     /**
-     Create Survey
+     Create Survey.
      
+     - parameter client: (header) Client Name 
      - parameter surveyRequest: (body) Survey Request 
+     - parameter location: (header) Location Name (optional)
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func create(surveyRequest: SurveyRequest, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: SurveyResponse?,_ error: Error?) -> Void)) {
-        createWithRequestBuilder(surveyRequest: surveyRequest).execute(apiResponseQueue) { result -> Void in
+    open class func createSurvey(client: String, surveyRequest: SurveyRequest, location: String? = nil, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: SurveySummaryResponse?,_ error: Error?) -> Void)) {
+        createSurveyWithRequestBuilder(client: client, surveyRequest: surveyRequest, location: location).execute(apiResponseQueue) { result -> Void in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -29,22 +31,29 @@ open class DefaultAPI {
     }
 
     /**
-     Create Survey
+     Create Survey.
      - POST /survey/create
-     - Create Survey
+     - Create Survey for user (current selected client/location).
+     - parameter client: (header) Client Name 
      - parameter surveyRequest: (body) Survey Request 
-     - returns: RequestBuilder<SurveyResponse> 
+     - parameter location: (header) Location Name (optional)
+     - returns: RequestBuilder<SurveySummaryResponse> 
      */
-    open class func createWithRequestBuilder(surveyRequest: SurveyRequest) -> RequestBuilder<SurveyResponse> {
+    open class func createSurveyWithRequestBuilder(client: String, surveyRequest: SurveyRequest, location: String? = nil) -> RequestBuilder<SurveySummaryResponse> {
         let path = "/survey/create"
         let URLString = OpenAPIClientAPI.basePath + path
         let parameters = JSONEncodingHelper.encodingParameters(forEncodableObject: surveyRequest)
 
         let url = URLComponents(string: URLString)
+        let nillableHeaders: [String: Any?] = [
+            "client": client.encodeToJSON(),
+            "location": location?.encodeToJSON()
+        ]
+        let headerParameters = APIHelper.rejectNilHeaders(nillableHeaders)
 
-        let requestBuilder: RequestBuilder<SurveyResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+        let requestBuilder: RequestBuilder<SurveySummaryResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return requestBuilder.init(method: "POST", URLString: (url?.string ?? URLString), parameters: parameters, isBody: true)
+        return requestBuilder.init(method: "POST", URLString: (url?.string ?? URLString), parameters: parameters, isBody: true, headers: headerParameters)
     }
 
     /**
@@ -70,7 +79,7 @@ open class DefaultAPI {
     /**
      Download a file.
      - GET /survey/download/{reference}/{folderId}
-     - Download a file.
+     - Download a file (for Survey).
      - parameter reference: (path) Reference (Survey Id) 
      - parameter folderId: (path) Folder Id 
      - parameter filename: (query) File name 
@@ -98,15 +107,13 @@ open class DefaultAPI {
     }
 
     /**
-     Get Survey
+     Receives all clients.
      
-     - parameter reference: (path) Reference (Survey Id) 
-     - parameter folderId: (path) Folder Id 
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func find(reference: UUID, folderId: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: SurveyResponse?,_ error: Error?) -> Void)) {
-        findWithRequestBuilder(reference: reference, folderId: folderId).execute(apiResponseQueue) { result -> Void in
+    open class func findClients(apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: [ClientResponse]?,_ error: Error?) -> Void)) {
+        findClientsWithRequestBuilder().execute(apiResponseQueue) { result -> Void in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -117,14 +124,95 @@ open class DefaultAPI {
     }
 
     /**
-     Get Survey
-     - GET /survey/find/{reference}/{folderId}
-     - Get Survey
+     Receives all clients.
+     - GET /client/find
+     - Receives all clients for a user.
+     - returns: RequestBuilder<[ClientResponse]> 
+     */
+    open class func findClientsWithRequestBuilder() -> RequestBuilder<[ClientResponse]> {
+        let path = "/client/find"
+        let URLString = OpenAPIClientAPI.basePath + path
+        let parameters: [String:Any]? = nil
+        
+        let url = URLComponents(string: URLString)
+
+        let requestBuilder: RequestBuilder<[ClientResponse]>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+
+        return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
+    }
+
+    /**
+     Receives all clients.
+     
+     - parameter userId: (path) User Id 
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
+     */
+    open class func findClientsByUser(userId: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: [ClientResponse]?,_ error: Error?) -> Void)) {
+        findClientsByUserWithRequestBuilder(userId: userId).execute(apiResponseQueue) { result -> Void in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
+    }
+
+    /**
+     Receives all clients.
+     - GET /client/find/{userId}
+     - Receives all clients for a user.
+     - parameter userId: (path) User Id 
+     - returns: RequestBuilder<[ClientResponse]> 
+     */
+    open class func findClientsByUserWithRequestBuilder(userId: String) -> RequestBuilder<[ClientResponse]> {
+        var path = "/client/find/{userId}"
+        let userIdPreEscape = "\(APIHelper.mapValueToPathItem(userId))"
+        let userIdPostEscape = userIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        path = path.replacingOccurrences(of: "{userId}", with: userIdPostEscape, options: .literal, range: nil)
+        let URLString = OpenAPIClientAPI.basePath + path
+        let parameters: [String:Any]? = nil
+        
+        let url = URLComponents(string: URLString)
+
+        let requestBuilder: RequestBuilder<[ClientResponse]>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+
+        return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
+    }
+
+    /**
+     Get Survey.
+     
+     - parameter client: (header) Client Name 
      - parameter reference: (path) Reference (Survey Id) 
      - parameter folderId: (path) Folder Id 
+     - parameter location: (header) Location Name (optional)
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
+     */
+    open class func findSurvey(client: String, reference: UUID, folderId: String, location: String? = nil, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: SurveyResponse?,_ error: Error?) -> Void)) {
+        findSurveyWithRequestBuilder(client: client, reference: reference, folderId: folderId, location: location).execute(apiResponseQueue) { result -> Void in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
+    }
+
+    /**
+     Get Survey.
+     - GET /survey/find/{reference}/{folderId}
+     - Get Survey (by reference).
+     - parameter client: (header) Client Name 
+     - parameter reference: (path) Reference (Survey Id) 
+     - parameter folderId: (path) Folder Id 
+     - parameter location: (header) Location Name (optional)
      - returns: RequestBuilder<SurveyResponse> 
      */
-    open class func findWithRequestBuilder(reference: UUID, folderId: String) -> RequestBuilder<SurveyResponse> {
+    open class func findSurveyWithRequestBuilder(client: String, reference: UUID, folderId: String, location: String? = nil) -> RequestBuilder<SurveyResponse> {
         var path = "/survey/find/{reference}/{folderId}"
         let referencePreEscape = "\(APIHelper.mapValueToPathItem(reference))"
         let referencePostEscape = referencePreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -136,20 +224,27 @@ open class DefaultAPI {
         let parameters: [String:Any]? = nil
         
         let url = URLComponents(string: URLString)
+        let nillableHeaders: [String: Any?] = [
+            "client": client.encodeToJSON(),
+            "location": location?.encodeToJSON()
+        ]
+        let headerParameters = APIHelper.rejectNilHeaders(nillableHeaders)
 
         let requestBuilder: RequestBuilder<SurveyResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
+        return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false, headers: headerParameters)
     }
 
     /**
-     Find all Surveys for user
+     Find all Surveys for user.
      
+     - parameter client: (header) Client Name 
+     - parameter location: (header) Location Name (optional)
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func findAll(apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: [SurveyResponse]?,_ error: Error?) -> Void)) {
-        findAllWithRequestBuilder().execute(apiResponseQueue) { result -> Void in
+    open class func findSurveys(client: String, location: String? = nil, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: [SurveySummaryResponse]?,_ error: Error?) -> Void)) {
+        findSurveysWithRequestBuilder(client: client, location: location).execute(apiResponseQueue) { result -> Void in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -160,32 +255,41 @@ open class DefaultAPI {
     }
 
     /**
-     Find all Surveys for user
+     Find all Surveys for user.
      - GET /survey/find
-     - Find all Surveys for user
-     - returns: RequestBuilder<[SurveyResponse]> 
+     - Find all Surveys for user (current selected client/location).
+     - parameter client: (header) Client Name 
+     - parameter location: (header) Location Name (optional)
+     - returns: RequestBuilder<[SurveySummaryResponse]> 
      */
-    open class func findAllWithRequestBuilder() -> RequestBuilder<[SurveyResponse]> {
+    open class func findSurveysWithRequestBuilder(client: String, location: String? = nil) -> RequestBuilder<[SurveySummaryResponse]> {
         let path = "/survey/find"
         let URLString = OpenAPIClientAPI.basePath + path
         let parameters: [String:Any]? = nil
         
         let url = URLComponents(string: URLString)
+        let nillableHeaders: [String: Any?] = [
+            "client": client.encodeToJSON(),
+            "location": location?.encodeToJSON()
+        ]
+        let headerParameters = APIHelper.rejectNilHeaders(nillableHeaders)
 
-        let requestBuilder: RequestBuilder<[SurveyResponse]>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+        let requestBuilder: RequestBuilder<[SurveySummaryResponse]>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
+        return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false, headers: headerParameters)
     }
 
     /**
-     Update Survey
+     Update Survey.
      
+     - parameter client: (header) Client Name 
      - parameter surveyRequest: (body) Survey Request 
+     - parameter location: (header) Location Name (optional)
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func update(surveyRequest: SurveyRequest, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: SurveyResponse?,_ error: Error?) -> Void)) {
-        updateWithRequestBuilder(surveyRequest: surveyRequest).execute(apiResponseQueue) { result -> Void in
+    open class func updateSurvey(client: String, surveyRequest: SurveyRequest, location: String? = nil, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: SurveyResponse?,_ error: Error?) -> Void)) {
+        updateSurveyWithRequestBuilder(client: client, surveyRequest: surveyRequest, location: location).execute(apiResponseQueue) { result -> Void in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -196,22 +300,29 @@ open class DefaultAPI {
     }
 
     /**
-     Update Survey
+     Update Survey.
      - PUT /survey/update
-     - Update Survey
+     - Update Survey (for reference).
+     - parameter client: (header) Client Name 
      - parameter surveyRequest: (body) Survey Request 
+     - parameter location: (header) Location Name (optional)
      - returns: RequestBuilder<SurveyResponse> 
      */
-    open class func updateWithRequestBuilder(surveyRequest: SurveyRequest) -> RequestBuilder<SurveyResponse> {
+    open class func updateSurveyWithRequestBuilder(client: String, surveyRequest: SurveyRequest, location: String? = nil) -> RequestBuilder<SurveyResponse> {
         let path = "/survey/update"
         let URLString = OpenAPIClientAPI.basePath + path
         let parameters = JSONEncodingHelper.encodingParameters(forEncodableObject: surveyRequest)
 
         let url = URLComponents(string: URLString)
+        let nillableHeaders: [String: Any?] = [
+            "client": client.encodeToJSON(),
+            "location": location?.encodeToJSON()
+        ]
+        let headerParameters = APIHelper.rejectNilHeaders(nillableHeaders)
 
         let requestBuilder: RequestBuilder<SurveyResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return requestBuilder.init(method: "PUT", URLString: (url?.string ?? URLString), parameters: parameters, isBody: true)
+        return requestBuilder.init(method: "PUT", URLString: (url?.string ?? URLString), parameters: parameters, isBody: true, headers: headerParameters)
     }
 
     /**
@@ -238,7 +349,7 @@ open class DefaultAPI {
     /**
      Upload a file.
      - POST /survey/upload/{reference}/{folderId}
-     - Uploads a file.
+     - Uploads a file (for Survey).
      - parameter reference: (path) Reference (Survey Id) 
      - parameter folderId: (path) Folder Id 
      - parameter fileUpload: (form) The file to upload. 

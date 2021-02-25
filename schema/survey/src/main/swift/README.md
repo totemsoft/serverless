@@ -26,21 +26,30 @@ All URIs are relative to *https://$.execute-api.$.amazonaws.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*DefaultAPI* | [**create**](docs/DefaultAPI.md#create) | **POST** /survey/create | Create Survey
+*DefaultAPI* | [**createSurvey**](docs/DefaultAPI.md#createsurvey) | **POST** /survey/create | Create Survey.
 *DefaultAPI* | [**download**](docs/DefaultAPI.md#download) | **GET** /survey/download/{reference}/{folderId} | Download a file.
-*DefaultAPI* | [**find**](docs/DefaultAPI.md#find) | **GET** /survey/find/{reference}/{folderId} | Get Survey
-*DefaultAPI* | [**findAll**](docs/DefaultAPI.md#findall) | **GET** /survey/find | Find all Surveys for user
-*DefaultAPI* | [**update**](docs/DefaultAPI.md#update) | **PUT** /survey/update | Update Survey
+*DefaultAPI* | [**findClients**](docs/DefaultAPI.md#findclients) | **GET** /client/find | Receives all clients.
+*DefaultAPI* | [**findClientsByUser**](docs/DefaultAPI.md#findclientsbyuser) | **GET** /client/find/{userId} | Receives all clients.
+*DefaultAPI* | [**findSurvey**](docs/DefaultAPI.md#findsurvey) | **GET** /survey/find/{reference}/{folderId} | Get Survey.
+*DefaultAPI* | [**findSurveys**](docs/DefaultAPI.md#findsurveys) | **GET** /survey/find | Find all Surveys for user.
+*DefaultAPI* | [**updateSurvey**](docs/DefaultAPI.md#updatesurvey) | **PUT** /survey/update | Update Survey.
 *DefaultAPI* | [**upload**](docs/DefaultAPI.md#upload) | **POST** /survey/upload/{reference}/{folderId} | Upload a file.
 
 
 ## Documentation For Models
 
+ - [Address](docs/Address.md)
+ - [AddressType](docs/AddressType.md)
  - [BrokerDetails](docs/BrokerDetails.md)
+ - [ClientResponse](docs/ClientResponse.md)
  - [FileType](docs/FileType.md)
  - [InsuredDetails](docs/InsuredDetails.md)
+ - [Location](docs/Location.md)
+ - [Phone](docs/Phone.md)
+ - [PhoneType](docs/PhoneType.md)
  - [SurveyRequest](docs/SurveyRequest.md)
  - [SurveyResponse](docs/SurveyResponse.md)
+ - [SurveySummaryResponse](docs/SurveySummaryResponse.md)
  - [UploadResponse](docs/UploadResponse.md)
 
 

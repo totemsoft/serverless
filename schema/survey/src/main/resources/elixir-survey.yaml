@@ -160,8 +160,9 @@ paths:
         200:
           description: Success
           schema:
-            type: string
-            format: binary
+            type: file
+            #type: string
+            #format: binary
             #format: base64
         404:
           description: File not found

@@ -9,6 +9,6 @@ import Foundation
 
 /** File Type */
 public enum FileType: String, Codable, CaseIterable {
-    case survey = "SURVEY"
-    case file = "FILE"
+    case business = "BUSINESS"
+    case farm = "FARM"
 }

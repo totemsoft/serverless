@@ -11,19 +11,19 @@ import Foundation
 public struct InsuredDetails: Codable { 
 
 
-    /** Client&#39;s name */
+    /** Insured name */
     public var firstname: String?
-    /** Client&#39;s surname */
+    /** Insured surname */
     public var surname: String?
-    /** Client&#39;s mobile */
+    /** Insured mobile */
     public var mobile: String?
-    /** Client&#39;s email */
+    /** Insured email */
     public var email: String
-    /** Client&#39;s company name */
+    /** Insured company name */
     public var companyName: String?
-    /** Client&#39;s trading name */
+    /** Insured trading name */
     public var tradingName: String?
-    /** Client&#39;s position */
+    /** Insured position */
     public var position: String?
 
     public init(firstname: String?, surname: String?, mobile: String?, email: String, companyName: String?, tradingName: String?, position: String?) {

@@ -7,13 +7,13 @@
 
 import Foundation
 
-/** Broker details */
+/** Broker details. */
 public struct BrokerDetails: Codable { 
 
 
-    /** Broker Id */
+    /** Broker Id (email) */
     public var id: String?
-    /** Broker Client */
+    /** Broker&#39;s Client ( current selected) */
     public var client: String
 
     public init(id: String?, client: String) {
