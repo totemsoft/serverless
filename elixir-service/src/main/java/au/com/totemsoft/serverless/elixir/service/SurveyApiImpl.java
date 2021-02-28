@@ -1,7 +1,6 @@
 package au.com.totemsoft.serverless.elixir.service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.util.InMemoryResource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import au.com.totemsoft.elixir.survey.v1.api.SurveyApi;
 import au.com.totemsoft.elixir.survey.v1.model.BrokerDetails;
@@ -183,13 +181,13 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<UploadResponse> upload(UUID reference, String folderId, String fileName, Resource body) {
+    public ResponseEntity<UploadResponse> upload(UUID reference, String folderId, String fileName, String body) {
         final String refName = reference.toString();
         try {
             final String name = fileName; //body.getFilename(); //fileUpload.getOriginalFilename();
             // TODO: get from http header "Content-Type"
             final String contentType = "image/jpeg"; //fileUpload.getContentType();
-            final long size = body.contentLength(); //fileUpload.getSize()
+            final long size = body.length(); //body.contentLength(); //fileUpload.getSize()
             String fileInfo = String.format("name: %s, contentType: %s, size: %d",
                 name, contentType, size);
             log.info("upload: " + fileInfo);
@@ -199,7 +197,7 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
             //Resource resource = fileUpload.getResource();
             //fileUpload.transferTo(file);
             //Resource body = new ByteArrayResource(fileUpload.getBytes());
-            String documentId = uploadService.upload(folderId, body,
+            String documentId = uploadService.upload(folderId, new ByteArrayResource(body.getBytes()),
                 metadata(name, contentType, null));
             log.info("documentId: " + documentId);
             // result

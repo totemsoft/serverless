@@ -161,9 +161,9 @@ public interface SurveyApi {
         @ApiResponse(code = 403, message = "Access token does not have the required scope") })
     @RequestMapping(value = "/survey/upload/{reference}/{folderId}/{fileName}",
         produces = { "application/json" }, 
-        consumes = { "image/_*" },
+        consumes = { "image/png" },
         method = RequestMethod.POST)
-    default ResponseEntity<UploadResponse> upload(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "Folder Id",required=true) @PathVariable("folderId") String folderId,@ApiParam(value = "File Name",required=true) @PathVariable("fileName") String fileName,@ApiParam(value = "" ,required=true )  @Valid @RequestBody Resource body) {
+    default ResponseEntity<UploadResponse> upload(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "Folder Id",required=true) @PathVariable("folderId") String folderId,@ApiParam(value = "File Name",required=true) @PathVariable("fileName") String fileName,@ApiParam(value = "" ,required=true )  @Valid @RequestBody String body) {
         return getDelegate().upload(reference, folderId, fileName, body);
     }
 

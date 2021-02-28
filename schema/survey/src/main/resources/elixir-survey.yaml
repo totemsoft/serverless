@@ -204,10 +204,11 @@ paths:
       requestBody:
         required: true
         content:
-          image/*:
+          image/png:
             schema:
               type: string
-              format: binary
+              #format: binary
+              format: base64
 #          multipart/form-data:
 #            schema:
 #              type: object
