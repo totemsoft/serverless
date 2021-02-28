@@ -8,4 +8,5 @@ You can view the server in swagger-ui by pointing to
 http://localhost:8080/survey-au/v1/
 
 ## Links
+* [Swagger OpenAPI 3](https://swagger.io/docs/specification/describing-request-body/file-upload/)
 * [SurveyJS](https://surveyjs.io/Examples/Library/?id=questiontype-text&platform=jQuery&theme=default)

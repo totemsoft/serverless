@@ -176,7 +176,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SurveyResponse'
       x-codegen-request-body-name: surveyRequest
-  /survey/upload/{reference}/{folderId}:
+  /survey/upload/{reference}/{folderId}/{fileName}:
     post:
       summary: Upload a file.
       description: Uploads a file (for Survey).
@@ -195,18 +195,26 @@ paths:
         required: true
         schema:
           type: string
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              required:
-              - fileUpload
-              properties:
-                fileUpload:
-                  type: string
-                  description: The file to upload.
-                  format: binary
+      - name: fileName
+        in: path
+        description: File Name
         required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          image/*:
+            schema:
+              type: string
+              format: binary
+#          multipart/form-data:
+#            schema:
+#              type: object
+#              properties:
+#                body:
+#                  type: string
+#                  format: binary
       responses:
         200:
           description: Success

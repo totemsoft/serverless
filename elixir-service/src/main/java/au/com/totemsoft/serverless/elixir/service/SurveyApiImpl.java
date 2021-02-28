@@ -183,29 +183,31 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<UploadResponse> upload(UUID reference, String folderId,
-        MultipartFile fileUpload) {
+    public ResponseEntity<UploadResponse> upload(UUID reference, String folderId, String fileName, Resource body) {
         final String refName = reference.toString();
-        final String name = fileUpload.getOriginalFilename();
-        final String contentType = fileUpload.getContentType();
         try {
+            final String name = fileName; //body.getFilename(); //fileUpload.getOriginalFilename();
+            // TODO: get from http header "Content-Type"
+            final String contentType = "image/jpeg"; //fileUpload.getContentType();
+            final long size = body.contentLength(); //fileUpload.getSize()
             String fileInfo = String.format("name: %s, contentType: %s, size: %d",
-                name, contentType, fileUpload.getSize());
+                name, contentType, size);
             log.info("upload: " + fileInfo);
             //File file = new File(name);
             //FileUtils.writeByteArrayToFile(file, fileUpload.getBytes());
             // save to document store
             //Resource resource = fileUpload.getResource();
             //fileUpload.transferTo(file);
-            Resource resource = new ByteArrayResource(fileUpload.getBytes());
-            String documentId = uploadService.upload(folderId, resource,
+            //Resource body = new ByteArrayResource(fileUpload.getBytes());
+            String documentId = uploadService.upload(folderId, body,
                 metadata(name, contentType, null));
             log.info("documentId: " + documentId);
             // result
             UploadResponse result = new UploadResponse()
                 .reference(reference)
                 .documentId(documentId)
-                .message("[" + refName + "] " + fileInfo);
+                .message("[" + refName + "] " + fileInfo)
+                ;
             log.info("result: " + result);
             return entity(result, null, null);
         } catch (Exception e) {
