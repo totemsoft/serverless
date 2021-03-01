@@ -266,7 +266,7 @@ paths:
         403:
           description: Access token does not have the required scope
           content: {}
-  /survey/upload/multipart/{reference}/{folderId}:
+  /survey/upload/{reference}/{folderId}:
     post:
       summary: Upload a file.
       description: Uploads a file (for Survey).

@@ -151,21 +151,21 @@ Resources:
         uploadBinary:
           Type: Api
           Properties:
-            Path: /survey/upload/binary/{reference}/{folderId}/{fileName}
+            Path: /survey/upload/binary/{reference}/{folderId}
             Method: post
             RestApiId:
               Ref: ElixirApi
         uploadBase64:
           Type: Api
           Properties:
-            Path: /survey/upload/base64/{reference}/{folderId}/{fileName}
+            Path: /survey/upload/base64/{reference}/{folderId}
             Method: post
             RestApiId:
               Ref: ElixirApi
         uploadMultipart:
           Type: Api
           Properties:
-            Path: /survey/upload/multipart/{reference}/{folderId}/{fileName}
+            Path: /survey/upload/{reference}/{folderId}
             Method: post
             RestApiId:
               Ref: ElixirApi

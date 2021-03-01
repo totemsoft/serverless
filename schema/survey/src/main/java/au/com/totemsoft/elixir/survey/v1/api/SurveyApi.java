@@ -197,7 +197,7 @@ public interface SurveyApi {
 
 
     /**
-     * POST /survey/upload/multipart/{reference}/{folderId} : Upload a file.
+     * POST /survey/upload/{reference}/{folderId} : Upload a file.
      * Uploads a file (for Survey).
      *
      * @param reference Reference (Survey Id) (required)
@@ -213,7 +213,7 @@ public interface SurveyApi {
         @ApiResponse(code = 200, message = "Success", response = UploadResponse.class),
         @ApiResponse(code = 401, message = "Not authenticated"),
         @ApiResponse(code = 403, message = "Access token does not have the required scope") })
-    @RequestMapping(value = "/survey/upload/multipart/{reference}/{folderId}",
+    @RequestMapping(value = "/survey/upload/{reference}/{folderId}",
         produces = { "application/json" }, 
         consumes = { "multipart/form-data" },
         method = RequestMethod.POST)
