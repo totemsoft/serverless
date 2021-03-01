@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.util.InMemoryResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import au.com.totemsoft.elixir.survey.v1.api.SurveyApi;
 import au.com.totemsoft.elixir.survey.v1.model.BrokerDetails;
@@ -181,23 +182,82 @@ public class SurveyApiImpl extends AbstractServiceImpl implements SurveyApi {
     }
 
     @Override
-    public ResponseEntity<UploadResponse> upload(UUID reference, String folderId, String fileName, String body) {
+    public ResponseEntity<UploadResponse> uploadBase64(UUID reference, String folderId, String filename, String body) {
         final String refName = reference.toString();
         try {
-            final String name = fileName; //body.getFilename(); //fileUpload.getOriginalFilename();
+            final String name = filename;
             // TODO: get from http header "Content-Type"
-            final String contentType = "image/jpeg"; //fileUpload.getContentType();
-            final long size = body.length(); //body.contentLength(); //fileUpload.getSize()
+            final String contentType = "image/jpeg";
+            final long size = body.length();
             String fileInfo = String.format("name: %s, contentType: %s, size: %d",
                 name, contentType, size);
-            log.info("upload: " + fileInfo);
+            log.info("uploadBase64: " + fileInfo);
+            String documentId = uploadService.upload(folderId, new ByteArrayResource(body.getBytes()),
+                metadata(name, contentType, null));
+            log.info("documentId: " + documentId);
+            // result
+            UploadResponse result = new UploadResponse()
+                .reference(reference)
+                .documentId(documentId)
+                .message("[" + refName + "] " + fileInfo)
+                ;
+            log.info("result: " + result);
+            return entity(result, null, null);
+        } catch (Exception e) {
+            UploadResponse error = new UploadResponse()
+                .reference(reference)
+                .message(error(e));
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR, null);
+        }
+    }
+
+    @Override
+    public ResponseEntity<UploadResponse> uploadBinary(UUID reference, String folderId, String filename, Resource body) {
+        final String refName = reference.toString();
+        try {
+            final String name = filename; //body.getFilename();
+            // TODO: get from http header "Content-Type"
+            final String contentType = "image/jpeg";
+            final long size = body.contentLength();
+            String fileInfo = String.format("name: %s, contentType: %s, size: %d",
+                name, contentType, size);
+            log.info("uploadBinary: " + fileInfo);
+            String documentId = uploadService.upload(folderId, body,
+                metadata(name, contentType, null));
+            log.info("documentId: " + documentId);
+            // result
+            UploadResponse result = new UploadResponse()
+                .reference(reference)
+                .documentId(documentId)
+                .message("[" + refName + "] " + fileInfo)
+                ;
+            log.info("result: " + result);
+            return entity(result, null, null);
+        } catch (Exception e) {
+            UploadResponse error = new UploadResponse()
+                .reference(reference)
+                .message(error(e));
+            return entity(error, HttpStatus.INTERNAL_SERVER_ERROR, null);
+        }
+    }
+
+    @Override
+    public ResponseEntity<UploadResponse> uploadMultipart(UUID reference, String folderId, MultipartFile fileUpload, Optional<String> filename) {
+        final String refName = reference.toString();
+        try {
+            final String name = filename.orElse(fileUpload.getOriginalFilename());
+            // TODO: get from http header "Content-Type"
+            final String contentType = fileUpload.getContentType();
+            final long size = fileUpload.getSize();
+            String fileInfo = String.format("name: %s, contentType: %s, size: %d",
+                name, contentType, size);
+            log.info("uploadMultipart: " + fileInfo);
             //File file = new File(name);
             //FileUtils.writeByteArrayToFile(file, fileUpload.getBytes());
             // save to document store
             //Resource resource = fileUpload.getResource();
             //fileUpload.transferTo(file);
-            //Resource body = new ByteArrayResource(fileUpload.getBytes());
-            String documentId = uploadService.upload(folderId, new ByteArrayResource(body.getBytes()),
+            String documentId = uploadService.upload(folderId, new ByteArrayResource(fileUpload.getBytes()),
                 metadata(name, contentType, null));
             log.info("documentId: " + documentId);
             // result

@@ -176,11 +176,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/SurveyResponse'
       x-codegen-request-body-name: surveyRequest
-  /survey/upload/{reference}/{folderId}/{fileName}:
+  /survey/upload/binary/{reference}/{folderId}:
     post:
       summary: Upload a file.
       description: Uploads a file (for Survey).
-      operationId: upload
+      operationId: uploadBinary
       parameters:
       - name: reference
         in: path
@@ -195,27 +195,115 @@ paths:
         required: true
         schema:
           type: string
-      - name: fileName
-        in: path
-        description: File Name
+      - name: filename
+        in: query
+        description: File name
         required: true
         schema:
           type: string
       requestBody:
-        required: true
         content:
-          image/png:
+          image/*:
             schema:
               type: string
-              #format: binary
+              format: binary
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+        401:
+          description: Not authenticated
+          content: {}
+        403:
+          description: Access token does not have the required scope
+          content: {}
+  /survey/upload/base64/{reference}/{folderId}:
+    post:
+      summary: Upload a file.
+      description: Uploads a file (for Survey).
+      operationId: uploadBase64
+      parameters:
+      - name: reference
+        in: path
+        description: Reference (Survey Id)
+        required: true
+        schema:
+          type: string
+          format: UUID
+      - name: folderId
+        in: path
+        description: Folder Id
+        required: true
+        schema:
+          type: string
+      - name: filename
+        in: query
+        description: File name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          image/*:
+            schema:
+              type: string
               format: base64
-#          multipart/form-data:
-#            schema:
-#              type: object
-#              properties:
-#                body:
-#                  type: string
-#                  format: binary
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+        401:
+          description: Not authenticated
+          content: {}
+        403:
+          description: Access token does not have the required scope
+          content: {}
+  /survey/upload/multipart/{reference}/{folderId}:
+    post:
+      summary: Upload a file.
+      description: Uploads a file (for Survey).
+      operationId: uploadMultipart
+      parameters:
+      - name: reference
+        in: path
+        description: Reference (Survey Id)
+        required: true
+        schema:
+          type: string
+          format: UUID
+      - name: folderId
+        in: path
+        description: Folder Id
+        required: true
+        schema:
+          type: string
+      - name: filename
+        in: query
+        description: File name
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              #type: object
+              required:
+              - fileUpload
+              properties:
+                fileUpload:
+                  type: string
+                  description: The file to upload.
+                  format: binary
+        required: true
       responses:
         200:
           description: Success

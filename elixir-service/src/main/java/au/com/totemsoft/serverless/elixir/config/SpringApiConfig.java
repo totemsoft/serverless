@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.HandlerAdapter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.HandlerMapping;
@@ -56,13 +55,13 @@ public class SpringApiConfig implements WebMvcConfigurer {
         
     }
 
-    @Bean(name = "multipartResolver")
-    public CommonsMultipartResolver multipartResolver() {
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(-1);
-        //multipartResolver.setPreserveFilename(true);
-        return multipartResolver;
-    }
+//    //@Bean(name = "multipartResolver")
+//    public CommonsMultipartResolver multipartResolver(ServletContext servletContext) {
+//        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(servletContext);
+//        multipartResolver.setMaxUploadSize(-1);
+//        //multipartResolver.setPreserveFilename(true);
+//        return multipartResolver;
+//    }
 
     @Bean
     public ObjectMapper objectMapper() {
