@@ -15,6 +15,8 @@ import au.com.totemsoft.serverless.elixir.config.SpringApiConfig;
 
 public class StreamLambdaHandler implements RequestStreamHandler {
 
+    //private static final Logger LOG = LogManager.getLogger();
+
     private static final SpringLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler;
     static {
         try {

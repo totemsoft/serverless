@@ -148,10 +148,24 @@ Resources:
             Method: put
             RestApiId:
               Ref: ElixirApi
-        upload:
+        uploadBinary:
           Type: Api
           Properties:
-            Path: /survey/upload/{reference}/{folderId}/{fileName}
+            Path: /survey/upload/binary/{reference}/{folderId}/{fileName}
+            Method: post
+            RestApiId:
+              Ref: ElixirApi
+        uploadBase64:
+          Type: Api
+          Properties:
+            Path: /survey/upload/base64/{reference}/{folderId}/{fileName}
+            Method: post
+            RestApiId:
+              Ref: ElixirApi
+        uploadMultipart:
+          Type: Api
+          Properties:
+            Path: /survey/upload/multipart/{reference}/{folderId}/{fileName}
             Method: post
             RestApiId:
               Ref: ElixirApi

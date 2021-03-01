@@ -75,7 +75,7 @@ public class StreamLambdaHandlerTest {
     @Test
     public void survey_upload() throws IOException {
         InputStream contentStream = getClass().getClassLoader().getResourceAsStream("document.json");
-        InputStream requestStream = new AwsProxyRequestBuilder("/survey/upload", HttpMethod.POST)
+        InputStream requestStream = new AwsProxyRequestBuilder("/survey/upload/multipart", HttpMethod.POST)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA + "; boundary=survey_upload")
             .header(HttpHeaders.AUTHORIZATION, "Bearer " + System.getProperty("access_token", "{{access_token}}"))
             .header("reference", UUID.randomUUID().toString())

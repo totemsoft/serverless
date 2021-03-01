@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import au.com.totemsoft.elixir.survey.v1.model.SurveyRequest;
 import au.com.totemsoft.elixir.survey.v1.model.SurveyResponse;
@@ -143,7 +145,7 @@ public interface SurveyApi {
 
 
     /**
-     * POST /survey/upload/{reference}/{folderId}/{fileName} : Upload a file.
+     * POST /survey/upload/base64/{reference}/{folderId}/{fileName} : Upload a file.
      * Uploads a file (for Survey).
      *
      * @param reference Reference (Survey Id) (required)
@@ -154,17 +156,69 @@ public interface SurveyApi {
      *         or Not authenticated (status code 401)
      *         or Access token does not have the required scope (status code 403)
      */
-    @ApiOperation(value = "Upload a file.", nickname = "upload", notes = "Uploads a file (for Survey).", response = UploadResponse.class, tags={  })
+    @ApiOperation(value = "Upload a file.", nickname = "uploadBase64", notes = "Uploads a file (for Survey).", response = UploadResponse.class, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = UploadResponse.class),
         @ApiResponse(code = 401, message = "Not authenticated"),
         @ApiResponse(code = 403, message = "Access token does not have the required scope") })
-    @RequestMapping(value = "/survey/upload/{reference}/{folderId}/{fileName}",
+    @RequestMapping(value = "/survey/upload/base64/{reference}/{folderId}/{fileName}",
         produces = { "application/json" }, 
-        consumes = { "image/png" },
+        consumes = { "image/_*" },
         method = RequestMethod.POST)
-    default ResponseEntity<UploadResponse> upload(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "Folder Id",required=true) @PathVariable("folderId") String folderId,@ApiParam(value = "File Name",required=true) @PathVariable("fileName") String fileName,@ApiParam(value = "" ,required=true )  @Valid @RequestBody String body) {
-        return getDelegate().upload(reference, folderId, fileName, body);
+    default ResponseEntity<UploadResponse> uploadBase64(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "Folder Id",required=true) @PathVariable("folderId") String folderId,@ApiParam(value = "File Name",required=true) @PathVariable("fileName") String fileName,@ApiParam(value = "" ,required=true )  @Valid @RequestBody String body) {
+        return getDelegate().uploadBase64(reference, folderId, fileName, body);
+    }
+
+
+    /**
+     * POST /survey/upload/binary/{reference}/{folderId}/{fileName} : Upload a file.
+     * Uploads a file (for Survey).
+     *
+     * @param reference Reference (Survey Id) (required)
+     * @param folderId Folder Id (required)
+     * @param fileName File Name (required)
+     * @param body  (required)
+     * @return Success (status code 200)
+     *         or Not authenticated (status code 401)
+     *         or Access token does not have the required scope (status code 403)
+     */
+    @ApiOperation(value = "Upload a file.", nickname = "uploadBinary", notes = "Uploads a file (for Survey).", response = UploadResponse.class, tags={  })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "Success", response = UploadResponse.class),
+        @ApiResponse(code = 401, message = "Not authenticated"),
+        @ApiResponse(code = 403, message = "Access token does not have the required scope") })
+    @RequestMapping(value = "/survey/upload/binary/{reference}/{folderId}/{fileName}",
+        produces = { "application/json" }, 
+        consumes = { "image/_*" },
+        method = RequestMethod.POST)
+    default ResponseEntity<UploadResponse> uploadBinary(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "Folder Id",required=true) @PathVariable("folderId") String folderId,@ApiParam(value = "File Name",required=true) @PathVariable("fileName") String fileName,@ApiParam(value = "" ,required=true )  @Valid @RequestBody Resource body) {
+        return getDelegate().uploadBinary(reference, folderId, fileName, body);
+    }
+
+
+    /**
+     * POST /survey/upload/multipart/{reference}/{folderId}/{fileName} : Upload a file.
+     * Uploads a file (for Survey).
+     *
+     * @param reference Reference (Survey Id) (required)
+     * @param folderId Folder Id (required)
+     * @param fileName File Name (required)
+     * @param fileUpload The file to upload. (required)
+     * @return Success (status code 200)
+     *         or Not authenticated (status code 401)
+     *         or Access token does not have the required scope (status code 403)
+     */
+    @ApiOperation(value = "Upload a file.", nickname = "uploadMultipart", notes = "Uploads a file (for Survey).", response = UploadResponse.class, tags={  })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "Success", response = UploadResponse.class),
+        @ApiResponse(code = 401, message = "Not authenticated"),
+        @ApiResponse(code = 403, message = "Access token does not have the required scope") })
+    @RequestMapping(value = "/survey/upload/multipart/{reference}/{folderId}/{fileName}",
+        produces = { "application/json" }, 
+        consumes = { "multipart/form-data" },
+        method = RequestMethod.POST)
+    default ResponseEntity<UploadResponse> uploadMultipart(@ApiParam(value = "Reference (Survey Id)",required=true) @PathVariable("reference") UUID reference,@ApiParam(value = "Folder Id",required=true) @PathVariable("folderId") String folderId,@ApiParam(value = "File Name",required=true) @PathVariable("fileName") String fileName,@ApiParam(value = "The file to upload.") @Valid @RequestPart(value = "fileUpload") MultipartFile fileUpload) {
+        return getDelegate().uploadMultipart(reference, folderId, fileName, fileUpload);
     }
 
 }
