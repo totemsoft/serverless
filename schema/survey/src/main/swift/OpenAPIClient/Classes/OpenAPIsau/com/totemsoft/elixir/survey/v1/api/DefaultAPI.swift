@@ -330,12 +330,117 @@ open class DefaultAPI {
      
      - parameter reference: (path) Reference (Survey Id) 
      - parameter folderId: (path) Folder Id 
-     - parameter fileUpload: (form) The file to upload. 
+     - parameter filename: (query) File name 
+     - parameter body: (body)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func upload(reference: UUID, folderId: String, fileUpload: URL, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: UploadResponse?,_ error: Error?) -> Void)) {
-        uploadWithRequestBuilder(reference: reference, folderId: folderId, fileUpload: fileUpload).execute(apiResponseQueue) { result -> Void in
+    open class func uploadBase64(reference: UUID, folderId: String, filename: String, body: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: UploadResponse?,_ error: Error?) -> Void)) {
+        uploadBase64WithRequestBuilder(reference: reference, folderId: folderId, filename: filename, body: body).execute(apiResponseQueue) { result -> Void in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
+    }
+
+    /**
+     Upload a file.
+     - POST /survey/upload/base64/{reference}/{folderId}
+     - Uploads a file (for Survey).
+     - parameter reference: (path) Reference (Survey Id) 
+     - parameter folderId: (path) Folder Id 
+     - parameter filename: (query) File name 
+     - parameter body: (body)  
+     - returns: RequestBuilder<UploadResponse> 
+     */
+    open class func uploadBase64WithRequestBuilder(reference: UUID, folderId: String, filename: String, body: String) -> RequestBuilder<UploadResponse> {
+        var path = "/survey/upload/base64/{reference}/{folderId}"
+        let referencePreEscape = "\(APIHelper.mapValueToPathItem(reference))"
+        let referencePostEscape = referencePreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        path = path.replacingOccurrences(of: "{reference}", with: referencePostEscape, options: .literal, range: nil)
+        let folderIdPreEscape = "\(APIHelper.mapValueToPathItem(folderId))"
+        let folderIdPostEscape = folderIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        path = path.replacingOccurrences(of: "{folderId}", with: folderIdPostEscape, options: .literal, range: nil)
+        let URLString = OpenAPIClientAPI.basePath + path
+        let parameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body)
+
+        var url = URLComponents(string: URLString)
+        url?.queryItems = APIHelper.mapValuesToQueryItems([
+            "filename": filename.encodeToJSON()
+        ])
+
+        let requestBuilder: RequestBuilder<UploadResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+
+        return requestBuilder.init(method: "POST", URLString: (url?.string ?? URLString), parameters: parameters, isBody: true)
+    }
+
+    /**
+     Upload a file.
+     
+     - parameter reference: (path) Reference (Survey Id) 
+     - parameter folderId: (path) Folder Id 
+     - parameter filename: (query) File name 
+     - parameter body: (body)  
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
+     */
+    open class func uploadBinary(reference: UUID, folderId: String, filename: String, body: URL, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: UploadResponse?,_ error: Error?) -> Void)) {
+        uploadBinaryWithRequestBuilder(reference: reference, folderId: folderId, filename: filename, body: body).execute(apiResponseQueue) { result -> Void in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
+    }
+
+    /**
+     Upload a file.
+     - POST /survey/upload/binary/{reference}/{folderId}
+     - Uploads a file (for Survey).
+     - parameter reference: (path) Reference (Survey Id) 
+     - parameter folderId: (path) Folder Id 
+     - parameter filename: (query) File name 
+     - parameter body: (body)  
+     - returns: RequestBuilder<UploadResponse> 
+     */
+    open class func uploadBinaryWithRequestBuilder(reference: UUID, folderId: String, filename: String, body: URL) -> RequestBuilder<UploadResponse> {
+        var path = "/survey/upload/binary/{reference}/{folderId}"
+        let referencePreEscape = "\(APIHelper.mapValueToPathItem(reference))"
+        let referencePostEscape = referencePreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        path = path.replacingOccurrences(of: "{reference}", with: referencePostEscape, options: .literal, range: nil)
+        let folderIdPreEscape = "\(APIHelper.mapValueToPathItem(folderId))"
+        let folderIdPostEscape = folderIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        path = path.replacingOccurrences(of: "{folderId}", with: folderIdPostEscape, options: .literal, range: nil)
+        let URLString = OpenAPIClientAPI.basePath + path
+        let parameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body)
+
+        var url = URLComponents(string: URLString)
+        url?.queryItems = APIHelper.mapValuesToQueryItems([
+            "filename": filename.encodeToJSON()
+        ])
+
+        let requestBuilder: RequestBuilder<UploadResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+
+        return requestBuilder.init(method: "POST", URLString: (url?.string ?? URLString), parameters: parameters, isBody: true)
+    }
+
+    /**
+     Upload a file.
+     
+     - parameter reference: (path) Reference (Survey Id) 
+     - parameter folderId: (path) Folder Id 
+     - parameter fileUpload: (form) The file to upload. 
+     - parameter filename: (query) File name (optional)
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
+     */
+    open class func uploadMultipart(reference: UUID, folderId: String, fileUpload: URL, filename: String? = nil, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: UploadResponse?,_ error: Error?) -> Void)) {
+        uploadMultipartWithRequestBuilder(reference: reference, folderId: folderId, fileUpload: fileUpload, filename: filename).execute(apiResponseQueue) { result -> Void in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -352,9 +457,10 @@ open class DefaultAPI {
      - parameter reference: (path) Reference (Survey Id) 
      - parameter folderId: (path) Folder Id 
      - parameter fileUpload: (form) The file to upload. 
+     - parameter filename: (query) File name (optional)
      - returns: RequestBuilder<UploadResponse> 
      */
-    open class func uploadWithRequestBuilder(reference: UUID, folderId: String, fileUpload: URL) -> RequestBuilder<UploadResponse> {
+    open class func uploadMultipartWithRequestBuilder(reference: UUID, folderId: String, fileUpload: URL, filename: String? = nil) -> RequestBuilder<UploadResponse> {
         var path = "/survey/upload/{reference}/{folderId}"
         let referencePreEscape = "\(APIHelper.mapValueToPathItem(reference))"
         let referencePostEscape = referencePreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -370,7 +476,10 @@ open class DefaultAPI {
         let nonNullParameters = APIHelper.rejectNil(formParams)
         let parameters = APIHelper.convertBoolToString(nonNullParameters)
         
-        let url = URLComponents(string: URLString)
+        var url = URLComponents(string: URLString)
+        url?.queryItems = APIHelper.mapValuesToQueryItems([
+            "filename": filename?.encodeToJSON()
+        ])
 
         let requestBuilder: RequestBuilder<UploadResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 

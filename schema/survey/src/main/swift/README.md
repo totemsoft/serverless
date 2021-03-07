@@ -22,7 +22,7 @@ Run `pod install`
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://$.execute-api.$.amazonaws.com*
+All URIs are relative to *http://$.execute-api.$.amazonaws.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -33,7 +33,9 @@ Class | Method | HTTP request | Description
 *DefaultAPI* | [**findSurvey**](docs/DefaultAPI.md#findsurvey) | **GET** /survey/find/{reference}/{folderId} | Get Survey.
 *DefaultAPI* | [**findSurveys**](docs/DefaultAPI.md#findsurveys) | **GET** /survey/find | Find all Surveys for user.
 *DefaultAPI* | [**updateSurvey**](docs/DefaultAPI.md#updatesurvey) | **PUT** /survey/update | Update Survey.
-*DefaultAPI* | [**upload**](docs/DefaultAPI.md#upload) | **POST** /survey/upload/{reference}/{folderId} | Upload a file.
+*DefaultAPI* | [**uploadBase64**](docs/DefaultAPI.md#uploadbase64) | **POST** /survey/upload/base64/{reference}/{folderId} | Upload a file.
+*DefaultAPI* | [**uploadBinary**](docs/DefaultAPI.md#uploadbinary) | **POST** /survey/upload/binary/{reference}/{folderId} | Upload a file.
+*DefaultAPI* | [**uploadMultipart**](docs/DefaultAPI.md#uploadmultipart) | **POST** /survey/upload/{reference}/{folderId} | Upload a file.
 
 
 ## Documentation For Models

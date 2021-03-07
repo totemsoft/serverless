@@ -1,6 +1,6 @@
 # DefaultAPI
 
-All URIs are relative to *https://$.execute-api.$.amazonaws.com*
+All URIs are relative to *http://$.execute-api.$.amazonaws.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -11,7 +11,9 @@ Method | HTTP request | Description
 [**findSurvey**](DefaultAPI.md#findsurvey) | **GET** /survey/find/{reference}/{folderId} | Get Survey.
 [**findSurveys**](DefaultAPI.md#findsurveys) | **GET** /survey/find | Find all Surveys for user.
 [**updateSurvey**](DefaultAPI.md#updatesurvey) | **PUT** /survey/update | Update Survey.
-[**upload**](DefaultAPI.md#upload) | **POST** /survey/upload/{reference}/{folderId} | Upload a file.
+[**uploadBase64**](DefaultAPI.md#uploadbase64) | **POST** /survey/upload/base64/{reference}/{folderId} | Upload a file.
+[**uploadBinary**](DefaultAPI.md#uploadbinary) | **POST** /survey/upload/binary/{reference}/{folderId} | Upload a file.
+[**uploadMultipart**](DefaultAPI.md#uploadmultipart) | **POST** /survey/upload/{reference}/{folderId} | Upload a file.
 
 
 # **createSurvey**
@@ -380,9 +382,121 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **upload**
+# **uploadBase64**
 ```swift
-    open class func upload(reference: UUID, folderId: String, fileUpload: URL, completion: @escaping (_ data: UploadResponse?, _ error: Error?) -> Void)
+    open class func uploadBase64(reference: UUID, folderId: String, filename: String, body: String, completion: @escaping (_ data: UploadResponse?, _ error: Error?) -> Void)
+```
+
+Upload a file.
+
+Uploads a file (for Survey).
+
+### Example 
+```swift
+// The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
+import OpenAPIClient
+
+let reference = 987 // UUID | Reference (Survey Id)
+let folderId = "folderId_example" // String | Folder Id
+let filename = "filename_example" // String | File name
+let body = "body_example" // String | 
+
+// Upload a file.
+DefaultAPI.uploadBase64(reference: reference, folderId: folderId, filename: filename, body: body) { (response, error) in
+    guard error == nil else {
+        print(error)
+        return
+    }
+
+    if (response) {
+        dump(response)
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **reference** | **UUID** | Reference (Survey Id) | 
+ **folderId** | **String** | Folder Id | 
+ **filename** | **String** | File name | 
+ **body** | **String** |  | 
+
+### Return type
+
+[**UploadResponse**](UploadResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: image/_*
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **uploadBinary**
+```swift
+    open class func uploadBinary(reference: UUID, folderId: String, filename: String, body: URL, completion: @escaping (_ data: UploadResponse?, _ error: Error?) -> Void)
+```
+
+Upload a file.
+
+Uploads a file (for Survey).
+
+### Example 
+```swift
+// The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
+import OpenAPIClient
+
+let reference = 987 // UUID | Reference (Survey Id)
+let folderId = "folderId_example" // String | Folder Id
+let filename = "filename_example" // String | File name
+let body = URL(string: "https://example.com")! // URL | 
+
+// Upload a file.
+DefaultAPI.uploadBinary(reference: reference, folderId: folderId, filename: filename, body: body) { (response, error) in
+    guard error == nil else {
+        print(error)
+        return
+    }
+
+    if (response) {
+        dump(response)
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **reference** | **UUID** | Reference (Survey Id) | 
+ **folderId** | **String** | Folder Id | 
+ **filename** | **String** | File name | 
+ **body** | **URL** |  | 
+
+### Return type
+
+[**UploadResponse**](UploadResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: image/_*
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **uploadMultipart**
+```swift
+    open class func uploadMultipart(reference: UUID, folderId: String, fileUpload: URL, filename: String? = nil, completion: @escaping (_ data: UploadResponse?, _ error: Error?) -> Void)
 ```
 
 Upload a file.
@@ -397,9 +511,10 @@ import OpenAPIClient
 let reference = 987 // UUID | Reference (Survey Id)
 let folderId = "folderId_example" // String | Folder Id
 let fileUpload = URL(string: "https://example.com")! // URL | The file to upload.
+let filename = "filename_example" // String | File name (optional)
 
 // Upload a file.
-DefaultAPI.upload(reference: reference, folderId: folderId, fileUpload: fileUpload) { (response, error) in
+DefaultAPI.uploadMultipart(reference: reference, folderId: folderId, fileUpload: fileUpload, filename: filename) { (response, error) in
     guard error == nil else {
         print(error)
         return
@@ -418,6 +533,7 @@ Name | Type | Description  | Notes
  **reference** | **UUID** | Reference (Survey Id) | 
  **folderId** | **String** | Folder Id | 
  **fileUpload** | **URL** | The file to upload. | 
+ **filename** | **String** | File name | [optional] 
 
 ### Return type
 
