@@ -6,7 +6,7 @@
     <parent>
         <groupId>au.com.totemsoft.serverless</groupId>
         <artifactId>schema</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${revision}${changelist}</version>
     </parent>
     <groupId>au.com.totemsoft.serverless.schema</groupId>
     <artifactId>survey</artifactId>
