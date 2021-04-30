@@ -18,7 +18,7 @@
         <pingfederate.version>10.2.0</pingfederate.version>
         <pingfederate-sdk.version>1.0.0.54</pingfederate-sdk.version>
 
-        <commons-io.version>2.5</commons-io.version>
+        <commons-io.version>2.7</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
         <httpcomponents.version>4.5.6</httpcomponents.version>
         <xmlbeans.version>2.6.0</xmlbeans.version>
