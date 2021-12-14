@@ -22,7 +22,7 @@
         <commons-lang.version>2.6</commons-lang.version>
         <httpcomponents.version>4.5.13</httpcomponents.version>
         <xmlbeans.version>2.6.0</xmlbeans.version>
-        <jackson.version>2.9.10.7</jackson.version>
+        <jackson.version>2.9.10.8</jackson.version>
         <version.jose4j>0.7.0</version.jose4j>
         <log4j.version>2.16.0</log4j.version>
         <lombok.version>1.18.8</lombok.version>
