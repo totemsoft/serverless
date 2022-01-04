@@ -24,7 +24,7 @@
         <xmlbeans.version>3.0.0</xmlbeans.version>
         <jackson.version>2.9.10.8</jackson.version>
         <version.jose4j>0.7.0</version.jose4j>
-        <log4j.version>2.16.0</log4j.version>
+        <log4j.version>2.17.1</log4j.version>
         <lombok.version>1.18.8</lombok.version>
 
         <junit.version>4.13.1</junit.version>
