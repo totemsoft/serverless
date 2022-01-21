@@ -36,7 +36,7 @@
         <spring-cloud.version>2.2.2.RELEASE</spring-cloud.version>
         <log4j.version>2.13.3</log4j.version>
 
-        <h2.version>1.4.200</h2.version>
+        <h2.version>2.1.210</h2.version>
         <postgresql.version>42.2.14</postgresql.version>
         <flywaydb.version>6.5.0</flywaydb.version>
 
