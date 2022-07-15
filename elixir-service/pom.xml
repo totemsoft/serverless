@@ -27,7 +27,7 @@
 
         <aws-serverless>1.5</aws-serverless>
         <aws-lambda>1.1.0</aws-lambda>
-        <amazonaws.version>1.11.847</amazonaws.version>
+        <amazonaws.version>1.12.261</amazonaws.version>
         <amazonaws-sqs.version>1.0.8</amazonaws-sqs.version>
 
         <quarkus.version>1.9.2.Final</quarkus.version>
